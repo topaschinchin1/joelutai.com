@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JoeLuT AI - AI Tools for Research & Food Science</title>
+    <title>FSMA 204 Compliance Checker - Free Tool | JoeLuT AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&display=swap" rel="stylesheet">
@@ -16,6 +16,10 @@
             --color-green: #2E7D32;
             --color-green-dark: #1B5E20;
             --color-green-light: #4CAF50;
+            --color-red: #D32F2F;
+            --color-red-light: #FFEBEE;
+            --color-yellow: #F9A825;
+            --color-yellow-light: #FFF8E1;
             --color-charcoal: #1E1E1E;
             --color-gray: #5F6368;
             --color-light-green: #E8F5E9;
@@ -33,6 +37,7 @@
             font-family: var(--font-body);
             background: var(--color-cream);
             color: var(--color-charcoal);
+            min-height: 100vh;
         }
 
         .bg-pattern {
@@ -51,122 +56,69 @@
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
             position: relative;
             z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(248, 250, 245, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        nav .container {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            text-decoration: none;
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
         }
 
         .logo-text {
             font-family: var(--font-display);
             font-weight: 600;
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             color: var(--color-green-dark);
         }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--color-charcoal);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--color-green);
-        }
-
-        .nav-cta {
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            color: white !important;
-            padding: 0.6rem 1.25rem;
+        .free-badge {
+            background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
+            color: white;
+            padding: 0.4rem 1rem;
             border-radius: 100px;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-        }
-
-        .mobile-menu {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 10rem 0 5rem;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--color-light-green);
-            color: var(--color-green-dark);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
         }
 
         .hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(2rem, 4vw, 2.75rem);
             font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
             color: var(--color-charcoal);
+            margin-bottom: 1rem;
+            line-height: 1.2;
         }
 
         .hero h1 .highlight {
@@ -174,714 +126,822 @@
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--color-gray);
-            max-width: 650px;
-            margin: 0 auto 2rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
             line-height: 1.6;
         }
 
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
+        .deadline-banner {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
+            background: var(--color-red-light);
+            border: 1px solid var(--color-red);
+            color: var(--color-red);
+            padding: 0.6rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
             font-weight: 600;
-            font-size: 1rem;
+        }
+
+        .checker-card {
+            background: var(--color-white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-step {
+            flex: 1;
+            height: 6px;
+            background: #E0E0E0;
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: var(--color-green);
+        }
+
+        .progress-step.completed {
+            background: var(--color-green);
+        }
+
+        .question-container {
+            min-height: 300px;
+        }
+
+        .question {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--color-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .question h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 0.75rem;
+        }
+
+        .question-help {
+            font-size: 0.95rem;
+            color: var(--color-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--color-cream);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-primary {
+        .option:hover {
+            border-color: var(--color-green);
+            background: var(--color-light-green);
+        }
+
+        .option.selected {
+            border-color: var(--color-green);
+            background: var(--color-light-green);
+        }
+
+        .option-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--color-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .option.selected .option-radio {
+            border-color: var(--color-green);
+            background: var(--color-green);
+        }
+
+        .option.selected .option-radio::after {
+            content: '✓';
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .option-text {
+            font-size: 1rem;
+            color: var(--color-charcoal);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            padding: 0.9rem 1.75rem;
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--color-gray);
+        }
+
+        .btn-back:hover {
+            color: var(--color-charcoal);
+        }
+
+        .btn-next {
             background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
             color: white;
             box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
         }
 
-        .btn-primary:hover {
+        .btn-next:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
         }
 
-        .btn-secondary {
-            background: white;
-            color: var(--color-charcoal);
-            border: 2px solid rgba(0,0,0,0.1);
+        .btn-next:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
-        .btn-secondary:hover {
-            border-color: var(--color-green);
-            color: var(--color-green);
+        /* Results */
+        .results {
+            display: none;
         }
 
-        /* Stats */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 4rem;
-            flex-wrap: wrap;
+        .results.show {
+            display: block;
         }
 
-        .stat {
+        .result-header {
             text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .stat-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--color-charcoal);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--color-gray);
-        }
-
-        /* Free Tools Section */
-        .free-tools {
-            padding: 5rem 0;
-            background: var(--color-white);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            color: var(--color-charcoal);
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: var(--color-gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .tool-card {
-            background: var(--color-cream);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tool-card:hover {
-            border-color: var(--color-green);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
-        }
-
-        .tool-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .tool-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .tool-card p {
-            font-size: 0.95rem;
-            color: var(--color-gray);
-            line-height: 1.5;
-            flex-grow: 1;
-            margin-bottom: 1.25rem;
-        }
-
-        .tool-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-green);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .tool-cta span {
-            transition: transform 0.2s ease;
-        }
-
-        .tool-card:hover .tool-cta span {
-            transform: translateX(4px);
-        }
-
-        .tool-badge {
-            display: inline-block;
-            background: var(--color-light-green);
-            color: var(--color-green-dark);
-            padding: 0.25rem 0.75rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .tool-badge.new {
-            background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
-            color: white;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 5rem 0;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .service-category {
-            background: var(--color-white);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-        }
-
-        .service-category h3 {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .service-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .service-item:last-child {
-            border-bottom: none;
-        }
-
-        .service-item-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--color-light-green);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .service-item h4 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--color-charcoal);
-        }
-
-        .service-item p {
-            font-size: 0.9rem;
-            color: var(--color-gray);
-            line-height: 1.5;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 5rem 0;
-            background: var(--color-white);
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .step {
-            text-align: center;
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            color: white;
+        .result-icon {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.25rem;
             margin: 0 auto 1rem;
+            font-size: 2.5rem;
         }
 
-        .step h4 {
+        .result-icon.exempt {
+            background: var(--color-light-green);
+        }
+
+        .result-icon.required {
+            background: var(--color-red-light);
+        }
+
+        .result-icon.partial {
+            background: var(--color-yellow-light);
+        }
+
+        .result-header h2 {
             font-family: var(--font-display);
-            font-weight: 600;
+            font-size: 1.75rem;
             margin-bottom: 0.5rem;
+        }
+
+        .result-header p {
+            color: var(--color-gray);
+            font-size: 1rem;
+        }
+
+        .result-details {
+            background: var(--color-cream);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-details h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
             color: var(--color-charcoal);
         }
 
-        .step p {
+        .result-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item-icon {
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+
+        .result-item-text {
+            flex: 1;
+        }
+
+        .result-item-title {
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-item-desc {
             font-size: 0.9rem;
             color: var(--color-gray);
             line-height: 1.5;
         }
 
-        /* About */
-        .about {
-            padding: 5rem 0;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-family: var(--font-display);
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .about-text p {
-            font-size: 1.05rem;
-            color: var(--color-gray);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .credentials {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .credential {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--color-light-green);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--color-green-dark);
-        }
-
-        /* CTA */
-        .cta {
-            padding: 5rem 0;
+        .cta-section {
             background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
+            border-radius: 16px;
+            padding: 2rem;
             text-align: center;
             color: white;
         }
 
-        .cta h2 {
+        .cta-section h3 {
             font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
         }
 
-        .cta p {
-            font-size: 1.1rem;
+        .cta-section p {
             opacity: 0.9;
-            margin-bottom: 2rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
         }
 
-        .cta .btn-primary {
+        .cta-btn {
+            display: inline-block;
             background: white;
             color: var(--color-green-dark);
-        }
-
-        .cta-email {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Footer */
-        footer {
-            padding: 3rem 0;
-            text-align: center;
-            color: var(--color-gray);
-        }
-
-        .footer-logo {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1.25rem;
-            color: var(--color-green-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1rem 0;
-        }
-
-        .footer-links a {
-            color: var(--color-gray);
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
 
-        .footer-links a:hover {
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .email-capture {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .email-capture p {
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .email-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+        }
+
+        .email-form button {
+            padding: 0.75rem 1.25rem;
+            background: var(--color-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .email-form button:hover {
+            background: var(--color-orange-dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--color-gray);
+            font-size: 0.85rem;
+        }
+
+        footer a {
             color: var(--color-green);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .steps {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
+            text-decoration: none;
         }
 
         @media (max-width: 600px) {
-            .steps {
-                grid-template-columns: 1fr;
+            .email-form {
+                flex-direction: column;
             }
-
-            .stats {
-                gap: 2rem;
+            
+            .nav-buttons {
+                flex-direction: column-reverse;
+                gap: 0.75rem;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="bg-pattern"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">📋</div>
+                <div class="logo-text">JoeLuT AI</div>
+            </div>
+            <span class="free-badge">Free Tool</span>
+        </header>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="#" class="logo">
-                <div class="logo-icon">🧪</div>
-                <span class="logo-text">JoeLuT AI</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#tools">Free Tools</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="https://calendly.com/chiomaodo/intro-call" class="nav-cta">Book a Call</a></li>
-            </ul>
-            <button class="mobile-menu">☰</button>
-        </div>
-    </nav>
+        <section class="hero">
+            <h1>Does <span class="highlight">FSMA 204</span> Apply to Your Business?</h1>
+            <p>The FDA Food Traceability Rule took effect January 2026. Answer 6 quick questions to find out if you need to comply—and what records you'll need to keep.</p>
+            <div class="deadline-banner">
+                <span>⚠️</span>
+                <span>Compliance Deadline: January 20, 2026</span>
+            </div>
+        </section>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-badge">🔬 AI Tools for Research & Food Science</div>
-            <h1>Let AI Handle the <span class="highlight">Tedious.</span><br>Focus on Discovery.</h1>
-            <p>Custom AI tools that automate R&D workflows, streamline compliance, and accelerate product development for food manufacturers and research teams.</p>
-            <div class="hero-buttons">
-                <a href="https://calendly.com/chiomaodo/intro-call" class="btn btn-primary">Book a Call <span>→</span></a>
-                <a href="#tools" class="btn btn-secondary">Try Free Tools</a>
+        <div class="checker-card">
+            <div class="progress-bar">
+                <div class="progress-step" id="step1"></div>
+                <div class="progress-step" id="step2"></div>
+                <div class="progress-step" id="step3"></div>
+                <div class="progress-step" id="step4"></div>
+                <div class="progress-step" id="step5"></div>
+                <div class="progress-step" id="step6"></div>
             </div>
 
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-icon">🔬</div>
-                    <div class="stat-value">Research Scientist</div>
-                    <div class="stat-label">Background</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">🏭</div>
-                    <div class="stat-value">Food Manufacturing</div>
-                    <div class="stat-label">Experience</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">⚙️</div>
-                    <div class="stat-value">50+</div>
-                    <div class="stat-label">Workflows Built</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">🧬</div>
-                    <div class="stat-value">Science + Automation</div>
-                    <div class="stat-label">Combined</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Free Tools Section -->
-    <section class="free-tools" id="tools">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">🎁 100% Free</div>
-                <h2>Free Tools You Can Use Today</h2>
-                <p>No signup required. No credit card. Just helpful tools for food scientists and researchers.</p>
-            </div>
-
-            <div class="tools-grid">
-                <!-- Microglia Analysis -->
-                <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-card">
-                    <div class="tool-badge">Popular</div>
-                    <div class="tool-icon">🔬</div>
-                    <h3>Microglia Morphology Analyzer</h3>
-                    <p>Upload microscopy images and get instant cell classification. Measures solidity, area, and morphological state (ramified vs amoeboid).</p>
-                    <div class="tool-cta">Try It Free <span>→</span></div>
-                </a>
-
-                <!-- FoodCost Pro -->
-                <a href="/foodcost-pro" class="tool-card">
-                    <div class="tool-badge new">New</div>
-                    <div class="tool-icon">💰</div>
-                    <h3>FoodCost Pro Calculator</h3>
-                    <p>Calculate true product costs including ingredients, labor, packaging & overhead. Get profitable pricing recommendations via Telegram.</p>
-                    <div class="tool-cta">Try It Free <span>→</span></div>
-                </a>
-
-                <!-- FSMA Checker -->
-                <a href="/fsma-checker" class="tool-card">
-                    <div class="tool-badge new">New</div>
-                    <div class="tool-icon">📋</div>
-                    <h3>FSMA 204 Compliance Checker</h3>
-                    <p>Answer 6 questions to find out if the FDA Food Traceability Rule applies to your business and what records you need to keep.</p>
-                    <div class="tool-cta">Check Now <span>→</span></div>
-                </a>
-
-                <!-- Dante AI -->
-                <a href="#" onclick="openDante(); return false;" class="tool-card">
-                    <div class="tool-badge">AI Chat</div>
-                    <div class="tool-icon">🧑‍🍳</div>
-                    <h3>Dante - AI Food Scientist</h3>
-                    <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation. Get instant answers from an AI trained on food science.</p>
-                    <div class="tool-cta">Chat Now <span>→</span></div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>What We Build</h2>
-                <p>AI tools built by a team that understands both the science and the business.</p>
-            </div>
-
-            <div class="services-grid">
-                <div class="service-category">
-                    <h3>🏭 Food Manufacturing</h3>
-                    <div class="service-item">
-                        <div class="service-item-icon">🧬</div>
-                        <div>
-                            <h4>Food Informatics Hub</h4>
-                            <p>Digital formulation databases, ingredient substitution engines, and AI-powered recipe optimization.</p>
+            <div class="question-container" id="questionsContainer">
+                <!-- Question 1 -->
+                <div class="question active" data-question="1">
+                    <div class="question-number">Question 1 of 6</div>
+                    <h2>What type of food business do you operate?</h2>
+                    <p class="question-help">Select the option that best describes your primary business activity.</p>
+                    <div class="options">
+                        <div class="option" data-value="manufacturer">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Food Manufacturer / Processor</span>
                         </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">📋</div>
-                        <div>
-                            <h4>Compliance Automation</h4>
-                            <p>HACCP & GMP document parsing, batch record automation, audit prep assistants.</p>
+                        <div class="option" data-value="restaurant">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Restaurant / Food Service</span>
                         </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">🤖</div>
-                        <div>
-                            <h4>Process Automation</h4>
-                            <p>Inventory tracking bots, production data capture, supplier flows, and QC alerts.</p>
+                        <div class="option" data-value="retail">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Retail Grocery Store</span>
+                        </div>
+                        <div class="option" data-value="distributor">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Distributor / Wholesaler</span>
+                        </div>
+                        <div class="option" data-value="farm">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Farm / Grower</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-category">
-                    <h3>🔬 Research & Analysis</h3>
-                    <div class="service-item">
-                        <div class="service-item-icon">🔬</div>
-                        <div>
-                            <h4>Cell Morphology Analysis</h4>
-                            <p>Automated cell classification and quantitative analysis from microscopy images.</p>
+                <!-- Question 2 -->
+                <div class="question" data-question="2">
+                    <div class="question-number">Question 2 of 6</div>
+                    <h2>Do you handle any foods on the FDA's Food Traceability List (FTL)?</h2>
+                    <p class="question-help">The FTL includes: fresh leafy greens, melons, tomatoes, peppers, sprouts, tropical tree fruits, fresh herbs, finfish, crustaceans, mollusks, fresh-cut fruits & vegetables, shell eggs, nut butters, and ready-to-eat deli salads.</p>
+                    <div class="options">
+                        <div class="option" data-value="yes">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Yes, I handle one or more FTL foods</span>
                         </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">🧬</div>
-                        <div>
-                            <h4>Genomic & Sequence Analysis</h4>
-                            <p>DNA/RNA sequence processing with NCBI database integration and automated reporting.</p>
+                        <div class="option" data-value="no">
+                            <div class="option-radio"></div>
+                            <span class="option-text">No, I don't handle any FTL foods</span>
                         </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">📊</div>
-                        <div>
-                            <h4>Research Paper Analysis</h4>
-                            <p>PDF data extraction, literature review automation, and searchable databases.</p>
+                        <div class="option" data-value="unsure">
+                            <div class="option-radio"></div>
+                            <span class="option-text">I'm not sure</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2>How We Work Together</h2>
-                <p>No bloated proposals. No unnecessary complexity. Just solutions that work.</p>
-            </div>
-
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h4>Discovery Call</h4>
-                    <p>We talk through your workflows, pain points, and goals.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h4>Solution Design</h4>
-                    <p>We map out exactly what we'll build and how it connects.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h4>Build & Iterate</h4>
-                    <p>You get a working prototype fast. We refine together.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h4>Launch & Support</h4>
-                    <p>Your team gets trained with ongoing support as you scale.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Science Meets Automation</h2>
-                    <p>We're not just automation builders — we come from the lab and the production floor. We've run food manufacturing operations, worked in research environments, and felt the pain of manual processes, spreadsheet chaos, and compliance headaches firsthand.</p>
-                    <p>That's why we built JoeLuT AI: to create tools that actually understand how scientists and food manufacturers work. No generic solutions. No tech for tech's sake. Just practical AI that saves you time.</p>
-                    <div class="credentials">
-                        <span class="credential">🔬 Research Scientist Background</span>
-                        <span class="credential">🏭 Food Manufacturing Experience</span>
-                        <span class="credential">⚙️ n8n Automation Experts</span>
-                        <span class="credential">🤖 AI Tools Development</span>
+                <!-- Question 3 -->
+                <div class="question" data-question="3">
+                    <div class="question-number">Question 3 of 6</div>
+                    <h2>What's your annual food sales revenue?</h2>
+                    <p class="question-help">Small businesses with limited sales may qualify for exemptions.</p>
+                    <div class="options">
+                        <div class="option" data-value="under1m">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Under $1 million</span>
+                        </div>
+                        <div class="option" data-value="1to10m">
+                            <div class="option-radio"></div>
+                            <span class="option-text">$1 million - $10 million</span>
+                        </div>
+                        <div class="option" data-value="over10m">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Over $10 million</span>
+                        </div>
                     </div>
                 </div>
-                <div class="about-image" style="background: var(--color-light-green); border-radius: 24px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
-                    🧪🔬🏭
+
+                <!-- Question 4 -->
+                <div class="question" data-question="4">
+                    <div class="question-number">Question 4 of 6</div>
+                    <h2>Do you sell directly to consumers only?</h2>
+                    <p class="question-help">Businesses that only sell direct-to-consumer (farmers markets, CSA, on-farm sales) may have different requirements.</p>
+                    <div class="options">
+                        <div class="option" data-value="directonly">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Yes, only direct-to-consumer sales</span>
+                        </div>
+                        <div class="option" data-value="wholesale">
+                            <div class="option-radio"></div>
+                            <span class="option-text">No, I also sell to other businesses (wholesale, restaurants, retailers)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question" data-question="5">
+                    <div class="question-number">Question 5 of 6</div>
+                    <h2>Do you currently track lot numbers or batch codes?</h2>
+                    <p class="question-help">FSMA 204 requires Traceability Lot Codes (TLCs) for covered foods.</p>
+                    <div class="options">
+                        <div class="option" data-value="yes">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Yes, we track lot/batch numbers</span>
+                        </div>
+                        <div class="option" data-value="partial">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Sometimes / For some products</span>
+                        </div>
+                        <div class="option" data-value="no">
+                            <div class="option-radio"></div>
+                            <span class="option-text">No, we don't track lot numbers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question" data-question="6">
+                    <div class="question-number">Question 6 of 6</div>
+                    <h2>Can you trace a product back to its source within 24 hours?</h2>
+                    <p class="question-help">FSMA 204 requires the ability to trace products within 24 hours during a recall.</p>
+                    <div class="options">
+                        <div class="option" data-value="yes">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Yes, we can trace within 24 hours</span>
+                        </div>
+                        <div class="option" data-value="maybe">
+                            <div class="option-radio"></div>
+                            <span class="option-text">Maybe, but it would take longer</span>
+                        </div>
+                        <div class="option" data-value="no">
+                            <div class="option-radio"></div>
+                            <span class="option-text">No, we can't do that currently</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- CTA -->
-    <section class="cta">
-        <div class="container">
-            <h2>Let's Build Something</h2>
-            <p>Tell us what's slowing you down. We'll tell you if AI can fix it — and how.</p>
-            <a href="https://calendly.com/chiomaodo/intro-call" class="btn btn-primary">Book a Discovery Call <span>→</span></a>
-            <p class="cta-email">or email directly: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="036a6d656c43696c666f7677626a2d606c6e">[email&#160;protected]</a></p>
-        </div>
-    </section>
+            <!-- Results Section -->
+            <div class="results" id="resultsSection">
+                <div class="result-header" id="resultHeader">
+                    <!-- Populated by JS -->
+                </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-logo">JoeLuT AI</div>
-            <p>AI Tools for Research & Food Science</p>
-            <div class="footer-links">
-                <a href="#tools">Free Tools</a>
-                <a href="#services">Services</a>
-                <a href="#about">About</a>
-                <a href="/cdn-cgi/l/email-protection#e48d8a828ba48e8b81889190858dca878b89">Contact</a>
+                <div class="result-details" id="resultDetails">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="cta-section">
+                    <h3>Need Help Getting Compliant?</h3>
+                    <p>We build automated traceability systems for small food manufacturers using simple tools you already know.</p>
+                    <a href="/cdn-cgi/l/email-protection#0d64636b624d6762686178796c64236e6260327e786f67686e79304b5e404c283f3d3f3d39283f3d4e62607d61646c636e68283f3d4568617d" class="cta-btn">Get a Free Consultation</a>
+                    
+                    <div class="email-capture">
+                        <p>Or get our free FSMA 204 Compliance Checklist:</p>
+                        <form class="email-form" id="emailForm">
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <p>© 2025 JoeLuT AI. Houston, TX.</p>
-        </div>
-    </footer>
 
-    <!-- Dante Chat Widget (placeholder - add your actual widget code) -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/
+            <div class="nav-buttons" id="navButtons">
+                <button class="btn btn-back" id="backBtn" style="visibility: hidden;">← Back</button>
+                <button class="btn btn-next" id="nextBtn" disabled>Next →</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built by <a href="https://joelutai.com" target="_blank">JoeLuT AI Solutions</a> · Houston, TX</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">This tool provides general guidance only. Consult FDA.gov for official requirements.</p>
+        </footer>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        const answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 6;
+
+        // Option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const questionNum = question.dataset.question;
+                answers[questionNum] = this.dataset.value;
+                
+                document.getElementById('nextBtn').disabled = false;
+            });
+        });
+
+        // Navigation
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (currentQuestion < totalQuestions) {
+                // Move to next question
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
+                currentQuestion++;
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
+                
+                // Update progress
+                updateProgress();
+                
+                // Update buttons
+                document.getElementById('backBtn').style.visibility = 'visible';
+                document.getElementById('nextBtn').disabled = true;
+                
+                // Check if already answered
+                if (answers[currentQuestion]) {
+                    document.getElementById('nextBtn').disabled = false;
+                }
+                
+                // Change button text on last question
+                if (currentQuestion === totalQuestions) {
+                    this.textContent = 'See Results →';
+                }
+            } else {
+                // Show results
+                showResults();
+            }
+        });
+
+        document.getElementById('backBtn').addEventListener('click', function() {
+            if (currentQuestion > 1) {
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
+                currentQuestion--;
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
+                
+                updateProgress();
+                
+                if (currentQuestion === 1) {
+                    this.style.visibility = 'hidden';
+                }
+                
+                document.getElementById('nextBtn').textContent = 'Next →';
+                document.getElementById('nextBtn').disabled = false;
+            }
+        });
+
+        function updateProgress() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                const step = document.getElementById(`step${i}`);
+                step.classList.remove('active', 'completed');
+                if (i < currentQuestion) {
+                    step.classList.add('completed');
+                } else if (i === currentQuestion) {
+                    step.classList.add('active');
+                }
+            }
+        }
+
+        function showResults() {
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('navButtons').style.display = 'none';
+            document.getElementById('resultsSection').classList.add('show');
+
+            // Analyze answers
+            const result = analyzeCompliance();
+            
+            const headerEl = document.getElementById('resultHeader');
+            const detailsEl = document.getElementById('resultDetails');
+
+            if (result.status === 'exempt') {
+                headerEl.innerHTML = `
+                    <div class="result-icon exempt">✅</div>
+                    <h2 style="color: var(--color-green);">Likely Exempt from FSMA 204</h2>
+                    <p>Based on your answers, your business appears to be exempt from the Food Traceability Rule.</p>
+                `;
+            } else if (result.status === 'required') {
+                headerEl.innerHTML = `
+                    <div class="result-icon required">⚠️</div>
+                    <h2 style="color: var(--color-red);">FSMA 204 Likely Applies to You</h2>
+                    <p>Your business handles FTL foods and appears to be covered by the Food Traceability Rule.</p>
+                `;
+            } else {
+                headerEl.innerHTML = `
+                    <div class="result-icon partial">🔶</div>
+                    <h2 style="color: var(--color-yellow);">Partial Compliance May Be Required</h2>
+                    <p>Some aspects of FSMA 204 may apply to your business. Review the details below.</p>
+                `;
+            }
+
+            detailsEl.innerHTML = `
+                <h3>What This Means for You:</h3>
+                ${result.items.map(item => `
+                    <div class="result-item">
+                        <span class="result-item-icon">${item.icon}</span>
+                        <div class="result-item-text">
+                            <div class="result-item-title">${item.title}</div>
+                            <div class="result-item-desc">${item.desc}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function analyzeCompliance() {
+            const items = [];
+            let status = 'partial';
+
+            // Check if handles FTL foods
+            if (answers['2'] === 'no') {
+                status = 'exempt';
+                items.push({
+                    icon: '✅',
+                    title: 'No FTL Foods',
+                    desc: 'You indicated you don\'t handle foods on the Food Traceability List. FSMA 204 only applies to FTL foods.'
+                });
+            } else if (answers['2'] === 'yes') {
+                status = 'required';
+                items.push({
+                    icon: '⚠️',
+                    title: 'FTL Foods Detected',
+                    desc: 'You handle foods on the Food Traceability List. You\'ll need to maintain traceability records for these products.'
+                });
+            }
+
+            // Check business type exemptions
+            if (answers['1'] === 'restaurant') {
+                status = 'exempt';
+                items.push({
+                    icon: '✅',
+                    title: 'Restaurant Exemption',
+                    desc: 'Restaurants are generally exempt from FSMA 204 recordkeeping requirements, though you should still maintain good food safety practices.'
+                });
+            }
+
+            // Check sales exemption
+            if (answers['3'] === 'under1m' && answers['4'] === 'directonly') {
+                if (status !== 'exempt') status = 'partial';
+                items.push({
+                    icon: '🔶',
+                    title: 'Small Business / Direct Sales',
+                    desc: 'Small businesses under $1M selling only direct-to-consumer may qualify for modified requirements. Check FDA guidance for details.'
+                });
+            }
+
+            // Check current traceability status
+            if (answers['5'] === 'no') {
+                items.push({
+                    icon: '📋',
+                    title: 'No Lot Tracking',
+                    desc: 'You\'ll need to implement Traceability Lot Codes (TLCs) for covered foods. Each batch needs a unique identifier.'
+                });
+            } else if (answers['5'] === 'yes') {
+                items.push({
+                    icon: '✅',
+                    title: 'Lot Tracking in Place',
+                    desc: 'Great! You already track lot numbers. Make sure they meet TLC requirements (unique identifier for each batch).'
+                });
+            }
+
+            // Check 24-hour trace capability
+            if (answers['6'] === 'no' || answers['6'] === 'maybe') {
+                items.push({
+                    icon: '⏱️',
+                    title: '24-Hour Traceability Gap',
+                    desc: 'FSMA 204 requires providing traceability info within 24 hours of an FDA request. You may need better systems to meet this requirement.'
+                });
+            } else {
+                items.push({
+                    icon: '✅',
+                    title: '24-Hour Capability',
+                    desc: 'You can trace products within 24 hours. Make sure you can provide Key Data Elements (KDEs) for each Critical Tracking Event (CTE).'
+                });
+            }
+
+            // Key requirements if covered
+            if (status === 'required') {
+                items.push({
+                    icon: '📝',
+                    title: 'Required Records (KDEs)',
+                    desc: 'You\'ll need to record: Traceability Lot Code, quantity, unit of measure, product description, location info, and dates for each CTE.'
+                });
+                items.push({
+                    icon: '🔗',
+                    title: 'Critical Tracking Events',
+                    desc: 'Document CTEs: receiving, transforming (if applicable), creating, and shipping FTL foods.'
+                });
+            }
+
+            return { status, items };
+        }
+
+        // Email form
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            
+            // You can connect this to your webhook
+            fetch('YOUR_WEBHOOK_URL', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, source: 'fsma-checker', answers })
+            }).catch(() => {});
+
+   
