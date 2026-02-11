@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSMA 204 Compliance Checker - Free Assessment | JoeLuT AI</title>
+    <meta name="description" content="Free FSMA 204 Food Traceability Rule compliance checker. Find out if your food business needs to comply with FDA traceability requirements by January 2026.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #fff 50%, #fff7ed 100%); min-height: 100vh; color: #1f2937; }
+        
+        .header { background: #166534; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; }
+        .logo span { color: #fb923c; }
+        .back-link { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.9; }
+        .back-link:hover { opacity: 1; }
+        
+        .deadline-banner { background: linear-gradient(135deg, #dc2626, #ea580c); color: white; text-align: center; padding: 0.75rem; font-weight: 600; }
+        .deadline-banner span { background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 4px; margin-left: 0.5rem; }
+        
+        .hero { text-align: center; padding: 3rem 2rem 2rem; }
+        .badge { display: inline-block; background: #dcfce7; color: #166534; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; color: #166534; margin-bottom: 0.5rem; }
+        .subtitle { color: #6b7280; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .checker { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .card-title { font-size: 1.25rem; font-weight: 600; color: #166534; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .question { margin-bottom: 2rem; }
+        .question:last-child { margin-bottom: 0; }
+        .question-text { font-weight: 600; color: #1f2937; margin-bottom: 1rem; font-size: 1.05rem; }
+        .question-help { font-size: 0.85rem; color: #6b7280; margin-bottom: 1rem; font-style: italic; }
+        
+        .options { display: flex; flex-direction: column; gap: 0.75rem; }
+        .option { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { border-color: #166534; background: #f0fdf4; }
+        .option.selected { border-color: #166534; background: #dcfce7; }
+        .option input { display: none; }
+        .option-radio { width: 20px; height: 20px; border: 2px solid #d1d5db; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .option.selected .option-radio { border-color: #166534; background: #166534; }
+        .option.selected .option-radio::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+        .option-text { font-weight: 500; }
+        
+        .btn-check { background: linear-gradient(135deg, #166534, #22863a); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,101,52,0.3); }
+        .btn-check:disabled { background: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .results { display: none; }
+        .results.show { display: block; }
+        
+        .result-status { text-align: center; padding: 2rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .result-status.exempt { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+        .result-status.required { background: linear-gradient(135deg, #fee2e2, #fecaca); }
+        .result-status.partial { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+        .result-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .result-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .result-status.exempt .result-title { color: #166534; }
+        .result-status.required .result-title { color: #dc2626; }
+        .result-status.partial .result-title { color: #d97706; }
+        .result-summary { color: #4b5563; font-size: 1.05rem; }
+        
+        .details-section { margin-top: 1.5rem; }
+        .details-section h3 { color: #166534; margin-bottom: 1rem; font-size: 1.1rem; }
+        .details-list { list-style: none; }
+        .details-list li { padding: 0.75rem 0; border-bottom: 1px solid #e5e7eb; display: flex; align-items: flex-start; gap: 0.75rem; }
+        .details-list li:last-child { border-bottom: none; }
+        .check-icon { color: #166534; font-weight: bold; }
+        .x-icon { color: #dc2626; font-weight: bold; }
+        .warn-icon { color: #d97706; font-weight: bold; }
+        
+        .action-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+        .action-box h3 { color: #166534; margin-bottom: 1rem; }
+        .action-box ul { margin-left: 1.5rem; color: #4b5563; }
+        .action-box li { margin-bottom: 0.5rem; }
+        
+        .email-capture { background: linear-gradient(135deg, #166534, #22863a); border-radius: 12px; padding: 2rem; margin-top: 1.5rem; color: white; text-align: center; }
+        .email-capture h3 { margin-bottom: 0.5rem; }
+        .email-capture p { opacity: 0.9; margin-bottom: 1rem; font-size: 0.95rem; }
+        .email-form { display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto; }
+        .email-form input { flex: 1; padding: 0.75rem 1rem; border: none; border-radius: 8px; font-size: 1rem; }
+        .email-form button { background: #ea580c; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .email-form button:hover { background: #c2410c; }
+        
+        .info-section { background: white; border-radius: 16px; padding: 2rem; margin: 2rem auto; max-width: 700px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .info-section h2 { color: #166534; margin-bottom: 1.5rem; }
+        .info-grid { display: grid; gap: 1.5rem; }
+        .info-item h3 { color: #1f2937; font-size: 1rem; margin-bottom: 0.5rem; }
+        .info-item p { color: #6b7280; font-size: 0.95rem; line-height: 1.6; }
+        
+        .ftl-foods { background: #fffbeb; border: 2px solid #fde68a; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+        .ftl-foods h3 { color: #d97706; margin-bottom: 1rem; }
+        .ftl-foods ul { margin-left: 1.5rem; color: #4b5563; font-size: 0.95rem; }
+        .ftl-foods li { margin-bottom: 0.25rem; }
+        
+        .cta-section { text-align: center; padding: 3rem 2rem; }
+        .cta-section h2 { color: #166534; margin-bottom: 1rem; }
+        .cta-section p { color: #6b7280; margin-bottom: 1.5rem; }
+        .btn-cta { display: inline-block; background: #ea580c; color: white; padding: 1rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 600; }
+        .btn-cta:hover { background: #c2410c; }
+        
+        .footer { text-align: center; padding: 2rem; color: #6b7280; font-size: 0.9rem; }
+        
+        .btn-restart { background: #f3f4f6; color: #4b5563; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+        .btn-restart:hover { background: #e5e7eb; }
+        
+        @media (max-width: 640px) {
+            h1 { font-size: 1.75rem; }
+            .email-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">JoeLuT<span>AI</span></div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </header>
+    
+    <div class="deadline-banner">
+        ⏰ FSMA 204 Compliance Deadline: <span>January 20, 2026</span>
+    </div>
+
+    <section class="hero">
+        <div class="badge">🎁 Free Compliance Check</div>
+        <h1>FSMA 204 Compliance Checker</h1>
+        <p class="subtitle">Find out if your food business needs to comply with the FDA Food Traceability Rule in under 2 minutes.</p>
+    </section>
+
+    <div class="checker">
+        <div class="card" id="questionCard">
+            <h2 class="card-title">📋 Quick Assessment</h2>
+            
+            <div class="question" data-question="1">
+                <div class="question-text">1. What type of food business do you operate?</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'business', 'manufacturer')">
+                        <input type="radio" name="business" value="manufacturer">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Food Manufacturer / Processor</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'business', 'distributor')">
+                        <input type="radio" name="business" value="distributor">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Distributor / Wholesaler</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'business', 'retailer')">
+                        <input type="radio" name="business" value="retailer">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Retailer / Grocery Store</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'business', 'restaurant')">
+                        <input type="radio" name="business" value="restaurant">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Restaurant / Food Service</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="2">
+                <div class="question-text">2. Do you handle any foods on the FDA Food Traceability List (FTL)?</div>
+                <div class="question-help">FTL includes: leafy greens, melons, tomatoes, soft cheeses, shell eggs, nut butters, fresh herbs, tropical fruits, finfish, crustaceans, mollusks, ready-to-eat deli salads</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'ftl', 'yes')">
+                        <input type="radio" name="ftl" value="yes">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Yes, we handle FTL foods</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'ftl', 'no')">
+                        <input type="radio" name="ftl" value="no">
+                        <span class="option-radio"></span>
+                        <span class="option-text">No, none of these foods</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'ftl', 'unsure')">
+                        <input type="radio" name="ftl" value="unsure">
+                        <span class="option-radio"></span>
+                        <span class="option-text">I'm not sure</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="3">
+                <div class="question-text">3. What is your annual food sales revenue?</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'revenue', 'under1m')">
+                        <input type="radio" name="revenue" value="under1m">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Under $1 million</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'revenue', '1to10m')">
+                        <input type="radio" name="revenue" value="1to10m">
+                        <span class="option-radio"></span>
+                        <span class="option-text">$1 million - $10 million</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'revenue', 'over10m')">
+                        <input type="radio" name="revenue" value="over10m">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Over $10 million</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="4">
+                <div class="question-text">4. How do you primarily sell your products?</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'sales', 'direct')">
+                        <input type="radio" name="sales" value="direct">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Direct to consumers only (farmers market, own store)</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sales', 'wholesale')">
+                        <input type="radio" name="sales" value="wholesale">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Wholesale to retailers/distributors</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sales', 'both')">
+                        <input type="radio" name="sales" value="both">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Both direct and wholesale</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="5">
+                <div class="question-text">5. Do you currently track lot/batch numbers for your products?</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'lotTracking', 'yes')">
+                        <input type="radio" name="lotTracking" value="yes">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Yes, we have lot/batch tracking</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'lotTracking', 'partial')">
+                        <input type="radio" name="lotTracking" value="partial">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Partially - some products only</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'lotTracking', 'no')">
+                        <input type="radio" name="lotTracking" value="no">
+                        <span class="option-radio"></span>
+                        <span class="option-text">No lot tracking currently</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" data-question="6">
+                <div class="question-text">6. Can you trace a product back to its source within 24 hours?</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'traceability', 'yes')">
+                        <input type="radio" name="traceability" value="yes">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Yes, we can trace within 24 hours</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'traceability', 'no')">
+                        <input type="radio" name="traceability" value="no">
+                        <span class="option-radio"></span>
+                        <span class="option-text">No, it would take longer</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'traceability', 'unsure')">
+                        <input type="radio" name="traceability" value="unsure">
+                        <span class="option-radio"></span>
+                        <span class="option-text">Not sure / Haven't tested</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn-check" id="checkBtn" onclick="checkCompliance()" disabled>Check My Compliance Status</button>
+        </div>
+
+        <div class="card results" id="resultsCard">
+            <div class="result-status" id="resultStatus">
+                <div class="result-icon" id="resultIcon">✅</div>
+                <div class="result-title" id="resultTitle">Status Title</div>
+                <div class="result-summary" id="resultSummary">Summary text here</div>
+            </div>
+
+            <div class="details-section">
+                <h3>📊 Your Assessment Details</h3>
+                <ul class="details-list" id="detailsList"></ul>
+            </div>
+
+            <div class="action-box" id="actionBox">
+                <h3>📋 Recommended Next Steps</h3>
+                <ul id="actionList"></ul>
+            </div>
+
+            <div class="email-capture">
+                <h3>📧 Get Your Full Compliance Report</h3>
+                <p>Receive a detailed PDF report with specific requirements for your business type.</p>
+                <div class="email-form">
+                    <input type="email" id="emailInput" placeholder="Enter your email">
+                    <button onclick="submitEmail()">Send Report</button>
+                </div>
+            </div>
+
+            <button class="btn-restart" onclick="restartAssessment()">↻ Start Over</button>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>📚 About FSMA 204</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <h3>What is FSMA 204?</h3>
+                <p>The FDA Food Traceability Rule (FSMA 204) requires additional traceability recordkeeping for businesses that manufacture, process, pack, or hold foods on the Food Traceability List (FTL). The goal is to enable faster identification and removal of contaminated foods.</p>
+            </div>
+            <div class="info-item">
+                <h3>Key Requirements</h3>
+                <p>Covered businesses must maintain records with Key Data Elements (KDEs) for Critical Tracking Events (CTEs), assign Traceability Lot Codes (TLCs), and be able to provide information to FDA within 24 hours of a request.</p>
+            </div>
+            <div class="info-item">
+                <h3>Who is Exempt?</h3>
+                <p>Restaurants and retail food establishments (for foods sold directly to consumers), farms (for produce they grow), and small businesses under certain revenue thresholds may be exempt from some or all requirements.</p>
+            </div>
+        </div>
+
+        <div class="ftl-foods">
+            <h3>🍎 Foods on the Traceability List (FTL)</h3>
+            <ul>
+                <li><strong>Produce:</strong> Leafy greens, tomatoes, melons, sprouts, peppers, fresh herbs, tropical tree fruits</li>
+                <li><strong>Dairy:</strong> Soft cheeses, shell eggs</li>
+                <li><strong>Seafood:</strong> Finfish, crustaceans, mollusks (fresh/frozen)</li>
+                <li><strong>Prepared Foods:</strong> Nut butters, ready-to-eat deli salads</li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="cta-section">
+        <h2>Need Help with FSMA Compliance?</h2>
+        <p>We build automated traceability systems that make compliance easy. Lot tracking, supplier management, and instant recall capabilities.</p>
+        <a href="https://calendly.com/joelutai/30min" class="btn-cta">Book a Free Consultation</a>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 JoeLuT AI Solutions • <a href="/" style="color: #166534;">joelutai.com</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Disclaimer: This tool provides general guidance only and does not constitute legal advice. Consult with a food safety professional for specific compliance requirements.</p>
+    </footer>
+
+    <script>
+        const answers = {};
+        const requiredQuestions = ['business', 'ftl', 'revenue', 'sales', 'lotTracking', 'traceability'];
+
+        function selectOption(element, question, value) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            // Add selected to clicked
+            element.classList.add('selected');
+            // Store answer
+            answers[question] = value;
+            // Check if all answered
+            checkAllAnswered();
+        }
+
+        function checkAllAnswered() {
+            const allAnswered = requiredQuestions.every(q => answers[q]);
+            document.getElementById('checkBtn').disabled = !allAnswered;
+        }
+
+        function checkCompliance() {
+            const { business, ftl, revenue, sales, lotTracking, traceability } = answers;
+            
+            let status = 'required'; // default
+            let title = '';
+            let summary = '';
+            let details = [];
+            let actions = [];
+
+            // Restaurant exemption
+            if (business === 'restaurant') {
+                status = 'exempt';
+                title = 'Likely Exempt';
+                summary = 'Restaurants and food service establishments are generally exempt from FSMA 204 recordkeeping requirements for foods prepared and sold directly to consumers.';
+                details = [
+                    { icon: 'check', text: 'Food service establishments are exempt for foods prepared on-site' },
+                    { icon: 'warn', text: 'Exemption applies only to foods sold directly to consumers' },
+                    { icon: 'warn', text: 'If you distribute to other businesses, those products may be covered' }
+                ];
+                actions = [
+                    'Maintain your current food safety records',
+                    'If you wholesale any products, assess those separately',
+                    'Stay informed about any regulatory updates'
+                ];
+            }
+            // No FTL foods
+            else if (ftl === 'no') {
+                status = 'exempt';
+                title = 'Likely Exempt';
+                summary = 'If you don\'t handle any foods on the Food Traceability List (FTL), you\'re not subject to the additional FSMA 204 recordkeeping requirements.';
+                details = [
+                    { icon: 'check', text: 'Your products are not on the Food Traceability List' },
+                    { icon: 'warn', text: 'Standard food safety records still required' },
+                    { icon: 'warn', text: 'Review the FTL periodically as it may be updated' }
+                ];
+                actions = [
+                    'Verify your products against the official FTL list',
+                    'Maintain standard food safety documentation',
+                    'Monitor FDA updates for any FTL changes'
+                ];
+            }
+            // Small business direct sales exemption
+            else if (revenue === 'under1m' && sales === 'direct') {
+                status = 'partial';
+                title = 'Partial Exemption May Apply';
+                summary = 'Small businesses under $1M in annual sales that sell directly to consumers may qualify for exemptions, but should verify specific requirements.';
+                details = [
+                    { icon: 'check', text: 'Small business size may qualify for exemptions' },
+                    { icon: 'check', text: 'Direct-to-consumer sales have reduced requirements' },
+                    { icon: 'warn', text: 'Must verify you meet all exemption criteria' },
+                    { icon: 'warn', text: 'Some recordkeeping may still be required' }
+                ];
+                actions = [
+                    'Review FDA small business exemption criteria',
+                    'Document your sales channels and revenue',
+                    'Implement basic lot tracking as best practice',
+                    'Consult with a food safety expert to confirm status'
+                ];
+            }
+            // Unsure about FTL
+            else if (ftl === 'unsure') {
+                status = 'partial';
+                title = 'Assessment Needed';
+                summary = 'You need to determine if your products are on the Food Traceability List. This is the key factor for FSMA 204 compliance.';
+                details = [
+                    { icon: 'warn', text: 'FTL status unknown - this is critical to determine' },
+                    { icon: 'x', text: 'Cannot confirm compliance status without FTL assessment' }
+                ];
+                actions = [
+                    'Review the FDA Food Traceability List immediately',
+                    'Inventory all products you manufacture, process, or handle',
+                    'Compare your products against each FTL category',
+                    'Consider consulting a food safety professional'
+                ];
+            }
+            // Full compliance required
+            else {
+                status = 'required';
+                title = 'Compliance Required';
+                summary = 'Based on your answers, your business is likely subject to FSMA 204 requirements. You must be compliant by January 20, 2026.';
+                
+                details = [
+                    { icon: 'x', text: 'You handle foods on the Food Traceability List' },
+                    { icon: business === 'manufacturer' ? 'x' : 'warn', text: `Business type: ${business} - covered under FSMA 204` }
+                ];
+
+                if (revenue !== 'under1m') {
+                    details.push({ icon: 'x', text: 'Revenue above small business exemption threshold' });
+                }
+                if (sales !== 'direct') {
+                    details.push({ icon: 'x', text: 'Wholesale/distribution sales are covered' });
+                }
+                if (lotTracking === 'no') {
+                    details.push({ icon: 'x', text: 'No lot tracking system - REQUIRED for compliance' });
+                } else if (lotTracking === 'partial') {
+                    details.push({ icon: 'warn', text: 'Partial lot tracking - needs expansion to all FTL products' });
+                } else {
+                    details.push({ icon: 'check', text: 'Lot tracking in place - good foundation' });
+                }
+                if (traceability !== 'yes') {
+                    details.push({ icon: 'x', text: '24-hour traceability not confirmed - REQUIRED' });
+                } else {
+                    details.push({ icon: 'check', text: '24-hour traceability capability confirmed' });
+                }
+
+                actions = [
+                    'Implement Traceability Lot Codes (TLCs) for all FTL products',
+                    'Set up systems to record Key Data Elements (KDEs)',
+                    'Document all Critical Tracking Events (CTEs)',
+                    'Establish 24-hour trace-back capability',
+                    'Train staff on new recordkeeping requirements',
+                    'Test your system with a mock recall exercise',
+                    'Consider automated traceability software'
+                ];
+            }
+
+            // Display results
+            displayResults(status, title, summary, details, actions);
+        }
+
+        function displayResults(status, title, summary, details, actions) {
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('resultsCard').classList.add('show');
+
+            const statusEl = document.getElementById('resultStatus');
+            statusEl.className = 'result-status ' + status;
+
+            const icons = { exempt: '✅', required: '⚠️', partial: '🔶' };
+            document.getElementById('resultIcon').textContent = icons[status];
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultSummary').textContent = summary;
+
+            const iconMap = { check: '✓', x: '✗', warn: '⚡' };
+            const classMap = { check: 'check-icon', x: 'x-icon', warn: 'warn-icon' };
+            
+            document.getElementById('detailsList').innerHTML = details.map(d => 
+                `<li><span class="${classMap[d.icon]}">${iconMap[d.icon]}</span> ${d.text}</li>`
+            ).join('');
+
+            document.getElementById('actionList').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
+
+            document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartAssessment() {
+            Object.keys(answers).forEach(key => delete answers[key]);
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('resultsCard').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function submitEmail() {
+            const email = document.getElementById('emailInput').value;
+            if (email && email.includes('@')) {
+                // In production, this would send to a webhook/API
+                alert('Thank you! Your compliance report will be sent to ' + email);
+                document.getElementById('emailInput').value = '';
+            } else {
+                alert('Please enter a valid email address');
+            }
+        }
+    </script>
+</body>
+</html>
