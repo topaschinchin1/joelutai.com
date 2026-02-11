@@ -3,885 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JoeLuT AI - AI Tools for Research & Food Science</title>
+    <title>JoeLuT AI - Free Tools for Food Business & Research Automation</title>
+    <meta name="description" content="Free AI-powered tools for food manufacturers, researchers, and food scientists. Product cost calculators, FSMA compliance checkers, and automation solutions.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --color-cream: #F8FAF5;
-            --color-white: #FFFFFF;
-            --color-orange: #E87A2E;
-            --color-orange-dark: #D16A20;
-            --color-green: #2E7D32;
-            --color-green-dark: #1B5E20;
-            --color-green-light: #4CAF50;
-            --color-charcoal: #1E1E1E;
-            --color-gray: #5F6368;
-            --color-light-green: #E8F5E9;
-            --font-display: 'Fraunces', serif;
-            --font-body: 'DM Sans', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--color-cream);
-            color: var(--color-charcoal);
-        }
-
-        .bg-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            opacity: 0.4;
-            background-image: 
-                radial-gradient(circle at 20% 80%, var(--color-orange) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, var(--color-green) 0%, transparent 35%);
-            filter: blur(120px);
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; min-height: 100vh; }
+        
         /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(248, 250, 245, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-
-        .logo-text {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1.35rem;
-            color: var(--color-green-dark);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--color-charcoal);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--color-green);
-        }
-
-        .nav-cta {
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            color: white !important;
-            padding: 0.6rem 1.25rem;
-            border-radius: 100px;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-        }
-
-        .mobile-menu {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; max-width: 1400px; margin: 0 auto; }
+        .logo { font-size: 1.75rem; font-weight: 800; color: #fff; text-decoration: none; }
+        .logo span { color: #22c55e; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: #a1a1aa; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #fff; }
+        .nav-cta { background: #22c55e; color: #000; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+        .nav-cta:hover { background: #16a34a; color: #000; }
+        
         /* Hero */
-        .hero {
-            padding: 10rem 0 5rem;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--color-light-green);
-            color: var(--color-green-dark);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .hero h1 .highlight {
-            color: var(--color-orange);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--color-gray);
-            max-width: 650px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-        }
-
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--color-charcoal);
-            border: 2px solid rgba(0,0,0,0.1);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--color-green);
-            color: var(--color-green);
-        }
-
-        /* Stats */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--color-charcoal);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--color-gray);
-        }
-
-        /* Free Tools Section */
-        .free-tools {
-            padding: 5rem 0;
-            background: var(--color-white);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            color: var(--color-charcoal);
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: var(--color-gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .tool-card {
-            background: var(--color-cream);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tool-card:hover {
-            border-color: var(--color-green);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
-        }
-
-        .tool-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .tool-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .tool-card p {
-            font-size: 0.95rem;
-            color: var(--color-gray);
-            line-height: 1.5;
-            flex-grow: 1;
-            margin-bottom: 1.25rem;
-        }
-
-        .tool-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-green);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .tool-cta span {
-            transition: transform 0.2s ease;
-        }
-
-        .tool-card:hover .tool-cta span {
-            transform: translateX(4px);
-        }
-
-        .tool-badge {
-            display: inline-block;
-            background: var(--color-light-green);
-            color: var(--color-green-dark);
-            padding: 0.25rem 0.75rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .tool-badge.new {
-            background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
-            color: white;
-        }
-
+        .hero { text-align: center; padding: 6rem 5% 4rem; max-width: 900px; margin: 0 auto; }
+        .hero-badge { display: inline-block; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero h1 .highlight { color: #22c55e; }
+        .hero p { font-size: 1.25rem; color: #a1a1aa; line-height: 1.6; margin-bottom: 2rem; }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { background: #22c55e; color: #000; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 1.1rem; transition: all 0.2s; }
+        .btn-primary:hover { background: #16a34a; transform: translateY(-2px); }
+        .btn-secondary { background: transparent; color: #fff; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; text-decoration: none; font-size: 1.1rem; border: 2px solid #333; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: #22c55e; color: #22c55e; }
+        
+        /* Tools Section */
+        .tools-section { padding: 5rem 5%; background: #0a0a0a; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 3rem; }
+        .section-badge { display: inline-block; background: rgba(251, 146, 60, 0.15); color: #fb923c; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; border: 1px solid rgba(251, 146, 60, 0.3); }
+        .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+        .section-header p { color: #a1a1aa; font-size: 1.1rem; }
+        
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .tool-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .tool-card:hover { border-color: #22c55e; transform: translateY(-4px); box-shadow: 0 20px 40px rgba(34, 197, 94, 0.1); }
+        .tool-badge { position: absolute; top: 1rem; right: 1rem; background: #22c55e; color: #000; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+        .tool-badge.popular { background: #fb923c; }
+        .tool-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .tool-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tool-card p { color: #a1a1aa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+        .tool-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #22c55e; font-weight: 600; text-decoration: none; }
+        .tool-link:hover { gap: 0.75rem; }
+        
         /* Services Section */
-        .services {
-            padding: 5rem 0;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .service-category {
-            background: var(--color-white);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-        }
-
-        .service-category h3 {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .service-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .service-item:last-child {
-            border-bottom: none;
-        }
-
-        .service-item-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--color-light-green);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .service-item h4 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--color-charcoal);
-        }
-
-        .service-item p {
-            font-size: 0.9rem;
-            color: var(--color-gray);
-            line-height: 1.5;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 5rem 0;
-            background: var(--color-white);
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .step {
-            text-align: center;
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin: 0 auto 1rem;
-        }
-
-        .step h4 {
-            font-family: var(--font-display);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .step p {
-            font-size: 0.9rem;
-            color: var(--color-gray);
-            line-height: 1.5;
-        }
-
-        /* About */
-        .about {
-            padding: 5rem 0;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-family: var(--font-display);
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--color-charcoal);
-        }
-
-        .about-text p {
-            font-size: 1.05rem;
-            color: var(--color-gray);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .credentials {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .credential {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--color-light-green);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--color-green-dark);
-        }
-
-        /* CTA */
-        .cta {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
-            text-align: center;
-            color: white;
-        }
-
-        .cta h2 {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta .btn-primary {
-            background: white;
-            color: var(--color-green-dark);
-        }
-
-        .cta-email {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
+        .services-section { padding: 5rem 5%; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .service-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 2rem; }
+        .service-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+        .service-card p { color: #a1a1aa; font-size: 0.95rem; line-height: 1.6; }
+        
+        /* CTA Section */
+        .cta-section { padding: 5rem 5%; text-align: center; background: linear-gradient(135deg, #0a0a0a 0%, #111 100%); }
+        .cta-box { background: linear-gradient(135deg, #166534, #22c55e); border-radius: 24px; padding: 4rem 2rem; max-width: 800px; margin: 0 auto; }
+        .cta-box h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+        .cta-box p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 2rem; }
+        .cta-box .btn-primary { background: #000; color: #fff; }
+        .cta-box .btn-primary:hover { background: #222; }
+        
         /* Footer */
-        footer {
-            padding: 3rem 0;
-            text-align: center;
-            color: var(--color-gray);
-        }
-
-        .footer-logo {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1.25rem;
-            color: var(--color-green-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1rem 0;
-        }
-
-        .footer-links a {
-            color: var(--color-gray);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover {
-            color: var(--color-green);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .steps {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .steps {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                gap: 2rem;
-            }
+        .footer { padding: 3rem 5%; border-top: 1px solid #222; text-align: center; }
+        .footer p { color: #666; font-size: 0.9rem; }
+        .footer a { color: #22c55e; text-decoration: none; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.25rem; }
+            .hero p { font-size: 1rem; }
+            .section-header h2 { font-size: 1.75rem; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-pattern"></div>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="#" class="logo">
-                <div class="logo-icon">🧪</div>
-                <span class="logo-text">JoeLuT AI</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#tools">Free Tools</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="https://calendly.com/chiomaodo/intro-call" class="nav-cta">Book a Call</a></li>
-            </ul>
-            <button class="mobile-menu">☰</button>
+    <nav class="nav">
+        <a href="/" class="logo">JoeLuT<span>AI</span></a>
+        <div class="nav-links">
+            <a href="#tools">Free Tools</a>
+            <a href="#services">Services</a>
+            <a href="https://calendly.com/joelutai/30min" class="nav-cta">Book a Call</a>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
-        <div class="container">
-            <div class="hero-badge">🔬 AI Tools for Research & Food Science</div>
-            <h1>Let AI Handle the <span class="highlight">Tedious.</span><br>Focus on Discovery.</h1>
-            <p>Custom AI tools that automate R&D workflows, streamline compliance, and accelerate product development for food manufacturers and research teams.</p>
-            <div class="hero-buttons">
-                <a href="https://calendly.com/chiomaodo/intro-call" class="btn btn-primary">Book a Call <span>→</span></a>
-                <a href="#tools" class="btn btn-secondary">Try Free Tools</a>
-            </div>
+        <div class="hero-badge">🚀 AI-Powered Automation</div>
+        <h1>Free Tools for <span class="highlight">Food Business</span> & Research</h1>
+        <p>Powerful calculators and compliance tools for food manufacturers, researchers, and food scientists. Plus custom automation solutions to streamline your operations.</p>
+        <div class="hero-buttons">
+            <a href="#tools" class="btn-primary">Explore Free Tools</a>
+            <a href="https://calendly.com/joelutai/30min" class="btn-secondary">Book Consultation</a>
+        </div>
+    </section>
 
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-icon">🔬</div>
-                    <div class="stat-value">Research Scientist</div>
-                    <div class="stat-label">Background</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">🏭</div>
-                    <div class="stat-value">Food Manufacturing</div>
-                    <div class="stat-label">Experience</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">⚙️</div>
-                    <div class="stat-value">50+</div>
-                    <div class="stat-label">Workflows Built</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-icon">🧬</div>
-                    <div class="stat-value">Science + Automation</div>
-                    <div class="stat-label">Combined</div>
-                </div>
+    <section class="tools-section" id="tools">
+        <div class="section-header">
+            <div class="section-badge">🎁 100% Free</div>
+            <h2>Free Tools</h2>
+            <p>No signup required. Use these tools instantly to improve your food business operations.</p>
+        </div>
+        <div class="tools-grid">
+            <div class="tool-card">
+                <span class="tool-badge popular">Popular</span>
+                <div class="tool-icon">🔬</div>
+                <h3>Microglia Morphology Analyzer</h3>
+                <p>Automated cell morphology analysis using solidity measurements. 100% accuracy for microglial classification in neuroinflammation research.</p>
+                <a href="https://joelutai-microglia-analysis.netlify.app" class="tool-link" target="_blank">Launch Tool →</a>
+            </div>
+            <div class="tool-card">
+                <span class="tool-badge">New</span>
+                <div class="tool-icon">💰</div>
+                <h3>FoodCost Pro Calculator</h3>
+                <p>Calculate true product costs including ingredients, labor, packaging, and overhead. Know your margins before you set prices.</p>
+                <a href="/foodcost-pro" class="tool-link">Launch Tool →</a>
+            </div>
+            <div class="tool-card">
+                <span class="tool-badge">New</span>
+                <div class="tool-icon">✅</div>
+                <h3>FSMA 204 Compliance Checker</h3>
+                <p>Find out if your food business needs to comply with FDA Food Traceability requirements. 2-minute assessment.</p>
+                <a href="/fsma-checker" class="tool-link">Launch Tool →</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🤖</div>
+                <h3>Dante AI Food Scientist</h3>
+                <p>Chat with an AI trained on food science, FSMA regulations, and manufacturing best practices. Get instant answers.</p>
+                <a href="#" class="tool-link" onclick="alert('Chat widget coming soon!')">Coming Soon →</a>
             </div>
         </div>
     </section>
 
-    <!-- Free Tools Section -->
-    <section class="free-tools" id="tools">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">🎁 100% Free</div>
-                <h2>Free Tools You Can Use Today</h2>
-                <p>No signup required. No credit card. Just helpful tools for food scientists and researchers.</p>
+    <section class="services-section" id="services">
+        <div class="section-header">
+            <h2>Custom Automation Services</h2>
+            <p>Need something more? We build tailored solutions for your specific needs.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>📦 Inventory Management</h3>
+                <p>Automated tracking systems using Telegram bots and Google Sheets. Real-time stock alerts and reorder notifications.</p>
             </div>
-
-            <div class="tools-grid">
-                <!-- Microglia Analysis -->
-                <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-card">
-                    <div class="tool-badge">Popular</div>
-                    <div class="tool-icon">🔬</div>
-                    <h3>Microglia Morphology Analyzer</h3>
-                    <p>Upload microscopy images and get instant cell classification. Measures solidity, area, and morphological state (ramified vs amoeboid).</p>
-                    <div class="tool-cta">Try It Free <span>→</span></div>
-                </a>
-
-                <!-- FoodCost Pro -->
-                <a href="/foodcost-pro" class="tool-card">
-                    <div class="tool-badge new">New</div>
-                    <div class="tool-icon">💰</div>
-                    <h3>FoodCost Pro Calculator</h3>
-                    <p>Calculate true product costs including ingredients, labor, packaging & overhead. Get profitable pricing recommendations via Telegram.</p>
-                    <div class="tool-cta">Try It Free <span>→</span></div>
-                </a>
-
-                <!-- FSMA Checker -->
-                <a href="/fsma-checker" class="tool-card">
-                    <div class="tool-badge new">New</div>
-                    <div class="tool-icon">📋</div>
-                    <h3>FSMA 204 Compliance Checker</h3>
-                    <p>Answer 6 questions to find out if the FDA Food Traceability Rule applies to your business and what records you need to keep.</p>
-                    <div class="tool-cta">Check Now <span>→</span></div>
-                </a>
-
-                <!-- Dante AI -->
-                <a href="#" onclick="openDante(); return false;" class="tool-card">
-                    <div class="tool-badge">AI Chat</div>
-                    <div class="tool-icon">🧑‍🍳</div>
-                    <h3>Dante - AI Food Scientist</h3>
-                    <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation. Get instant answers from an AI trained on food science.</p>
-                    <div class="tool-cta">Chat Now <span>→</span></div>
-                </a>
+            <div class="service-card">
+                <h3>👷 Labor Tracking</h3>
+                <p>Time-based pay calculations, shift logging, and productivity analytics. Bilingual support for diverse teams.</p>
+            </div>
+            <div class="service-card">
+                <h3>🧾 Invoice Processing</h3>
+                <p>OCR-powered invoice extraction. Automatically capture vendor data and sync with your accounting system.</p>
+            </div>
+            <div class="service-card">
+                <h3>🔬 Research Automation</h3>
+                <p>Custom analysis tools for biomedical research. Cell counting, morphology analysis, and data pipelines.</p>
             </div>
         </div>
     </section>
 
-    <!-- Services -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>What We Build</h2>
-                <p>AI tools built by a team that understands both the science and the business.</p>
-            </div>
-
-            <div class="services-grid">
-                <div class="service-category">
-                    <h3>🏭 Food Manufacturing</h3>
-                    <div class="service-item">
-                        <div class="service-item-icon">🧬</div>
-                        <div>
-                            <h4>Food Informatics Hub</h4>
-                            <p>Digital formulation databases, ingredient substitution engines, and AI-powered recipe optimization.</p>
-                        </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">📋</div>
-                        <div>
-                            <h4>Compliance Automation</h4>
-                            <p>HACCP & GMP document parsing, batch record automation, audit prep assistants.</p>
-                        </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">🤖</div>
-                        <div>
-                            <h4>Process Automation</h4>
-                            <p>Inventory tracking bots, production data capture, supplier flows, and QC alerts.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="service-category">
-                    <h3>🔬 Research & Analysis</h3>
-                    <div class="service-item">
-                        <div class="service-item-icon">🔬</div>
-                        <div>
-                            <h4>Cell Morphology Analysis</h4>
-                            <p>Automated cell classification and quantitative analysis from microscopy images.</p>
-                        </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">🧬</div>
-                        <div>
-                            <h4>Genomic & Sequence Analysis</h4>
-                            <p>DNA/RNA sequence processing with NCBI database integration and automated reporting.</p>
-                        </div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-item-icon">📊</div>
-                        <div>
-                            <h4>Research Paper Analysis</h4>
-                            <p>PDF data extraction, literature review automation, and searchable databases.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="cta-section">
+        <div class="cta-box">
+            <h2>Ready to Automate Your Operations?</h2>
+            <p>Book a free 30-minute consultation to discuss your specific needs and get a custom solution proposal.</p>
+            <a href="https://calendly.com/joelutai/30min" class="btn-primary">Book Free Consultation</a>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2>How We Work Together</h2>
-                <p>No bloated proposals. No unnecessary complexity. Just solutions that work.</p>
-            </div>
-
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h4>Discovery Call</h4>
-                    <p>We talk through your workflows, pain points, and goals.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h4>Solution Design</h4>
-                    <p>We map out exactly what we'll build and how it connects.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h4>Build & Iterate</h4>
-                    <p>You get a working prototype fast. We refine together.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h4>Launch & Support</h4>
-                    <p>Your team gets trained with ongoing support as you scale.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Science Meets Automation</h2>
-                    <p>We're not just automation builders — we come from the lab and the production floor. We've run food manufacturing operations, worked in research environments, and felt the pain of manual processes, spreadsheet chaos, and compliance headaches firsthand.</p>
-                    <p>That's why we built JoeLuT AI: to create tools that actually understand how scientists and food manufacturers work. No generic solutions. No tech for tech's sake. Just practical AI that saves you time.</p>
-                    <div class="credentials">
-                        <span class="credential">🔬 Research Scientist Background</span>
-                        <span class="credential">🏭 Food Manufacturing Experience</span>
-                        <span class="credential">⚙️ n8n Automation Experts</span>
-                        <span class="credential">🤖 AI Tools Development</span>
-                    </div>
-                </div>
-                <div class="about-image" style="background: var(--color-light-green); border-radius: 24px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
-                    🧪🔬🏭
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta">
-        <div class="container">
-            <h2>Let's Build Something</h2>
-            <p>Tell us what's slowing you down. We'll tell you if AI can fix it — and how.</p>
-            <a href="https://calendly.com/chiomaodo/intro-call" class="btn btn-primary">Book a Discovery Call <span>→</span></a>
-            <p class="cta-email">or email directly: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="036a6d656c43696c666f7677626a2d606c6e">[email&#160;protected]</a></p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-logo">JoeLuT AI</div>
-            <p>AI Tools for Research & Food Science</p>
-            <div class="footer-links">
-                <a href="#tools">Free Tools</a>
-                <a href="#services">Services</a>
-                <a href="#about">About</a>
-                <a href="/cdn-cgi/l/email-protection#e48d8a828ba48e8b81889190858dca878b89">Contact</a>
-            </div>
-            <p>© 2025 JoeLuT AI. Houston, TX.</p>
-        </div>
+    <footer class="footer">
+        <p>© 2025 JoeLuT AI Solutions • Houston, TX • <a href="mailto:info@joelutai.com">info@joelutai.com</a></p>
     </footer>
-
-    <!-- Dante Chat Widget (placeholder - add your actual widget code) -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/
+</body>
+</html>
