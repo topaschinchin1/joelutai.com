@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodCost Pro - Free Product Cost Calculator | JoeLuT AI</title>
+    <meta name="description" content="Free food product cost calculator. Calculate ingredient costs, labor, packaging, and profit margins for your food manufacturing business.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #fff 50%, #fff7ed 100%); min-height: 100vh; color: #1f2937; }
+        
+        .header { background: #166534; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; }
+        .logo span { color: #fb923c; }
+        .back-link { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.9; }
+        .back-link:hover { opacity: 1; }
+        
+        .hero { text-align: center; padding: 3rem 2rem 2rem; }
+        .badge { display: inline-block; background: #dcfce7; color: #166534; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; color: #166534; margin-bottom: 0.5rem; }
+        .subtitle { color: #6b7280; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .calculator { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .card-title { font-size: 1.25rem; font-weight: 600; color: #166534; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #374151; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; }
+        input:focus, select:focus { outline: none; border-color: #166534; }
+        .input-prefix { position: relative; }
+        .input-prefix span { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280; }
+        .input-prefix input { padding-left: 2rem; }
+        
+        .ingredient-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 0.75rem; align-items: end; margin-bottom: 0.75rem; }
+        .ingredient-row input { padding: 0.6rem 0.75rem; }
+        .btn-remove { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; }
+        .btn-remove:hover { background: #fecaca; }
+        .btn-add { background: #dcfce7; color: #166534; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+        .btn-add:hover { background: #bbf7d0; }
+        
+        .btn-calculate { background: linear-gradient(135deg, #166534, #22863a); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-calculate:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,101,52,0.3); }
+        
+        .results { display: none; }
+        .results.show { display: block; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .result-item { background: #f9fafb; padding: 1.25rem; border-radius: 12px; text-align: center; }
+        .result-item.highlight { background: linear-gradient(135deg, #166534, #22863a); color: white; }
+        .result-item.warning { background: #fef3c7; }
+        .result-label { font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem; }
+        .result-item.highlight .result-label { color: rgba(255,255,255,0.8); }
+        .result-value { font-size: 1.5rem; font-weight: 700; color: #166534; }
+        .result-item.highlight .result-value { color: white; }
+        .result-item.warning .result-value { color: #d97706; }
+        
+        .breakdown-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .breakdown-table th, .breakdown-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        .breakdown-table th { font-weight: 600; color: #6b7280; font-size: 0.85rem; text-transform: uppercase; }
+        .breakdown-table td:last-child { text-align: right; font-weight: 600; }
+        
+        .guide-section { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px; padding: 2rem; margin: 3rem auto; max-width: 900px; }
+        .guide-section h2 { color: #166534; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .guide-item h3 { color: #166534; font-size: 1rem; margin-bottom: 0.5rem; }
+        .guide-item p { color: #6b7280; font-size: 0.9rem; line-height: 1.6; }
+        
+        .cta-section { text-align: center; padding: 3rem 2rem; }
+        .cta-section h2 { color: #166534; margin-bottom: 1rem; }
+        .cta-section p { color: #6b7280; margin-bottom: 1.5rem; }
+        .btn-cta { display: inline-block; background: #ea580c; color: white; padding: 1rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 600; }
+        .btn-cta:hover { background: #c2410c; }
+        
+        .footer { text-align: center; padding: 2rem; color: #6b7280; font-size: 0.9rem; }
+        
+        @media (max-width: 640px) {
+            h1 { font-size: 1.75rem; }
+            .ingredient-row { grid-template-columns: 1fr 1fr; }
+            .ingredient-row input:first-child { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">JoeLuT<span>AI</span></div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </header>
+
+    <section class="hero">
+        <div class="badge">🎁 100% Free Tool</div>
+        <h1>FoodCost Pro Calculator</h1>
+        <p class="subtitle">Calculate your true product costs including ingredients, labor, packaging, and overhead. Know your margins before you price.</p>
+    </section>
+
+    <div class="calculator">
+        <div class="card">
+            <h2 class="card-title">📦 Product Details</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName" placeholder="e.g., Chin Chin 250g">
+                </div>
+                <div class="form-group">
+                    <label>Batch Size (units produced)</label>
+                    <input type="number" id="batchSize" placeholder="e.g., 24" min="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">🥘 Ingredients</h2>
+            <div id="ingredientsList">
+                <div class="ingredient-row">
+                    <input type="text" placeholder="Ingredient name">
+                    <input type="number" placeholder="Qty" step="0.01">
+                    <input type="text" placeholder="Unit" value="lbs">
+                    <input type="number" placeholder="Cost $" step="0.01">
+                    <button class="btn-remove" onclick="removeIngredient(this)">×</button>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addIngredient()">+ Add Ingredient</button>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">👷 Labor & Overhead</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Labor Hours (per batch)</label>
+                    <input type="number" id="laborHours" placeholder="e.g., 4" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label>Hourly Wage ($)</label>
+                    <div class="input-prefix">
+                        <span>$</span>
+                        <input type="number" id="hourlyWage" placeholder="15.00" step="0.5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Packaging Cost (per unit)</label>
+                    <div class="input-prefix">
+                        <span>$</span>
+                        <input type="number" id="packagingCost" placeholder="0.50" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Overhead % (rent, utilities)</label>
+                    <input type="number" id="overheadPct" placeholder="15" value="15">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">💰 Pricing</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Target Selling Price (per unit)</label>
+                    <div class="input-prefix">
+                        <span>$</span>
+                        <input type="number" id="sellingPrice" placeholder="12.00" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Target Profit Margin %</label>
+                    <input type="number" id="targetMargin" placeholder="30" value="30">
+                </div>
+            </div>
+            <button class="btn-calculate" onclick="calculateCosts()">Calculate Product Costs</button>
+        </div>
+
+        <div class="card results" id="resultsSection">
+            <h2 class="card-title">📊 Cost Breakdown</h2>
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="result-label">Ingredient Cost/Unit</div>
+                    <div class="result-value" id="ingredientCostUnit">$0.00</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Labor Cost/Unit</div>
+                    <div class="result-value" id="laborCostUnit">$0.00</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Packaging/Unit</div>
+                    <div class="result-value" id="packagingCostUnit">$0.00</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Overhead/Unit</div>
+                    <div class="result-value" id="overheadCostUnit">$0.00</div>
+                </div>
+                <div class="result-item highlight">
+                    <div class="result-label">Total Cost/Unit</div>
+                    <div class="result-value" id="totalCostUnit">$0.00</div>
+                </div>
+                <div class="result-item" id="marginItem">
+                    <div class="result-label">Profit Margin</div>
+                    <div class="result-value" id="profitMargin">0%</div>
+                </div>
+            </div>
+            
+            <h3 style="margin: 1.5rem 0 1rem; color: #166534;">Recommended Pricing</h3>
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="result-label">Min Price (Break Even)</div>
+                    <div class="result-value" id="breakEvenPrice">$0.00</div>
+                </div>
+                <div class="result-item highlight">
+                    <div class="result-label">Target Price (<span id="targetPct">30</span>% margin)</div>
+                    <div class="result-value" id="recommendedPrice">$0.00</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Premium Price (50% margin)</div>
+                    <div class="result-value" id="premiumPrice">$0.00</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 1rem; color: #166534;">Detailed Breakdown</h3>
+            <table class="breakdown-table">
+                <thead>
+                    <tr><th>Category</th><th>Per Batch</th><th>Per Unit</th><th>% of Cost</th></tr>
+                </thead>
+                <tbody id="breakdownTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <section class="guide-section">
+        <h2>📖 How to Use This Calculator</h2>
+        <div class="guide-grid">
+            <div class="guide-item">
+                <h3>1. Enter Product Details</h3>
+                <p>Name your product and specify how many units you produce per batch. This is crucial for accurate per-unit costing.</p>
+            </div>
+            <div class="guide-item">
+                <h3>2. Add All Ingredients</h3>
+                <p>List every ingredient with quantities and costs. Don't forget seasonings, oils, and small items - they add up!</p>
+            </div>
+            <div class="guide-item">
+                <h3>3. Include Labor Costs</h3>
+                <p>Track the time it takes to make a batch. Include prep, cooking, cooling, and packaging time.</p>
+            </div>
+            <div class="guide-item">
+                <h3>4. Set Your Overhead</h3>
+                <p>15-20% is typical for home-based. Commercial kitchens may be 25-35%. This covers rent, utilities, insurance.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Need Help Automating Your Food Business?</h2>
+        <p>Get custom inventory tracking, production logging, and cost analysis systems built for your business.</p>
+        <a href="https://calendly.com/joelutai/30min" class="btn-cta">Book a Free Consultation</a>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 JoeLuT AI Solutions • <a href="/" style="color: #166534;">joelutai.com</a></p>
+    </footer>
+
+    <script>
+        function addIngredient() {
+            const list = document.getElementById('ingredientsList');
+            const row = document.createElement('div');
+            row.className = 'ingredient-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Ingredient name">
+                <input type="number" placeholder="Qty" step="0.01">
+                <input type="text" placeholder="Unit" value="lbs">
+                <input type="number" placeholder="Cost $" step="0.01">
+                <button class="btn-remove" onclick="removeIngredient(this)">×</button>
+            `;
+            list.appendChild(row);
+        }
+
+        function removeIngredient(btn) {
+            const list = document.getElementById('ingredientsList');
+            if (list.children.length > 1) btn.parentElement.remove();
+        }
+
+        function calculateCosts() {
+            const batchSize = parseFloat(document.getElementById('batchSize').value) || 1;
+            const laborHours = parseFloat(document.getElementById('laborHours').value) || 0;
+            const hourlyWage = parseFloat(document.getElementById('hourlyWage').value) || 15;
+            const packagingCost = parseFloat(document.getElementById('packagingCost').value) || 0;
+            const overheadPct = parseFloat(document.getElementById('overheadPct').value) || 15;
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            const targetMargin = parseFloat(document.getElementById('targetMargin').value) || 30;
+
+            // Calculate ingredient costs
+            let totalIngredientCost = 0;
+            document.querySelectorAll('.ingredient-row').forEach(row => {
+                const cost = parseFloat(row.querySelectorAll('input')[3].value) || 0;
+                totalIngredientCost += cost;
+            });
+
+            const laborCostBatch = laborHours * hourlyWage;
+            const packagingCostBatch = packagingCost * batchSize;
+            const subtotal = totalIngredientCost + laborCostBatch + packagingCostBatch;
+            const overheadCostBatch = subtotal * (overheadPct / 100);
+            const totalCostBatch = subtotal + overheadCostBatch;
+
+            const ingredientCostUnit = totalIngredientCost / batchSize;
+            const laborCostUnit = laborCostBatch / batchSize;
+            const packagingCostUnit = packagingCost;
+            const overheadCostUnit = overheadCostBatch / batchSize;
+            const totalCostUnit = totalCostBatch / batchSize;
+
+            // Calculate prices
+            const breakEvenPrice = totalCostUnit;
+            const recommendedPrice = totalCostUnit / (1 - targetMargin / 100);
+            const premiumPrice = totalCostUnit / 0.5;
+
+            // Calculate margin if selling price provided
+            let profitMargin = 0;
+            if (sellingPrice > 0) {
+                profitMargin = ((sellingPrice - totalCostUnit) / sellingPrice) * 100;
+            }
+
+            // Update display
+            document.getElementById('ingredientCostUnit').textContent = '$' + ingredientCostUnit.toFixed(2);
+            document.getElementById('laborCostUnit').textContent = '$' + laborCostUnit.toFixed(2);
+            document.getElementById('packagingCostUnit').textContent = '$' + packagingCostUnit.toFixed(2);
+            document.getElementById('overheadCostUnit').textContent = '$' + overheadCostUnit.toFixed(2);
+            document.getElementById('totalCostUnit').textContent = '$' + totalCostUnit.toFixed(2);
+            document.getElementById('profitMargin').textContent = profitMargin.toFixed(1) + '%';
+            document.getElementById('breakEvenPrice').textContent = '$' + breakEvenPrice.toFixed(2);
+            document.getElementById('recommendedPrice').textContent = '$' + recommendedPrice.toFixed(2);
+            document.getElementById('premiumPrice').textContent = '$' + premiumPrice.toFixed(2);
+            document.getElementById('targetPct').textContent = targetMargin;
+
+            // Color margin based on health
+            const marginItem = document.getElementById('marginItem');
+            marginItem.classList.remove('warning', 'highlight');
+            if (profitMargin < 20) marginItem.classList.add('warning');
+            else if (profitMargin >= 30) marginItem.classList.add('highlight');
+
+            // Update breakdown table
+            const total = totalCostBatch;
+            document.getElementById('breakdownTable').innerHTML = `
+                <tr><td>Ingredients</td><td>$${totalIngredientCost.toFixed(2)}</td><td>$${ingredientCostUnit.toFixed(2)}</td><td>${((totalIngredientCost/total)*100).toFixed(1)}%</td></tr>
+                <tr><td>Labor</td><td>$${laborCostBatch.toFixed(2)}</td><td>$${laborCostUnit.toFixed(2)}</td><td>${((laborCostBatch/total)*100).toFixed(1)}%</td></tr>
+                <tr><td>Packaging</td><td>$${packagingCostBatch.toFixed(2)}</td><td>$${packagingCostUnit.toFixed(2)}</td><td>${((packagingCostBatch/total)*100).toFixed(1)}%</td></tr>
+                <tr><td>Overhead (${overheadPct}%)</td><td>$${overheadCostBatch.toFixed(2)}</td><td>$${overheadCostUnit.toFixed(2)}</td><td>${((overheadCostBatch/total)*100).toFixed(1)}%</td></tr>
+                <tr style="font-weight:700;background:#f0fdf4"><td>TOTAL</td><td>$${totalCostBatch.toFixed(2)}</td><td>$${totalCostUnit.toFixed(2)}</td><td>100%</td></tr>
+            `;
+
+            document.getElementById('resultsSection').classList.add('show');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
