@@ -947,11 +947,11 @@
                     <span class="tool-link">Check Now <span>→</span></span>
                 </a>
 
-                <!-- FoodPro AI (formerly Dante) -->
-                <a href="#" onclick="foodproOpen(); return false;" class="tool-card">
+                <!-- Dante AI -->
+                <a href="#" onclick="openDante(); return false;" class="tool-card">
                     <span class="tool-badge">AI Chat</span>
                     <div class="tool-icon">👩‍🍳</div>
-                    <h3>FoodPro AI - Food Scientist</h3>
+                    <h3>Dante - AI Food Scientist</h3>
                     <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation. Get instant answers from an AI trained on food science.</p>
                     <span class="tool-link">Chat Now <span>→</span></span>
                 </a>
@@ -1131,7 +1131,7 @@
                     Book a Discovery Call
                     <span>→</span>
                 </a>
-                <p class="cta-email">or email directly: info@joelutai.com</p>
+                <p class="cta-email">or email directly: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3babdb5bc93b9bcb6bfa6a7b2bafdb0bcbe">[email&#160;protected]</a></p>
             </div>
         </div>
     </section>
@@ -1148,14 +1148,14 @@
                     <a href="#tools">Free Tools</a>
                     <a href="#services">Services</a>
                     <a href="#about">About</a>
-                    <a href="mailto:info@joelutai.com">Contact</a>
+                    <a href="/cdn-cgi/l/email-protection#e68f888089a68c89838a9392878fc885898b">Contact</a>
                 </div>
                 <p class="footer-text">© 2025 JoeLuT AI. Houston, TX.</p>
             </div>
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
@@ -1179,372 +1179,199 @@
                 }
             });
         });
+
+        // Dante Chat Widget
+        function openDante() {
+            if (typeof foodproOpen === 'function') foodproOpen();
+        }
     </script>
 
-    <!-- ============================================== -->
     <!-- FoodPro AI Chat Widget -->
-    <!-- ============================================== -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
-
-        #foodpro-widget * { box-sizing: border-box; margin: 0; padding: 0; }
-        #foodpro-widget { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
-
-        #foodpro-btn {
-            position: fixed; bottom: 24px; right: 24px; width: 64px; height: 64px;
-            border-radius: 50%; border: none; cursor: pointer; z-index: 99999;
-            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
-            box-shadow: 0 4px 24px rgba(46,125,50,0.45);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; line-height: 1;
-        }
-        #foodpro-btn:hover {
-            transform: scale(1.12);
-            box-shadow: 0 6px 32px rgba(46,125,50,0.55);
-        }
-
-        #foodpro-panel {
-            position: fixed; bottom: 24px; right: 24px; width: 400px; max-width: calc(100vw - 48px);
-            border-radius: 20px; background: #0D1B0F; border: 1px solid #1E3A22;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 60px rgba(46,125,50,0.08);
-            display: none; flex-direction: column; overflow: hidden; z-index: 100000;
-        }
-        #foodpro-panel.open { display: flex; }
-        #foodpro-panel.chat-mode { height: 600px; max-height: calc(100vh - 48px); }
-
-        .fp-header {
-            padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
-            background: linear-gradient(135deg, #1B5E20 0%, #132415 100%);
-            border-bottom: 1px solid #1E3A22; flex-shrink: 0;
-        }
-        .fp-header-left { display: flex; align-items: center; gap: 10px; }
-        .fp-header-title { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.3px; }
-        .fp-header-sub { font-size: 11px; color: #4CAF50; font-weight: 500; }
-        .fp-header-right { display: flex; align-items: center; gap: 8px; }
-        .fp-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
-        .fp-online { font-size: 11px; color: #4CAF50; }
-        .fp-close {
-            margin-left: 8px; width: 28px; height: 28px; border-radius: 8px; border: none;
-            background: rgba(255,255,255,0.08); color: #9E9E9E; font-size: 14px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        .fp-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
-
-        .fp-email-form { padding: 32px 24px; display: flex; flex-direction: column; gap: 16px; }
-        .fp-email-form .fp-icon { font-size: 40px; text-align: center; margin-bottom: 8px; }
-        .fp-email-form h3 {
-            font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px;
-            color: #fff; text-align: center;
-        }
-        .fp-email-form .fp-desc {
-            font-size: 13px; color: #9E9E9E; text-align: center; line-height: 1.5; margin-top: 6px;
-        }
-        .fp-input {
-            width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid #1E3A22;
-            background: #132415; color: #fff; font-size: 14px; font-family: 'DM Sans', sans-serif;
-            outline: none; transition: border-color 0.2s;
-        }
-        .fp-input:focus { border-color: #4CAF50; }
-        .fp-input::placeholder { color: #666; }
-        .fp-submit {
-            width: 100%; padding: 13px; border-radius: 10px; border: none;
-            background: linear-gradient(135deg, #E65100 0%, #FF6D00 100%);
-            color: #fff; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px;
-            cursor: pointer; box-shadow: 0 4px 16px rgba(230,81,0,0.3); transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .fp-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(230,81,0,0.4); }
-        .fp-error { font-size: 12px; color: #FF6D00; text-align: center; display: none; }
-        .fp-credit { font-size: 11px; color: #5a5a5a; text-align: center; }
-        .fp-credit span { color: #4CAF50; font-weight: 600; }
-
-        .fp-biz { padding: 28px 20px; }
-        .fp-biz h4 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: #fff; text-align: center; margin-bottom: 4px; }
-        .fp-biz .fp-desc { font-size: 12px; color: #9E9E9E; text-align: center; margin-bottom: 18px; }
-        .fp-biz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .fp-biz-card {
-            padding: 14px 10px; border-radius: 12px; border: 1.5px solid #1E3A22;
-            background: #132415; cursor: pointer; text-align: center; transition: all 0.25s ease;
-        }
-        .fp-biz-card:hover {
-            border-color: #4CAF50; background: rgba(46,125,50,0.15); transform: translateY(-2px);
-        }
-        .fp-biz-card .icon { font-size: 24px; margin-bottom: 4px; }
-        .fp-biz-card .label { font-size: 13px; font-weight: 600; color: #E0E0E0; }
-        .fp-biz-card:hover .label { color: #4CAF50; }
-
-        .fp-messages {
-            flex: 1; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column;
-        }
-        .fp-msg { display: flex; margin-bottom: 12px; }
-        .fp-msg.user { justify-content: flex-end; }
-        .fp-msg.assistant { justify-content: flex-start; }
-        .fp-bubble {
-            max-width: 82%; padding: 12px 16px; font-size: 13.5px; line-height: 1.55;
-            color: #fff; white-space: pre-wrap; word-break: break-word;
-        }
-        .fp-msg.user .fp-bubble {
-            border-radius: 14px 14px 4px 14px;
-            background: linear-gradient(135deg, #E65100 0%, #FF6D00 100%);
-            box-shadow: 0 2px 12px rgba(230,81,0,0.2);
-        }
-        .fp-msg.assistant .fp-bubble {
-            border-radius: 14px 14px 14px 4px;
-            background: #132415; border: 1px solid #1E3A22;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .fp-typing {
-            display: flex; gap: 5px; padding: 14px 18px; background: #132415;
-            border-radius: 14px 14px 14px 4px; border: 1px solid #1E3A22;
-            width: fit-content; margin-bottom: 12px;
-        }
-        .fp-typing-dot {
-            width: 7px; height: 7px; border-radius: 50%; background: #4CAF50;
-            animation: fp-bounce 1.2s ease-in-out infinite;
-        }
-        .fp-typing-dot:nth-child(2) { animation-delay: 0.15s; }
-        .fp-typing-dot:nth-child(3) { animation-delay: 0.3s; }
-        @keyframes fp-bounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
-            30% { transform: translateY(-6px); opacity: 1; }
-        }
-
-        .fp-examples { padding: 12px 16px 4px; }
-        .fp-examples .fp-desc { font-size: 12px; color: #9E9E9E; margin-bottom: 10px; padding-left: 4px; }
-        .fp-example-btn {
-            display: block; width: 100%; padding: 11px 14px; border-radius: 10px;
-            border: 1px solid #1E3A22; background: transparent; color: #E0E0E0;
-            font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer;
-            text-align: left; margin-bottom: 8px; transition: all 0.2s; line-height: 1.4;
-        }
-        .fp-example-btn:hover { border-color: #4CAF50; background: rgba(46,125,50,0.1); color: #4CAF50; }
-
-        .fp-input-area {
-            padding: 12px 16px 14px; border-top: 1px solid #1E3A22;
-            background: #0D1B0F; flex-shrink: 0;
-        }
-        .fp-input-row { display: flex; gap: 8px; align-items: flex-end; }
-        .fp-chat-input {
-            flex: 1; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #1E3A22;
-            background: #132415; color: #fff; font-size: 14px; font-family: 'DM Sans', sans-serif;
-            outline: none; resize: none; max-height: 100px; transition: border-color 0.2s;
-        }
-        .fp-chat-input:focus { border-color: #4CAF50; }
-        .fp-chat-input::placeholder { color: #666; }
-        .fp-send {
-            width: 42px; height: 42px; border-radius: 12px; border: none;
-            background: rgba(255,255,255,0.06); color: #9E9E9E; font-size: 18px;
-            cursor: default; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; transition: all 0.2s;
-        }
-        .fp-send.active {
-            background: linear-gradient(135deg, #E65100 0%, #FF6D00 100%);
-            color: #fff; cursor: pointer; box-shadow: 0 2px 12px rgba(230,81,0,0.3);
-        }
-        .fp-footer { text-align: center; margin-top: 8px; font-size: 10px; color: #444; }
-        .fp-footer span { color: #4CAF50; font-weight: 600; }
+      @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+      #foodpro-widget *{box-sizing:border-box;margin:0;padding:0}
+      #foodpro-widget{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif}
+      #foodpro-btn{position:fixed;bottom:24px;right:24px;width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;z-index:99999;background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 4px 24px rgba(46,125,50,0.45);transition:transform 0.2s,box-shadow 0.2s;display:flex;align-items:center;justify-content:center;font-size:30px;line-height:1}
+      #foodpro-btn:hover{transform:scale(1.12);box-shadow:0 6px 32px rgba(46,125,50,0.55)}
+      #foodpro-panel{position:fixed;bottom:24px;right:24px;width:400px;max-width:calc(100vw - 48px);border-radius:20px;background:#0D1B0F;border:1px solid #1E3A22;box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 60px rgba(46,125,50,0.08);display:none;flex-direction:column;overflow:hidden;z-index:100000}
+      #foodpro-panel.open{display:flex}
+      #foodpro-panel.chat-mode{height:600px;max-height:calc(100vh - 48px)}
+      .fp-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#1B5E20 0%,#132415 100%);border-bottom:1px solid #1E3A22;flex-shrink:0}
+      .fp-header-left{display:flex;align-items:center;gap:10px}
+      .fp-header-title{font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.3px}
+      .fp-header-sub{font-size:11px;color:#4CAF50;font-weight:500}
+      .fp-header-right{display:flex;align-items:center;gap:8px}
+      .fp-dot{width:8px;height:8px;border-radius:50%;background:#4CAF50;box-shadow:0 0 8px #4CAF50}
+      .fp-online{font-size:11px;color:#4CAF50}
+      .fp-close{margin-left:8px;width:28px;height:28px;border-radius:8px;border:none;background:rgba(255,255,255,0.08);color:#9E9E9E;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+      .fp-close:hover{background:rgba(255,255,255,0.15);color:#fff}
+      .fp-email-form{padding:32px 24px;display:flex;flex-direction:column;gap:16px}
+      .fp-email-form .fp-icon{font-size:40px;text-align:center;margin-bottom:8px}
+      .fp-email-form h3{font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#fff;text-align:center}
+      .fp-email-form .fp-desc{font-size:13px;color:#9E9E9E;text-align:center;line-height:1.5;margin-top:6px}
+      .fp-input{width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #1E3A22;background:#132415;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+      .fp-input:focus{border-color:#4CAF50}
+      .fp-input::placeholder{color:#666}
+      .fp-submit{width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.3);transition:transform 0.2s,box-shadow 0.2s}
+      .fp-submit:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(230,81,0,0.4)}
+      .fp-error{font-size:12px;color:#FF6D00;text-align:center}
+      .fp-credit{font-size:11px;color:#5a5a5a;text-align:center}
+      .fp-credit span{color:#4CAF50;font-weight:600}
+      .fp-biz{padding:28px 20px}
+      .fp-biz h4{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#fff;text-align:center;margin-bottom:4px}
+      .fp-biz .fp-desc{font-size:12px;color:#9E9E9E;text-align:center;margin-bottom:18px}
+      .fp-biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+      .fp-biz-card{padding:14px 10px;border-radius:12px;border:1.5px solid #1E3A22;background:#132415;cursor:pointer;text-align:center;transition:all 0.25s ease}
+      .fp-biz-card:hover{border-color:#4CAF50;background:rgba(46,125,50,0.15);transform:translateY(-2px)}
+      .fp-biz-card .icon{font-size:24px;margin-bottom:4px}
+      .fp-biz-card .label{font-size:13px;font-weight:600;color:#E0E0E0}
+      .fp-biz-card:hover .label{color:#4CAF50}
+      .fp-messages{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column}
+      .fp-msg{display:flex;margin-bottom:12px}
+      .fp-msg.user{justify-content:flex-end}
+      .fp-msg.assistant{justify-content:flex-start}
+      .fp-bubble{max-width:82%;padding:12px 16px;font-size:13.5px;line-height:1.55;color:#fff;white-space:pre-wrap;word-break:break-word}
+      .fp-msg.user .fp-bubble{border-radius:14px 14px 4px 14px;background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);box-shadow:0 2px 12px rgba(230,81,0,0.2)}
+      .fp-msg.assistant .fp-bubble{border-radius:14px 14px 14px 4px;background:#132415;border:1px solid #1E3A22;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+      .fp-typing{display:flex;gap:5px;padding:14px 18px;background:#132415;border-radius:14px 14px 14px 4px;border:1px solid #1E3A22;width:fit-content;margin-bottom:12px}
+      .fp-typing-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:fp-bounce 1.2s ease-in-out infinite}
+      .fp-typing-dot:nth-child(2){animation-delay:0.15s}
+      .fp-typing-dot:nth-child(3){animation-delay:0.3s}
+      @keyframes fp-bounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-6px);opacity:1}}
+      .fp-examples{padding:12px 16px 4px}
+      .fp-examples .fp-desc{font-size:12px;color:#9E9E9E;margin-bottom:10px;padding-left:4px}
+      .fp-example-btn{display:block;width:100%;padding:11px 14px;border-radius:10px;border:1px solid #1E3A22;background:transparent;color:#E0E0E0;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;margin-bottom:8px;transition:all 0.2s;line-height:1.4}
+      .fp-example-btn:hover{border-color:#4CAF50;background:rgba(46,125,50,0.1);color:#4CAF50}
+      .fp-input-area{padding:12px 16px 14px;border-top:1px solid #1E3A22;background:#0D1B0F;flex-shrink:0}
+      .fp-input-row{display:flex;gap:8px;align-items:flex-end}
+      .fp-chat-input{flex:1;padding:11px 14px;border-radius:12px;border:1.5px solid #1E3A22;background:#132415;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;max-height:100px;transition:border-color 0.2s}
+      .fp-chat-input:focus{border-color:#4CAF50}
+      .fp-chat-input::placeholder{color:#666}
+      .fp-send{width:42px;height:42px;border-radius:12px;border:none;background:rgba(255,255,255,0.06);color:#9E9E9E;font-size:18px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+      .fp-send.active{background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);color:#fff;cursor:pointer;box-shadow:0 2px 12px rgba(230,81,0,0.3)}
+      .fp-footer{text-align:center;margin-top:8px;font-size:10px;color:#444}
+      .fp-footer span{color:#4CAF50;font-weight:600}
     </style>
 
     <div id="foodpro-widget">
-        <button id="foodpro-btn" onclick="foodproOpen()">🧑‍🔬</button>
-
-        <div id="foodpro-panel">
-            <div class="fp-header">
-                <div class="fp-header-left">
-                    <span style="font-size:22px">🧑‍🔬</span>
-                    <div>
-                        <div class="fp-header-title">FoodPro AI</div>
-                        <div class="fp-header-sub">Food Science Assistant</div>
-                    </div>
-                </div>
-                <div class="fp-header-right">
-                    <span class="fp-dot"></span>
-                    <span class="fp-online">Online</span>
-                    <button class="fp-close" onclick="foodproClose()">✕</button>
-                </div>
-            </div>
-
-            <div id="fp-step-email" class="fp-email-form">
-                <div class="fp-icon">🧑‍🔬</div>
-                <h3>Ask a Food Scientist</h3>
-                <p class="fp-desc">Get instant answers to your recipe questions, ingredient substitutions, and food science inquiries.</p>
-                <input type="text" id="fp-name" class="fp-input" placeholder="Your name">
-                <input type="email" id="fp-email" class="fp-input" placeholder="Your email">
-                <p id="fp-email-error" class="fp-error"></p>
-                <button class="fp-submit" onclick="foodproSubmitEmail()">Start Chatting →</button>
-                <p class="fp-credit">Powered by <span>JoeLuT AI</span></p>
-            </div>
-
-            <div id="fp-step-biz" class="fp-biz" style="display:none">
-                <h4>What best describes your business?</h4>
-                <p class="fp-desc">This helps me give you more relevant advice</p>
-                <div class="fp-biz-grid">
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('restaurant')"><div class="icon">🍽️</div><div class="label">Restaurant</div></div>
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('bakery')"><div class="icon">🥐</div><div class="label">Bakery</div></div>
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('manufacturer')"><div class="icon">🏭</div><div class="label">Manufacturer</div></div>
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('caterer')"><div class="icon">🍱</div><div class="label">Caterer</div></div>
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('food_truck')"><div class="icon">🚚</div><div class="label">Food Truck</div></div>
-                    <div class="fp-biz-card" onclick="foodproSelectBiz('meal_prep')"><div class="icon">🥗</div><div class="label">Meal Prep</div></div>
-                </div>
-            </div>
-
-            <div id="fp-step-chat" style="display:none;flex:1;flex-direction:column;overflow:hidden">
-                <div class="fp-messages" id="fp-messages"></div>
-                <div class="fp-examples" id="fp-examples"></div>
-                <div class="fp-input-area">
-                    <div class="fp-input-row">
-                        <textarea id="fp-chat-input" class="fp-chat-input" placeholder="Ask about your recipes..." rows="1"
-                            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();foodproSend()}"
-                            oninput="foodproUpdateSendBtn()"></textarea>
-                        <button id="fp-send-btn" class="fp-send" onclick="foodproSend()">↑</button>
-                    </div>
-                    <div class="fp-footer">Powered by <span>JoeLuT AI</span></div>
-                </div>
-            </div>
+      <button id="foodpro-btn" onclick="foodproOpen()">🧑‍🍳</button>
+      <div id="foodpro-panel">
+        <div class="fp-header">
+          <div class="fp-header-left"><span style="font-size:22px">🧑‍🍳</span><div><div class="fp-header-title">FoodPro AI</div><div class="fp-header-sub">by JoeLuT AI</div></div></div>
+          <div class="fp-header-right"><div class="fp-dot"></div><span class="fp-online">Online</span><button class="fp-close" onclick="foodproClose()">✕</button></div>
         </div>
+        <div id="fp-step-email" class="fp-email-form">
+          <div><div class="fp-icon">🧑‍🍳</div><h3>Meet FoodPro AI</h3><p class="fp-desc">Your food science consultant — recipe optimization, ingredient substitutions & nutraceutical insights</p></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <input type="text" id="fp-name" class="fp-input" placeholder="Your name">
+            <input type="email" id="fp-email" class="fp-input" placeholder="Your email" onkeydown="if(event.key==='Enter')foodproSubmitEmail()">
+          </div>
+          <div id="fp-email-error" class="fp-error" style="display:none"></div>
+          <button class="fp-submit" onclick="foodproSubmitEmail()">Start Chatting →</button>
+          <p class="fp-credit">Built by <span>JoeLuT AI</span> — AI automation for food businesses</p>
+        </div>
+        <div id="fp-step-biz" class="fp-biz" style="display:none">
+          <h4>What type of food business are you?</h4>
+          <p class="fp-desc">This helps me tailor my advice</p>
+          <div class="fp-biz-grid">
+            <div class="fp-biz-card" onclick="foodproSelectBiz('restaurant')"><div class="icon">🍽️</div><div class="label">Restaurant</div></div>
+            <div class="fp-biz-card" onclick="foodproSelectBiz('bakery')"><div class="icon">🥐</div><div class="label">Bakery</div></div>
+            <div class="fp-biz-card" onclick="foodproSelectBiz('manufacturer')"><div class="icon">🏭</div><div class="label">Manufacturer</div></div>
+            <div class="fp-biz-card" onclick="foodproSelectBiz('caterer')"><div class="icon">🍱</div><div class="label">Caterer</div></div>
+            <div class="fp-biz-card" onclick="foodproSelectBiz('food_truck')"><div class="icon">🚚</div><div class="label">Food Truck</div></div>
+            <div class="fp-biz-card" onclick="foodproSelectBiz('meal_prep')"><div class="icon">🥗</div><div class="label">Meal Prep</div></div>
+          </div>
+        </div>
+        <div id="fp-step-chat" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+          <div class="fp-messages" id="fp-messages"></div>
+          <div class="fp-examples" id="fp-examples"></div>
+          <div class="fp-input-area">
+            <div class="fp-input-row">
+              <textarea id="fp-chat-input" class="fp-chat-input" placeholder="Ask about your recipes..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();foodproSend()}" oninput="foodproUpdateSendBtn()"></textarea>
+              <button id="fp-send-btn" class="fp-send" onclick="foodproSend()">↑</button>
+            </div>
+            <div class="fp-footer">Powered by <span>JoeLuT AI</span> — joelutai.com</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
     (function() {
-        const WEBHOOK_URL = "https://joelut.app.n8n.cloud/webhook/foodpro-chat";
+      var WEBHOOK_URL = "https://joelut.app.n8n.cloud/webhook/foodpro-chat";
+      var EXAMPLES = {
+        restaurant:["My grilled chicken dries out during dinner rush hold times","What anti-inflammatory ingredients can I add to my menu?","How do I make a creamy pasta sauce dairy-free?"],
+        bakery:["How can I make my muffins healthier without changing taste?","My sourdough isn't getting the right crumb structure","Best sugar substitute for diabetic-friendly pastries?"],
+        manufacturer:["My chin chin is absorbing too much oil during frying","How do I extend shelf life without artificial preservatives?","What functional ingredients can I add to snack products?"],
+        caterer:["How do I scale mac & cheese from 20 to 200 servings?","Best way to keep food safe during outdoor events?","Which dishes hold best for 3+ hour buffet service?"],
+        food_truck:["Quick anti-inflammatory taco toppings that wow customers?","How to keep fried items crispy in a food truck setup?","Cost-effective protein substitutes for my bowls?"],
+        meal_prep:["Which vegetables lose the most nutrients when reheated?","Best containers to preserve freshness for 5-day preps?","How to add functional superfoods to weekly meal plans?"]
+      };
+      var BIZ_LABELS = {restaurant:"Restaurant",bakery:"Bakery",manufacturer:"Manufacturer",caterer:"Caterer",food_truck:"Food Truck",meal_prep:"Meal Prep"};
+      var userData = {name:"",email:"",businessType:""};
+      var isLoading = false;
 
-        const EXAMPLES = {
-            restaurant: ["My grilled chicken dries out during dinner rush hold times", "What anti-inflammatory ingredients can I add to my menu?", "How do I make a creamy pasta sauce dairy-free?"],
-            bakery: ["How can I make my muffins healthier without changing taste?", "My sourdough isn't getting the right crumb structure", "Best sugar substitute for diabetic-friendly pastries?"],
-            manufacturer: ["My chin chin is absorbing too much oil during frying", "How do I extend shelf life without artificial preservatives?", "What functional ingredients can I add to snack products?"],
-            caterer: ["How do I scale mac & cheese from 20 to 200 servings?", "Best way to keep food safe during outdoor events?", "Which dishes hold best for 3+ hour buffet service?"],
-            food_truck: ["Quick anti-inflammatory taco toppings that wow customers?", "How to keep fried items crispy in a food truck setup?", "Cost-effective protein substitutes for my bowls?"],
-            meal_prep: ["Which vegetables lose the most nutrients when reheated?", "Best containers to preserve freshness for 5-day preps?", "How to add functional superfoods to weekly meal plans?"]
-        };
-
-        const BIZ_LABELS = { restaurant:"Restaurant", bakery:"Bakery", manufacturer:"Manufacturer", caterer:"Caterer", food_truck:"Food Truck", meal_prep:"Meal Prep" };
-
-        let userData = { name: "", email: "", businessType: "" };
-        let isLoading = false;
-
-        window.foodproOpen = function() {
-            document.getElementById("foodpro-btn").style.display = "none";
-            document.getElementById("foodpro-panel").classList.add("open");
-        };
-        window.foodproClose = function() {
-            document.getElementById("foodpro-panel").classList.remove("open");
-            document.getElementById("foodpro-btn").style.display = "flex";
-        };
-
-        window.foodproSubmitEmail = function() {
-            const name = document.getElementById("fp-name").value.trim();
-            const email = document.getElementById("fp-email").value.trim();
-            const errEl = document.getElementById("fp-email-error");
-
-            if (!name) { errEl.textContent = "Please enter your name"; errEl.style.display = "block"; return; }
-            if (!email || !email.includes("@")) { errEl.textContent = "Please enter a valid email"; errEl.style.display = "block"; return; }
-
-            userData.name = name;
+      // Auto-skip form if coming from landing page
+      (function checkLandingPageRedirect(){
+        var params = new URLSearchParams(window.location.search);
+        if(params.get('foodpro')==='true'){
+          var email = params.get('email')||'';
+          if(email){
+            userData.name = email.split('@')[0];
             userData.email = email;
-            errEl.style.display = "none";
-            document.getElementById("fp-step-email").style.display = "none";
-            document.getElementById("fp-step-biz").style.display = "block";
-        };
-
-        window.foodproSelectBiz = function(type) {
-            userData.businessType = type;
-            const label = BIZ_LABELS[type] || type;
-
-            document.getElementById("fp-step-biz").style.display = "none";
-            document.getElementById("fp-step-chat").style.display = "flex";
-            document.getElementById("foodpro-panel").classList.add("chat-mode");
-
-            addMessage("assistant", `Hey ${userData.name}! 👋 Welcome to FoodPro AI.\n\nI see you run a ${label.toLowerCase()} — great! I'm here to help with recipe optimization, ingredient substitutions, cost analysis, and functional food insights.\n\nAsk me anything, or try one of the examples below!`);
-
-            const exDiv = document.getElementById("fp-examples");
-            const qs = EXAMPLES[type] || EXAMPLES.restaurant;
-            exDiv.innerHTML = `<p class="fp-desc">Try asking about your ${label.toLowerCase()}:</p>` +
-                qs.map(q => `<button class="fp-example-btn" onclick="foodproSendExample(this, '${q.replace(/'/g, "\\'")}')">💬 ${q}</button>`).join("");
-
-            setTimeout(() => document.getElementById("fp-chat-input").focus(), 150);
-        };
-
-        function addMessage(role, text) {
-            const container = document.getElementById("fp-messages");
-            const div = document.createElement("div");
-            div.className = `fp-msg ${role}`;
-            div.innerHTML = `<div class="fp-bubble">${escapeHtml(text)}</div>`;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
+            setTimeout(function(){
+              foodproOpen();
+              document.getElementById("fp-step-email").style.display = "none";
+              document.getElementById("fp-step-biz").style.display = "block";
+            },500);
+            window.history.replaceState({},'',window.location.pathname);
+          }
         }
+      })();
 
-        function escapeHtml(text) {
-            return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
-        }
+      window.foodproOpen = function(){document.getElementById("foodpro-btn").style.display="none";document.getElementById("foodpro-panel").classList.add("open")};
+      window.foodproClose = function(){document.getElementById("foodpro-panel").classList.remove("open");document.getElementById("foodpro-btn").style.display="flex"};
 
-        function showTyping() {
-            const container = document.getElementById("fp-messages");
-            const div = document.createElement("div");
-            div.id = "fp-typing";
-            div.className = "fp-typing";
-            div.innerHTML = '<div class="fp-typing-dot"></div><div class="fp-typing-dot"></div><div class="fp-typing-dot"></div>';
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
+      window.foodproSubmitEmail = function(){
+        var name=document.getElementById("fp-name").value.trim();
+        var email=document.getElementById("fp-email").value.trim();
+        var errEl=document.getElementById("fp-email-error");
+        if(!name){errEl.textContent="Please enter your name";errEl.style.display="block";return}
+        if(!email||!email.includes("@")){errEl.textContent="Please enter a valid email";errEl.style.display="block";return}
+        userData.name=name;userData.email=email;errEl.style.display="none";
+        document.getElementById("fp-step-email").style.display="none";
+        document.getElementById("fp-step-biz").style.display="block";
+      };
 
-        function hideTyping() {
-            const el = document.getElementById("fp-typing");
-            if (el) el.remove();
-        }
+      window.foodproSelectBiz = function(type){
+        userData.businessType=type;var label=BIZ_LABELS[type]||type;
+        document.getElementById("fp-step-biz").style.display="none";
+        document.getElementById("fp-step-chat").style.display="flex";
+        document.getElementById("foodpro-panel").classList.add("chat-mode");
+        addMessage("assistant","Hey "+userData.name+"! \uD83D\uDC4B Welcome to FoodPro AI.\n\nI see you run a "+label.toLowerCase()+" \u2014 great! I'm here to help with recipe optimization, ingredient substitutions, cost analysis, and functional food insights.\n\nAsk me anything, or try one of the examples below!");
+        var exDiv=document.getElementById("fp-examples");var qs=EXAMPLES[type]||EXAMPLES.restaurant;
+        exDiv.innerHTML='<p class="fp-desc">Try asking about your '+label.toLowerCase()+':</p>'+qs.map(function(q){return'<button class="fp-example-btn" onclick="foodproSendExample(this,\''+q.replace(/'/g,"\\'")+'\')">\uD83D\uDCAC '+q+'</button>'}).join("");
+        setTimeout(function(){document.getElementById("fp-chat-input").focus()},150);
+      };
 
-        window.foodproUpdateSendBtn = function() {
-            const btn = document.getElementById("fp-send-btn");
-            const val = document.getElementById("fp-chat-input").value.trim();
-            if (val && !isLoading) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
-        };
+      function addMessage(role,text){var c=document.getElementById("fp-messages");var d=document.createElement("div");d.className="fp-msg "+role;d.innerHTML='<div class="fp-bubble">'+escapeHtml(text)+'</div>';c.appendChild(d);c.scrollTop=c.scrollHeight}
+      function escapeHtml(text){return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}
+      function showTyping(){var c=document.getElementById("fp-messages");var d=document.createElement("div");d.id="fp-typing";d.className="fp-typing";d.innerHTML='<div class="fp-typing-dot"></div><div class="fp-typing-dot"></div><div class="fp-typing-dot"></div>';c.appendChild(d);c.scrollTop=c.scrollHeight}
+      function hideTyping(){var el=document.getElementById("fp-typing");if(el)el.remove()}
 
-        window.foodproSendExample = function(btn, text) {
-            document.getElementById("fp-examples").style.display = "none";
-            sendToAgent(text);
-        };
+      window.foodproUpdateSendBtn = function(){var btn=document.getElementById("fp-send-btn");var val=document.getElementById("fp-chat-input").value.trim();if(val&&!isLoading){btn.classList.add("active")}else{btn.classList.remove("active")}};
+      window.foodproSendExample = function(btn,text){document.getElementById("fp-examples").style.display="none";sendToAgent(text)};
+      window.foodproSend = function(){var input=document.getElementById("fp-chat-input");var text=input.value.trim();if(!text||isLoading)return;input.value="";foodproUpdateSendBtn();document.getElementById("fp-examples").style.display="none";sendToAgent(text)};
 
-        window.foodproSend = function() {
-            const input = document.getElementById("fp-chat-input");
-            const text = input.value.trim();
-            if (!text || isLoading) return;
-            input.value = "";
-            foodproUpdateSendBtn();
-            document.getElementById("fp-examples").style.display = "none";
-            sendToAgent(text);
-        };
-
-        async function sendToAgent(text) {
-            addMessage("user", text);
-            isLoading = true;
-            foodproUpdateSendBtn();
-            showTyping();
-
-            try {
-                const res = await fetch(WEBHOOK_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        query: text,
-                        user_name: userData.name,
-                        user_email: userData.email,
-                        business_type: userData.businessType,
-                        session_id: `web_${userData.email}_${Date.now()}`,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-                const data = await res.json();
-                const reply = data?.output || data?.response || data?.text || "⚠️ Could not process your request. Please try again.";
-                hideTyping();
-                addMessage("assistant", reply);
-            } catch (err) {
-                hideTyping();
-                addMessage("assistant", "⚠️ Connection error — please try again in a moment.\n\n⚠️ Error de conexión — inténtalo de nuevo en un momento.");
-            } finally {
-                isLoading = false;
-                foodproUpdateSendBtn();
-            }
-        }
+      async function sendToAgent(text){
+        addMessage("user",text);isLoading=true;foodproUpdateSendBtn();showTyping();
+        try{
+          var res=await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:text,user_name:userData.name,user_email:userData.email,business_type:userData.businessType,session_id:"web_"+userData.email+"_"+Date.now(),timestamp:new Date().toISOString()})});
+          var data=await res.json();var reply=data&&(data.output||data.response||data.text)||"\u26A0\uFE0F Could not process your request. Please try again.";
+          hideTyping();addMessage("assistant",reply);
+        }catch(err){hideTyping();addMessage("assistant","\u26A0\uFE0F Connection error \u2014 please try again in a moment.");}
+        finally{isLoading=false;foodproUpdateSendBtn()}
+      }
     })();
     </script>
 </body>
