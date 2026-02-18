@@ -1420,6 +1420,14 @@
     </div>
 
     <script>
+    var FC_BLOCKED_DOMAINS = ['mailinator.com','tempmail.com','guerrillamail.com','throwaway.email','temp-mail.org','fakeinbox.com','sharklasers.com','guerrillamailblock.com','grr.la','dispostable.com','yopmail.com','trashmail.com','maildrop.cc','10minutemail.com','minutemail.com','getairmail.com','mohmal.com','burpcollaborator.net','mailnesia.com','tempail.com','tempr.email','discard.email','discardmail.com','mailcatch.com','trash-mail.com','binkmail.com','bobmail.info','chammy.info','devnullmail.com','letthemeatspam.com','mailexpire.com','mailforspam.com','mailinator.net','mailmetrash.com','nomail.xl.cx','spamfree24.org','spamhereplease.com','throwam.com','trashymail.com','tmail.ws'];
+
+    function isFcDisposable(email) {
+        var domain = email.split('@')[1];
+        if (!domain) return false;
+        return FC_BLOCKED_DOMAINS.indexOf(domain.toLowerCase()) !== -1;
+    }
+
     function openFoodCostModal(){
       document.getElementById('fc-overlay').classList.add('open');
       setTimeout(function(){document.getElementById('fc-email').focus()},100);
@@ -1436,6 +1444,7 @@
       var errEl=document.getElementById('fc-error');
       var btn=document.getElementById('fc-submit-btn');
       if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email';errEl.style.display='block';return}
+      if(isFcDisposable(email)){errEl.textContent='Please use a valid business or personal email address.';errEl.style.display='block';return}
       errEl.style.display='none';
       btn.disabled=true;btn.textContent='Sending...';
 
