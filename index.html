@@ -248,8 +248,6 @@
 
         .hero-word {
             display: inline-block;
-            opacity: 0;
-            transform: translateY(50px);
         }
 
         .gradient-text {
@@ -266,14 +264,12 @@
             max-width: 560px;
             margin-bottom: 48px;
             line-height: 1.7;
-            opacity: 0;
         }
 
         .hero-ctas {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
-            opacity: 0;
         }
 
         .btn-primary {
@@ -346,7 +342,6 @@
 
         .cred-item {
             text-align: center;
-            opacity: 0;
         }
 
         .cred-item .icon {
@@ -1500,22 +1495,71 @@
                 document.getElementById('tab-' + tabId).classList.add('active');
 
                 // Re-animate cards in new tab
-                gsap.from('#tab-' + tabId + ' .service-card', {
-                    y: 30,
-                    opacity: 0,
-                    duration: 0.5,
-                    stagger: 0.1,
-                    ease: 'power2.out'
-                });
+                if (typeof gsap !== 'undefined') {
+                    gsap.from('#tab-' + tabId + ' .service-card', {
+                        y: 30,
+                        opacity: 0,
+                        duration: 0.5,
+                        stagger: 0.1,
+                        ease: 'power2.out',
+                        clearProps: 'opacity,transform'
+                    });
+                }
             });
         });
 
-        // --- Counter animation ---
+        // --- Counter animation (plain JS fallback) ---
         var counterEl = document.querySelector('[data-count]');
         var counterDone = false;
+        var counterTarget = counterEl ? parseInt(counterEl.getAttribute('data-count'), 10) : 0;
 
+        // Set counter to final value immediately as fallback
+        if (counterEl) counterEl.textContent = counterTarget;
+
+        // ============================================
+        // GSAP ANIMATIONS (graceful degradation)
+        // All content is visible by default.
+        // GSAP sets opacity:0 then animates to 1.
+        // If GSAP fails to load, content stays visible.
+        // ============================================
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Helper: set initial hidden state then animate to visible
+        function revealFrom(targets, fromVars, scrollTriggerConfig) {
+            gsap.set(targets, { opacity: 0, y: fromVars.y || 0, scale: fromVars.scale || 1 });
+            gsap.to(targets, Object.assign({
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: fromVars.duration || 0.6,
+                stagger: fromVars.stagger || 0,
+                ease: fromVars.ease || 'power2.out',
+                delay: fromVars.delay || 0,
+                scrollTrigger: scrollTriggerConfig
+            }));
+        }
+
+        // --- Hero entrance ---
+        gsap.set('.hero-word', { opacity: 0, y: 50 });
+        gsap.set('.hero-badge', { opacity: 0, y: 30 });
+        gsap.set('.hero p', { opacity: 0, y: 30 });
+        gsap.set('.hero-ctas', { opacity: 0 });
+
+        var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        heroTl
+            .to('.hero-badge', { y: 0, opacity: 1, duration: 0.8 }, 0.2)
+            .to('.hero-word', { y: 0, opacity: 1, duration: 0.6, stagger: 0.08 }, 0.4)
+            .to('.hero p', { y: 0, opacity: 1, duration: 0.8 }, 1.0)
+            .to('.hero-ctas', { opacity: 1, duration: 0.8 }, 1.2);
+
+        // --- Credibility items ---
+        revealFrom('.cred-item', { y: 30, stagger: 0.12 },
+            { trigger: '.credibility', start: 'top 80%' });
+
+        // --- Counter with GSAP ---
         if (counterEl) {
-            var target = parseInt(counterEl.getAttribute('data-count'), 10);
+            counterEl.textContent = '0';
             ScrollTrigger.create({
                 trigger: '#credibility-bar',
                 start: 'top 80%',
@@ -1524,7 +1568,7 @@
                     counterDone = true;
                     var obj = { val: 0 };
                     gsap.to(obj, {
-                        val: target,
+                        val: counterTarget,
                         duration: 1.8,
                         ease: 'power2.out',
                         onUpdate: function() {
@@ -1535,106 +1579,39 @@
             });
         }
 
-        // ============================================
-        // GSAP ANIMATIONS
-        // ============================================
-        gsap.registerPlugin(ScrollTrigger);
-
-        // --- Hero entrance ---
-        var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-        heroTl
-            .from('.hero-badge', { y: 30, opacity: 0, duration: 0.8 }, 0.2)
-            .to('.hero-word', {
-                y: 0,
-                opacity: 1,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: 'power3.out'
-            }, 0.4)
-            .from('.hero p', { y: 30, opacity: 0, duration: 0.8 }, 1.0)
-            .to('.hero-ctas', { opacity: 1, duration: 0.8 }, 1.2);
-
-        // --- Credibility items ---
-        gsap.from('.cred-item', {
-            scrollTrigger: { trigger: '.credibility', start: 'top 80%' },
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.12,
-            ease: 'power2.out'
-        });
+        // --- Free Tools section header ---
+        revealFrom('#tools .section-header', { y: 40, duration: 0.8 },
+            { trigger: '#tools', start: 'top 80%' });
 
         // --- Tool cards ---
-        gsap.from('.section-header', {
-            scrollTrigger: { trigger: '.free-tools', start: 'top 80%' },
-            y: 40,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
-
-        gsap.from('.tool-card', {
-            scrollTrigger: { trigger: '.tools-grid', start: 'top 85%' },
-            y: 50,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power2.out'
-        });
+        revealFrom('.tool-card', { y: 50, stagger: 0.1 },
+            { trigger: '.tools-grid', start: 'top 85%' });
 
         // --- Services section ---
-        gsap.from('#services .section-header', {
-            scrollTrigger: { trigger: '#services', start: 'top 75%' },
-            y: 40,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
+        revealFrom('#services .section-header', { y: 40, duration: 0.8 },
+            { trigger: '#services', start: 'top 75%' });
 
-        gsap.from('.tab-buttons', {
-            scrollTrigger: { trigger: '#services', start: 'top 70%' },
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-            delay: 0.2,
-            ease: 'power2.out'
-        });
+        revealFrom('.tab-buttons', { y: 20, delay: 0.2 },
+            { trigger: '#services', start: 'top 70%' });
 
-        gsap.from('#tab-food .service-card', {
-            scrollTrigger: { trigger: '#tab-food', start: 'top 85%' },
-            y: 40,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: 'power2.out'
-        });
+        revealFrom('#tab-food .service-card', { y: 40, duration: 0.5, stagger: 0.1 },
+            { trigger: '#tab-food', start: 'top 85%' });
 
-        // --- How It Works timeline ---
+        // --- How It Works ---
         var isMobile = window.innerWidth <= 900;
 
-        gsap.from('#how-it-works .section-header', {
-            scrollTrigger: { trigger: '#how-it-works', start: 'top 75%' },
-            y: 40,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
+        revealFrom('#how-it-works .section-header', { y: 40, duration: 0.8 },
+            { trigger: '#how-it-works', start: 'top 75%' });
 
         document.querySelectorAll('.step').forEach(function(step, i) {
+            gsap.set(step, { opacity: 0, y: 30 });
             ScrollTrigger.create({
                 trigger: step,
                 start: 'top 80%',
                 onEnter: function() {
                     step.classList.add('active');
-                    gsap.from(step, {
-                        y: 30,
-                        opacity: 0,
-                        duration: 0.6,
-                        ease: 'power2.out'
-                    });
+                    gsap.to(step, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
 
-                    // Update progress line
                     var timeline = document.getElementById('timeline');
                     var progress = document.getElementById('timeline-progress');
                     var totalSteps = document.querySelectorAll('.step').length;
@@ -1653,50 +1630,24 @@
         });
 
         // --- About section ---
-        gsap.from('.about-content h2', {
-            scrollTrigger: { trigger: '.about', start: 'top 75%' },
-            y: 40,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
+        revealFrom('.about-content h2', { y: 40, duration: 0.8 },
+            { trigger: '.about', start: 'top 75%' });
 
-        gsap.from('.about-content p', {
-            scrollTrigger: { trigger: '.about', start: 'top 70%' },
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.15,
-            ease: 'power2.out'
-        });
+        revealFrom('.about-content p', { y: 30, stagger: 0.15 },
+            { trigger: '.about', start: 'top 70%' });
 
-        gsap.from('.credential', {
-            scrollTrigger: { trigger: '.about-credentials', start: 'top 85%' },
-            scale: 0.85,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: 'back.out(1.5)'
-        });
+        revealFrom('.credential', { scale: 0.85, stagger: 0.1, duration: 0.5, ease: 'back.out(1.5)' },
+            { trigger: '.about-credentials', start: 'top 85%' });
 
         // --- CTA section ---
-        gsap.from('.cta-box', {
-            scrollTrigger: { trigger: '.cta-section', start: 'top 75%' },
-            scale: 0.92,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
+        revealFrom('.cta-box', { scale: 0.92, duration: 0.8 },
+            { trigger: '.cta-section', start: 'top 75%' });
 
         // --- Footer ---
-        gsap.from('.footer-content > *', {
-            scrollTrigger: { trigger: 'footer', start: 'top 90%' },
-            y: 20,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: 'power2.out'
-        });
+        revealFrom('.footer-content > *', { y: 20, duration: 0.5, stagger: 0.1 },
+            { trigger: 'footer', start: 'top 90%' });
+
+        } // end GSAP check
 
     })();
     </script>
