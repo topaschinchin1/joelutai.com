@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JoeLuT AI - AI Tools for Food Business & Research</title>
+    <title>JoeLuT AI — AI Tools for Food Science & Manufacturing</title>
+    <meta name="description" content="Custom AI solutions that streamline R&D workflows, simplify compliance, and accelerate product development for food science and manufacturing.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,6 +16,7 @@
             --light: #f7f8fa;
             --dark: #0a0e17;
             --gradient: linear-gradient(135deg, #4DD9CB 0%, #2196F3 50%, #0D47A1 100%);
+            --gradient-text: linear-gradient(135deg, #4DD9CB, #2196F3, #0D47A1);
             --teal: #4DD9CB;
             --blue: #2196F3;
             --deep: #0D47A1;
@@ -25,7 +27,9 @@
             --border: #e5e7eb;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
             --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
         }
 
         /* ============================================
@@ -40,188 +44,426 @@
             line-height: 1.6;
             color: var(--text-dark);
             background: var(--white);
-            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-body);
+            max-width: 600px;
+            line-height: 1.6;
+        }
 
         /* ============================================
            NAVBAR
            ============================================ */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: 18px 0;
-            background: transparent;
-            transition: all 0.3s ease;
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        nav.scrolled {
-            padding: 12px 0;
+
+        .navbar.scrolled {
             background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 0;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.06);
         }
-        /* When over dark hero, links are white */
-        nav .nav-links a { color: rgba(255,255,255,0.7); transition: color 0.2s; }
-        nav .nav-links a:hover { color: #fff; }
-        nav.scrolled .nav-links a { color: var(--text-body); }
-        nav.scrolled .nav-links a:hover { color: var(--text-dark); }
-        nav .logo-text { color: #fff; transition: color 0.3s; }
-        nav.scrolled .logo-text { color: var(--text-dark); }
 
-        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-        .logo { text-decoration: none; display: flex; align-items: center; gap: 12px; }
-        .logo-icon { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
-        .logo-text { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .nav-links { display: flex; gap: 32px; list-style: none; }
-        .nav-links a { font-size: 0.9rem; font-weight: 400; text-decoration: none; }
+        .nav-brand svg { width: 40px; height: 40px; }
+
+        .nav-brand span {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-light);
+            transition: color 0.4s;
+        }
+
+        .navbar.scrolled .nav-brand span { color: var(--text-dark); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--text-light); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .navbar.scrolled .nav-links a { color: var(--text-body); }
+        .navbar.scrolled .nav-links a:hover { color: var(--text-dark); }
 
         .nav-cta {
-            font-size: 0.85rem; font-weight: 600;
             padding: 10px 24px;
-            background: var(--gradient); color: var(--dark);
-            text-decoration: none; border-radius: 8px;
-            transition: all 0.3s ease;
+            background: var(--gradient);
+            color: var(--text-light) !important;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(77,217,203,0.3); }
 
-        .mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
-        nav.scrolled .mobile-menu-btn { color: var(--text-dark); }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(77,217,203,0.3);
+        }
+
+        .nav-cta::after { display: none !important; }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none; border: none;
+            padding: 4px;
+        }
+
+        .nav-toggle span {
+            width: 24px; height: 2px;
+            background: var(--text-light);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled .nav-toggle span { background: var(--text-dark); }
 
         /* ============================================
-           HERO (Dark)
+           HERO — CINEMATIC
            ============================================ */
         .hero {
-            background: var(--dark);
+            position: relative;
             min-height: 100vh;
-            display: flex; align-items: center;
+            display: flex;
+            align-items: center;
+            background: var(--dark);
+            overflow: hidden;
             padding: 120px 0 80px;
-            position: relative; overflow: hidden;
         }
-        .hero .container { display: flex; align-items: center; gap: 60px; }
-        .hero-text { flex: 1; min-width: 0; }
-        .hero-visual { flex: 0 0 380px; display: flex; align-items: center; justify-content: center; position: relative; }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            will-change: transform;
+        }
+
+        .hero-orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(77,217,203,0.15), transparent 70%);
+            top: -200px; right: -100px;
+            animation: orbFloat1 20s ease-in-out infinite;
+        }
+
+        .hero-orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(33,150,243,0.12), transparent 70%);
+            bottom: -150px; left: -100px;
+            animation: orbFloat2 25s ease-in-out infinite;
+        }
+
+        .hero-orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(13,71,161,0.1), transparent 70%);
+            top: 40%; left: 50%;
+            animation: orbFloat3 18s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, 30px) scale(1.05); }
+            66% { transform: translate(20px, -20px) scale(0.95); }
+        }
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        @keyframes orbFloat3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+
+        /* Cinematic grain overlay */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content { max-width: 580px; }
 
         .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 18px;
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 100px; font-size: 0.85rem; color: var(--text-light-muted);
-            margin-bottom: 32px;
+            background: rgba(77,217,203,0.08);
+            border: 1px solid rgba(77,217,203,0.2);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--teal);
+            margin-bottom: 28px;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5.5vw, 4rem);
-            font-weight: 700; line-height: 1.1;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
             color: var(--text-light);
-            margin-bottom: 24px; letter-spacing: -0.03em;
+            margin-bottom: 24px;
         }
-        .hero h1 .gradient-text {
-            background: var(--gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+
+        .hero h1 em {
+            font-style: normal;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero p {
-            font-size: 1.15rem; font-weight: 300;
+            font-size: 1.15rem;
             color: var(--text-light-muted);
-            max-width: 520px; margin-bottom: 40px; line-height: 1.7;
+            line-height: 1.7;
+            margin-bottom: 36px;
+            max-width: 500px;
         }
 
-        .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
 
         .btn-primary {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem; font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 16px 32px;
-            background: var(--gradient); color: var(--dark);
-            text-decoration: none; border-radius: 10px; border: none; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 8px;
-            transition: all 0.3s ease;
+            background: var(--gradient);
+            color: var(--text-light);
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(77,217,203,0.3); }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(77,217,203,0.25);
+        }
 
         .btn-outline {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem; font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 16px 32px;
-            background: transparent; color: var(--text-light);
-            text-decoration: none; border-radius: 10px;
+            background: transparent;
+            color: var(--text-light);
             border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .btn-outline:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.35); }
 
-        /* Hero gradient orb */
-        .hero-orb {
-            width: 340px; height: 340px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, rgba(77,217,203,0.5), rgba(33,150,243,0.4) 50%, rgba(13,71,161,0.3) 100%);
-            filter: blur(50px);
-            animation: orbPulse 8s ease-in-out infinite alternate;
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.4);
         }
-        .hero-orb-ring {
-            position: absolute; inset: -20px;
+
+        /* Hero visual — cinematic 3D orb */
+        .hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-sphere {
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 30%, rgba(77,217,203,0.4), transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(33,150,243,0.3), transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(13,71,161,0.2), transparent 70%);
+            box-shadow:
+                0 0 80px rgba(77,217,203,0.15),
+                0 0 160px rgba(33,150,243,0.08),
+                inset 0 0 80px rgba(10,14,23,0.5);
+            animation: spherePulse 8s ease-in-out infinite;
+            position: relative;
+        }
+
+        .hero-sphere::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
             border: 1px solid rgba(77,217,203,0.15);
+            animation: sphereRotate 20s linear infinite;
+        }
+
+        .hero-sphere::after {
+            content: '';
+            position: absolute;
+            inset: 20px;
             border-radius: 50%;
-            animation: orbSpin 20s linear infinite;
+            border: 1px solid rgba(33,150,243,0.1);
+            animation: sphereRotate 15s linear infinite reverse;
         }
-        .hero-orb-ring::after {
-            content: ''; position: absolute; top: -4px; left: 50%;
-            width: 8px; height: 8px; background: var(--teal); border-radius: 50%;
-            box-shadow: 0 0 12px rgba(77,217,203,0.6);
-        }
-        @keyframes orbPulse { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
-        @keyframes orbSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* ============================================
-           CREDIBILITY BAR (Dark, below hero)
-           ============================================ */
-        .credibility {
-            background: var(--dark);
+        @keyframes spherePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        @keyframes sphereRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Credibility bar */
+        .credibility-bar {
+            position: relative;
+            z-index: 2;
+            margin-top: 60px;
+            padding-top: 40px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            padding: 48px 0;
         }
-        .credibility-content { display: flex; justify-content: center; gap: 56px; flex-wrap: wrap; }
-        .cred-item { text-align: center; }
-        .cred-item .icon { font-size: 1.8rem; margin-bottom: 6px; }
-        .cred-item p { font-size: 0.9rem; color: var(--text-light-muted); }
-        .cred-item strong { color: var(--text-light); font-weight: 600; }
 
-        /* ============================================
-           SECTION SHARED STYLES
-           ============================================ */
-        .section-light { background: var(--light); padding: 120px 0; }
-        .section-white { background: var(--white); padding: 120px 0; }
-        .section-dark { background: var(--dark); padding: 120px 0; }
+        .credibility-bar .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
 
-        .section-header { text-align: center; margin-bottom: 64px; }
-        .section-label {
-            display: inline-block;
-            font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.14em;
-            color: var(--teal);
-            margin-bottom: 16px;
+        .cred-item {
+            text-align: center;
+            padding: 16px;
         }
-        .section-title {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            font-weight: 700; letter-spacing: -0.02em;
-            margin-bottom: 12px; line-height: 1.15;
+
+        .cred-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
-        .section-subtitle {
-            font-size: 1.05rem; font-weight: 300;
-            color: var(--text-body);
-            max-width: 540px; margin: 0 auto; line-height: 1.65;
+
+        .cred-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1.2;
         }
-        /* dark section header text */
-        .section-dark .section-title { color: var(--text-light); }
-        .section-dark .section-subtitle { color: var(--text-light-muted); }
+
+        .cred-label {
+            font-size: 0.85rem;
+            color: var(--text-light-muted);
+            margin-top: 4px;
+        }
 
         /* ============================================
            FREE TOOLS
            ============================================ */
+        .tools {
+            padding: 120px 0;
+            background: var(--light);
+        }
+
+        .tools-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .tools-header .section-subtitle {
+            margin: 0 auto;
+        }
+
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -229,480 +471,990 @@
         }
 
         .tool-card {
+            position: relative;
             background: var(--white);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 32px 28px;
-            text-decoration: none; color: inherit;
-            display: flex; flex-direction: column;
-            position: relative; overflow: hidden;
-            transition: all 0.3s ease;
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
         }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
         .tool-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
             box-shadow: var(--shadow-lg);
             border-color: transparent;
         }
-        .tool-card:hover::after {
-            opacity: 1;
-        }
-        .tool-card::after {
-            content: ''; position: absolute;
-            top: 0; left: 0; bottom: 0; width: 3px;
-            background: var(--gradient);
-            opacity: 0; transition: opacity 0.3s;
+
+        .tool-card:hover::before { opacity: 1; }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
         }
 
         .tool-badge {
-            position: absolute; top: 16px; right: 16px;
-            padding: 4px 10px;
-            background: var(--light); border: 1px solid var(--border);
+            position: absolute;
+            top: 20px; right: 20px;
+            padding: 4px 12px;
             border-radius: 100px;
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
-            color: var(--teal); letter-spacing: 0.04em;
-        }
-        .tool-badge.new {
-            background: rgba(77,217,203,0.08);
-            border-color: rgba(77,217,203,0.2);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .tool-icon {
-            width: 52px; height: 52px;
-            background: var(--light);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px; margin-bottom: 18px;
+        .badge-popular { background: #FEF3C7; color: #92400E; }
+        .badge-new { background: #DBEAFE; color: #1E40AF; }
+        .badge-ai { background: #D1FAE5; color: #065F46; }
+
+        .tool-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
         }
-        .tool-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
-        .tool-card p { font-size: 0.9rem; color: var(--text-body); line-height: 1.6; flex-grow: 1; margin-bottom: 16px; }
-        .tool-link { font-size: 0.85rem; font-weight: 600; color: var(--teal); display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s; }
-        .tool-card:hover .tool-link { gap: 10px; }
+
+        .tool-card p {
+            font-size: 0.95rem;
+            color: var(--text-body);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--blue);
+            transition: gap 0.3s;
+        }
+
+        .tool-link:hover { gap: 12px; }
 
         /* ============================================
            SERVICES (Tabbed)
            ============================================ */
-        .tab-buttons {
-            display: flex; justify-content: center; gap: 4px;
+        .services {
+            padding: 120px 0;
+            background: var(--white);
+        }
+
+        .services-header {
+            text-align: center;
             margin-bottom: 48px;
-            background: var(--light); border: 1px solid var(--border);
-            border-radius: 12px; padding: 4px;
-            max-width: 460px; margin-left: auto; margin-right: auto;
         }
+
+        .services-header .section-subtitle { margin: 0 auto; }
+
+        .tab-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 48px;
+        }
+
         .tab-btn {
-            flex: 1; padding: 12px 20px;
-            background: transparent; border: none; border-radius: 10px;
+            padding: 12px 28px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            background: var(--white);
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem; font-weight: 500; color: var(--text-body);
-            cursor: pointer; transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-body);
+            cursor: pointer;
+            transition: all 0.3s;
         }
+
         .tab-btn.active {
-            background: var(--gradient); color: var(--dark); font-weight: 600;
-            box-shadow: 0 2px 8px rgba(77,217,203,0.2);
+            background: var(--gradient);
+            color: var(--text-light);
+            border-color: transparent;
         }
-        .tab-btn:not(.active):hover { color: var(--text-dark); }
+
+        .tab-btn:hover:not(.active) {
+            border-color: var(--blue);
+            color: var(--text-dark);
+        }
 
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .tab-content.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
         .service-card {
             background: var(--white);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 32px 28px;
-            transition: all 0.3s ease;
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .service-card:hover {
-            transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
-        .service-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+
         .service-icon {
-            width: 44px; height: 44px;
-            background: var(--gradient);
-            border-radius: 11px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px; color: white;
-        }
-        .service-card h4 { font-size: 1.1rem; font-weight: 600; }
-        .service-card > p { color: var(--text-body); font-size: 0.9rem; margin-bottom: 14px; line-height: 1.6; }
-        .service-features { list-style: none; }
-        .service-features li {
-            font-size: 0.85rem; color: var(--text-body);
-            padding: 5px 0; display: flex; align-items: center; gap: 8px;
-        }
-        .service-features li::before {
-            content: ''; width: 5px; height: 5px; border-radius: 50%;
-            background: var(--teal); flex-shrink: 0;
-        }
-        .service-link {
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-top: 14px; padding: 8px 16px;
-            font-size: 0.85rem; font-weight: 600;
-            color: var(--teal);
-            background: rgba(77,217,203,0.06);
-            border: 1px solid rgba(77,217,203,0.15);
-            border-radius: 8px; text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .service-link:hover { background: rgba(77,217,203,0.12); border-color: var(--teal); }
-
-        /* ============================================
-           HOW WE WORK (Timeline)
-           ============================================ */
-        .timeline {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 0; margin-top: 64px; position: relative;
-        }
-        .timeline::before {
-            content: ''; position: absolute;
-            top: 28px; left: 30px; right: 30px; height: 2px;
-            background: var(--border);
-        }
-        .timeline-progress {
-            position: absolute; top: 28px; left: 30px;
-            height: 2px; width: 0;
-            background: var(--gradient); z-index: 1;
-            transition: width 0.6s ease;
-        }
-        .step { text-align: center; padding: 0 16px; position: relative; z-index: 2; }
-        .step-number {
             width: 56px; height: 56px;
-            background: var(--white); border: 2px solid var(--border);
+            border-radius: 14px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+        }
+
+        .service-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .service-card li {
+            font-size: 0.92rem;
+            color: var(--text-body);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .service-card li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 9px;
+            width: 6px; height: 6px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: 700; color: var(--text-body);
-            margin: 0 auto 24px;
-            transition: all 0.4s ease;
+            background: var(--teal);
         }
-        .step.active .step-number {
-            background: var(--gradient); border-color: transparent;
-            color: var(--dark);
-            box-shadow: 0 4px 20px rgba(77,217,203,0.25);
-        }
-        .step h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
-        .step p { font-size: 0.9rem; color: var(--text-body); line-height: 1.55; }
+
+        .service-card .tool-link { margin-top: 16px; }
 
         /* ============================================
-           ABOUT
+           TIMELINE — HOW WE WORK
            ============================================ */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-        .about-text p { color: var(--text-body); font-size: 1.05rem; line-height: 1.7; margin-bottom: 16px; font-weight: 300; }
-        .about-credentials { display: flex; flex-direction: column; gap: 14px; }
-        .credential {
-            display: flex; align-items: center; gap: 14px;
-            padding: 18px 22px;
+        .timeline-section {
+            padding: 120px 0;
+            background: var(--light);
+        }
+
+        .timeline-section .section-header {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+
+        .timeline-section .section-subtitle { margin: 0 auto; }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: calc(12.5% + 12px);
+            right: calc(12.5% + 12px);
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 36px;
+            left: calc(12.5% + 12px);
+            height: 3px;
+            width: 0;
+            background: var(--gradient);
+            border-radius: 2px;
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .timeline-step {
+            text-align: center;
+            position: relative;
+            padding: 0 16px;
+        }
+
+        .step-number {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-body);
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s;
+        }
+
+        .timeline-step.active .step-number {
+            background: var(--gradient);
+            border-color: transparent;
+            color: var(--text-light);
+            box-shadow: 0 8px 24px rgba(77,217,203,0.25);
+        }
+
+        .timeline-step h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .timeline-step p {
+            font-size: 0.9rem;
+            color: var(--text-body);
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           ABOUT / CREDIBILITY
+           ============================================ */
+        .about {
+            padding: 120px 0;
+            background: var(--white);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: start;
+        }
+
+        .about-text .section-title { margin-bottom: 24px; }
+
+        .about-text p {
+            color: var(--text-body);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .credential-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 40px;
+        }
+
+        .credential-pill {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 24px;
             background: var(--white);
             border: 1px solid var(--border);
-            border-left: 3px solid var(--teal);
-            border-radius: 10px;
-            font-size: 0.95rem; font-weight: 500; color: var(--text-dark);
+            border-left: 4px solid var(--teal);
+            border-radius: var(--radius-sm);
             box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-        .credential:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
-        .credential .cred-icon { font-size: 1.3rem; }
+
+        .credential-pill:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+
+        .credential-pill .pill-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .credential-pill .pill-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .credential-pill .pill-desc {
+            font-size: 0.82rem;
+            color: var(--text-body);
+            margin-top: 2px;
+        }
 
         /* ============================================
-           CTA (Dark)
+           CTA SECTION
            ============================================ */
-        .cta-section { text-align: center; position: relative; overflow: hidden; }
-        .cta-orb {
-            position: absolute; border-radius: 50%;
-            filter: blur(100px); pointer-events: none;
+        .cta-section {
+            padding: 120px 0;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
         }
-        .cta-orb-1 { width: 400px; height: 400px; top: -150px; right: -100px; background: rgba(77,217,203,0.08); }
-        .cta-orb-2 { width: 300px; height: 300px; bottom: -120px; left: -80px; background: rgba(33,150,243,0.06); }
 
-        .cta-section h2 { color: var(--text-light); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; position: relative; }
-        .cta-section p { color: var(--text-light-muted); font-size: 1.1rem; font-weight: 300; margin-bottom: 40px; position: relative; }
-        .cta-section .btn-primary { position: relative; font-size: 1.1rem; padding: 18px 40px; }
-        .cta-email { color: var(--text-light-muted); font-size: 0.95rem; margin-top: 24px; position: relative; }
-        .cta-email a { color: var(--teal); text-decoration: none; font-weight: 500; }
-        .cta-email a:hover { text-decoration: underline; }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(77,217,203,0.08), transparent 70%);
+            top: -200px; right: -200px;
+            pointer-events: none;
+        }
+
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(33,150,243,0.06), transparent 70%);
+            bottom: -100px; left: -100px;
+            pointer-events: none;
+        }
+
+        .cta-section .container { position: relative; z-index: 2; }
+
+        .cta-section .section-title {
+            color: var(--text-light);
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section .section-subtitle {
+            color: var(--text-light-muted);
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        .cta-section .btn-primary {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+        }
+
+        .cta-email {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: var(--text-light-muted);
+        }
+
+        .cta-email a {
+            color: var(--teal);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .cta-email a:hover { color: var(--text-light); }
 
         /* ============================================
-           FOOTER (Dark)
+           FOOTER
            ============================================ */
-        footer { background: var(--dark); padding: 64px 0 32px; border-top: 1px solid rgba(255,255,255,0.06); }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
-        .footer-brand .logo-text { color: var(--text-light); font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-        .footer-brand p { color: var(--text-light-muted); font-size: 0.85rem; line-height: 1.5; }
-        .footer-col h4 { color: var(--text-light); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
-        .footer-col a { display: block; color: var(--text-light-muted); font-size: 0.9rem; text-decoration: none; padding: 4px 0; transition: color 0.2s; }
+        .footer {
+            padding: 64px 0 32px;
+            background: var(--dark);
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand span {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            color: var(--text-light-muted);
+            margin-top: 12px;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul { list-style: none; }
+
+        .footer-col li { margin-bottom: 10px; }
+
+        .footer-col a {
+            font-size: 0.9rem;
+            color: var(--text-light-muted);
+            transition: color 0.3s;
+        }
+
         .footer-col a:hover { color: var(--teal); }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px; text-align: center; }
-        .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light-muted);
+        }
 
         /* ============================================
            BACK TO TOP
            ============================================ */
         .back-to-top {
-            position: fixed; bottom: 100px; right: 24px;
-            width: 44px; height: 44px; border-radius: 50%;
-            background: var(--white); border: 1px solid var(--border);
-            color: var(--text-body); font-size: 1rem; cursor: pointer;
-            z-index: 99; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transform: translateY(20px);
-            transition: all 0.3s ease; pointer-events: none;
+            position: fixed;
+            bottom: 32px; right: 32px;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--text-body);
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
             box-shadow: var(--shadow-md);
         }
-        .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .back-to-top:hover { background: var(--teal); color: var(--dark); border-color: var(--teal); }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background: var(--gradient);
+            color: var(--text-light);
+            border-color: transparent;
+        }
+
+        /* ============================================
+           FOODCOST PRO MODAL
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 48px;
+            max-width: 460px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--light);
+            color: var(--text-body);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover { background: var(--border); }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .modal p {
+            font-size: 0.95rem;
+            color: var(--text-body);
+            margin-bottom: 24px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .modal input:focus { border-color: var(--blue); }
+
+        .modal .btn-primary {
+            width: 100%;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        .modal .modal-note {
+            font-size: 0.8rem;
+            color: var(--text-body);
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           FOODPRO AI WIDGET
+           ============================================ */
+        .foodpro-toggle {
+            position: fixed;
+            bottom: 24px; right: 96px;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 4px 20px rgba(77,217,203,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foodpro-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 28px rgba(77,217,203,0.4);
+        }
+
+        .foodpro-panel {
+            position: fixed;
+            bottom: 96px; right: 24px;
+            width: 380px; height: 520px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+            border: 1px solid var(--border);
+            z-index: 999;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .foodpro-panel.open { display: flex; }
+
+        .foodpro-header {
+            padding: 16px 20px;
+            background: var(--gradient);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .foodpro-header span {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .foodpro-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foodpro-body {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .foodpro-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
         /* ============================================
            RESPONSIVE
            ============================================ */
         @media (max-width: 1024px) {
-            .tools-grid, .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .about-grid { grid-template-columns: 1fr; gap: 48px; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 768px) {
-            .nav-links, .nav-cta { display: none; }
-            .mobile-menu-btn { display: block; }
-
-            .hero .container { flex-direction: column; text-align: center; }
-            .hero-text { text-align: center; }
-            .hero p { margin-left: auto; margin-right: auto; }
+            .hero .container { grid-template-columns: 1fr; text-align: center; }
+            .hero-content { max-width: 100%; }
+            .hero p { margin: 0 auto 36px; }
             .hero-ctas { justify-content: center; }
-            .hero-visual { flex: 0 0 auto; }
-            .hero-orb { width: 240px; height: 240px; }
+            .hero-visual { display: none; }
+            .credibility-bar .container { grid-template-columns: repeat(2, 1fr); }
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+            .tab-content.active { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
 
-            .tools-grid, .services-grid { grid-template-columns: 1fr; }
-            .tab-buttons { max-width: 100%; }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-toggle { display: flex; }
 
-            .timeline { grid-template-columns: 1fr; gap: 40px; }
-            .timeline::before { top: 0; bottom: 0; left: 28px; right: auto; width: 2px; height: auto; }
-            .timeline-progress { top: 0; left: 28px; width: 2px !important; height: 0; }
-            .step { text-align: left; padding-left: 72px; }
-            .step-number { position: absolute; left: 0; top: 0; margin: 0; }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%; left: 0; right: 0;
+                background: var(--white);
+                padding: 24px;
+                gap: 16px;
+                box-shadow: var(--shadow-lg);
+                border-radius: 0 0 var(--radius) var(--radius);
+            }
 
+            .nav-links.open a { color: var(--text-dark); }
+
+            .section-title { font-size: 2rem; }
+            .hero { padding: 100px 0 60px; min-height: auto; }
+            .hero h1 { font-size: 2.2rem; }
+
+            .tools, .services, .timeline-section, .about, .cta-section { padding: 80px 0; }
+
+            .credibility-bar .container { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .tab-content.active { grid-template-columns: 1fr; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
 
-            .section-light, .section-white, .section-dark { padding: 80px 0; }
+            .timeline { grid-template-columns: 1fr; gap: 32px; }
+            .timeline::before {
+                top: 0; bottom: 0;
+                left: 36px; right: auto;
+                width: 3px; height: 100%;
+            }
+            .timeline-progress {
+                top: 0; left: 36px;
+                width: 3px !important; height: 0;
+                transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .timeline-step {
+                text-align: left;
+                padding-left: 90px;
+            }
+            .step-number {
+                position: absolute;
+                left: 0; top: 0;
+                margin: 0;
+            }
 
             .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .credibility-content { gap: 32px; }
+            .cta-section .section-title { font-size: 2rem; }
+
+            .foodpro-panel {
+                width: calc(100% - 32px);
+                right: 16px; bottom: 88px;
+                height: 480px;
+            }
+
+            .foodpro-toggle { right: 24px; }
         }
 
+        /* ============================================
+           REDUCED MOTION
+           ============================================ */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ============================================
+           SMOOTH SCROLL REVEAL (cinematic)
+           ============================================ */
+        .reveal {
+            opacity: 1;
+            transform: none;
         }
     </style>
 </head>
 <body>
 
     <!-- ========== NAVBAR ========== -->
-    <nav id="navbar">
+    <nav class="navbar" id="navbar">
         <div class="container">
-            <a href="#" class="logo">
-                <div class="logo-icon"><svg width="40" height="40" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="240" fill="transparent" rx="20"/><defs><linearGradient id="lg" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E0F7FA"/><stop offset="25%" stop-color="#4DD9CB"/><stop offset="60%" stop-color="#2196F3"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient><filter id="gw"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="120" cy="120" r="90" stroke="url(#lg)" stroke-width="3" fill="none"/><ellipse cx="120" cy="120" rx="90" ry="30" stroke="#4DD9CB" stroke-width="2" fill="none" opacity="0.35" transform="rotate(-35 120 120)"/><ellipse cx="120" cy="120" rx="90" ry="30" stroke="#2196F3" stroke-width="2" fill="none" opacity="0.35" transform="rotate(35 120 120)"/><path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#lg)" stroke-width="7" stroke-linecap="round" fill="none" filter="url(#gw)"/><path d="M106 92V152H130" stroke="url(#lg)" stroke-width="7" stroke-linecap="round" fill="none" filter="url(#gw)"/><path d="M138 92H174M156 92V152" stroke="url(#lg)" stroke-width="7" stroke-linecap="round" fill="none" filter="url(#gw)"/><circle cx="38" cy="84" r="7" fill="#4DD9CB" opacity="0.8" filter="url(#gw)"/><circle cx="202" cy="84" r="7" fill="#2196F3" opacity="0.7" filter="url(#gw)"/><circle cx="120" cy="214" r="7" fill="#0D47A1" opacity="0.5" filter="url(#gw)"/></svg></div>
-                <span class="logo-text">JoeLuT AI</span>
+            <a href="#" class="nav-brand">
+                <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#E0F7FA"/>
+                            <stop offset="25%" stop-color="#4DD9CB"/>
+                            <stop offset="60%" stop-color="#2196F3"/>
+                            <stop offset="100%" stop-color="#0D47A1"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="120" cy="120" r="90" stroke="url(#navGrad)" stroke-width="3" fill="none"/>
+                    <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#4DD9CB" stroke-width="2" fill="none" opacity="0.35" transform="rotate(-35 120 120)"/>
+                    <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#2196F3" stroke-width="2" fill="none" opacity="0.35" transform="rotate(35 120 120)"/>
+                    <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <path d="M106 92V152H130" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <path d="M138 92H174M156 92V152" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <circle cx="38" cy="84" r="7" fill="#4DD9CB" opacity="0.8"/>
+                    <circle cx="202" cy="84" r="7" fill="#2196F3" opacity="0.7"/>
+                    <circle cx="120" cy="214" r="7" fill="#0D47A1" opacity="0.5"/>
+                </svg>
+                <span>JoeLuT AI</span>
             </a>
-            <ul class="nav-links">
+
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#tools">Free Tools</a></li>
                 <li><a href="#services">Services</a></li>
                 <li><a href="#process">How It Works</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="nav-cta">Book a Call</a></li>
             </ul>
-            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="nav-cta">Book a Call</a>
-            <button class="mobile-menu-btn">&#9776;</button>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
-    <!-- ========== HERO (Dark) ========== -->
+    <!-- ========== HERO ========== -->
     <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+        </div>
+
         <div class="container">
-            <div class="hero-text">
-                <div class="hero-badge">&#128300; AI Tools for Food Science &amp; Manufacturing</div>
-                <h1>AI tools built by scientists, <span class="gradient-text">for scientists.</span></h1>
-                <p>We build custom AI solutions that automate R&amp;D workflows, streamline compliance, and accelerate product development &mdash; because we've been in the lab and on the production floor.</p>
+            <div class="hero-content">
+                <div class="hero-badge">AI Tools for Food Science & Manufacturing</div>
+                <h1>AI tools built by scientists, <em>for scientists.</em></h1>
+                <p>We build custom AI solutions that streamline R&D workflows, simplify compliance, and accelerate product development — because we've been in the lab and on the production floor.</p>
                 <div class="hero-ctas">
-                    <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call &rarr;</a>
+                    <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call <span>&rarr;</span></a>
                     <a href="#tools" class="btn-outline">Try Free Tools</a>
                 </div>
             </div>
+
             <div class="hero-visual">
-                <div class="hero-orb"></div>
-                <div class="hero-orb-ring"></div>
+                <div class="hero-sphere"></div>
+            </div>
+        </div>
+
+        <div class="credibility-bar">
+            <div class="container">
+                <div class="cred-item">
+                    <div class="cred-icon">&#x1F52C;</div>
+                    <div class="cred-label">Research Scientist</div>
+                </div>
+                <div class="cred-item">
+                    <div class="cred-icon">&#x1F3ED;</div>
+                    <div class="cred-label">Food Manufacturing</div>
+                </div>
+                <div class="cred-item">
+                    <div class="cred-icon">&#x2699;&#xFE0F;</div>
+                    <div class="cred-number" data-count="50">50+</div>
+                    <div class="cred-label">Workflows Built</div>
+                </div>
+                <div class="cred-item">
+                    <div class="cred-icon">&#x1F9EC;</div>
+                    <div class="cred-label">Science + AI</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== CREDIBILITY BAR (Dark) ========== -->
-    <section class="credibility">
+    <!-- ========== FREE TOOLS ========== -->
+    <section class="tools" id="tools">
         <div class="container">
-            <div class="credibility-content">
-                <div class="cred-item"><div class="icon">&#128300;</div><p><strong>Research</strong> Scientist</p></div>
-                <div class="cred-item"><div class="icon">&#127981;</div><p><strong>Food Manufacturing</strong> Experience</p></div>
-                <div class="cred-item"><div class="icon">&#9881;&#65039;</div><p><strong data-count="50">50</strong>+ Workflows Built</p></div>
-                <div class="cred-item"><div class="icon">&#129516;</div><p><strong>Science</strong> + Automation</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FREE TOOLS (Light) ========== -->
-    <section class="section-light" id="tools">
-        <div class="container">
-            <div class="section-header">
+            <div class="tools-header">
                 <div class="section-label">Free Tools</div>
-                <h2 class="section-title">Try our tools &mdash; no signup required</h2>
+                <h2 class="section-title">Try our tools — no signup required</h2>
                 <p class="section-subtitle">Built by a food scientist for food businesses and researchers.</p>
             </div>
 
             <div class="tools-grid">
                 <a href="https://colonycount.netlify.app/" target="_blank" class="tool-card">
-                    <span class="tool-badge new">New</span>
-                    <div class="tool-icon">&#129515;</div>
+                    <span class="tool-badge badge-new">New</span>
+                    <span class="tool-icon">&#x1F9EB;</span>
                     <h3>Bacterial Colony Counter</h3>
-                    <p>Upload petri dish images and get instant automated colony counts powered by AI vision.</p>
-                    <span class="tool-link">Try It Free &rarr;</span>
+                    <p>Upload plate images and get instant, accurate colony counts powered by AI vision.</p>
+                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
                 </a>
 
                 <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-card">
-                    <span class="tool-badge">Popular</span>
-                    <div class="tool-icon">&#128300;</div>
+                    <span class="tool-badge badge-popular">Popular</span>
+                    <span class="tool-icon">&#x1F52C;</span>
                     <h3>Microglia Morphology Analyzer</h3>
-                    <p>Upload microscopy images and get instant cell classification with morphological metrics.</p>
-                    <span class="tool-link">Try It Free &rarr;</span>
+                    <p>Analyze cell morphology with AI-powered image segmentation and classification.</p>
+                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
                 </a>
 
-                <a href="#" onclick="openFoodCostModal(); return false;" class="tool-card">
-                    <span class="tool-badge new">New</span>
-                    <div class="tool-icon">&#128176;</div>
+                <div class="tool-card" id="foodcostTrigger" style="cursor:pointer;">
+                    <span class="tool-badge badge-new">New</span>
+                    <span class="tool-icon">&#x1F4B0;</span>
                     <h3>FoodCost Pro Calculator</h3>
-                    <p>Calculate true product costs including ingredients, labor, packaging &amp; overhead.</p>
-                    <span class="tool-link">Try It Free &rarr;</span>
-                </a>
+                    <p>Calculate recipe costs, margins, and pricing with our intelligent food costing tool.</p>
+                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
+                </div>
 
                 <a href="/fsma-checker" class="tool-card">
-                    <span class="tool-badge new">New</span>
-                    <div class="tool-icon">&#128203;</div>
+                    <span class="tool-badge badge-new">New</span>
+                    <span class="tool-icon">&#x1F4CB;</span>
                     <h3>FSMA 204 Compliance Checker</h3>
-                    <p>Find out if the FDA Food Traceability Rule applies to your business in 6 questions.</p>
-                    <span class="tool-link">Check Now &rarr;</span>
+                    <p>Check your food traceability compliance against FDA FSMA 204 requirements.</p>
+                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
                 </a>
 
-                <a href="#" onclick="openDante(); return false;" class="tool-card">
-                    <span class="tool-badge">AI Chat</span>
-                    <div class="tool-icon">&#128105;&#8205;&#127859;</div>
-                    <h3>Dante &mdash; AI Food Scientist</h3>
-                    <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation.</p>
-                    <span class="tool-link">Chat Now &rarr;</span>
-                </a>
+                <div class="tool-card" id="danteTrigger" style="cursor:pointer;">
+                    <span class="tool-badge badge-ai">AI Chat</span>
+                    <span class="tool-icon">&#x1F469;&#x200D;&#x1F373;</span>
+                    <h3>Dante — AI Food Scientist</h3>
+                    <p>Chat with an AI trained on food science, formulation, and regulatory knowledge.</p>
+                    <span class="tool-link">Start Chatting <span>&rarr;</span></span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== SERVICES (White, Tabbed) ========== -->
-    <section class="section-white" id="services">
+    <!-- ========== SERVICES (Tabbed) ========== -->
+    <section class="services" id="services">
         <div class="container">
-            <div class="section-header">
+            <div class="services-header">
                 <div class="section-label">Services</div>
                 <h2 class="section-title">AI tools that actually work</h2>
                 <p class="section-subtitle">Built by a team that understands both the science and the business.</p>
             </div>
 
-            <div class="tab-buttons">
-                <button class="tab-btn active" data-tab="food">Food Manufacturing</button>
-                <button class="tab-btn" data-tab="research">Research &amp; Analysis</button>
+            <div class="tab-bar">
+                <button class="tab-btn active" data-tab="manufacturing">Food Manufacturing</button>
+                <button class="tab-btn" data-tab="research">Research & Analysis</button>
             </div>
 
-            <div class="tab-content active" id="tab-food">
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#129516;</div>
-                            <h4>Food Informatics Hub</h4>
-                        </div>
-                        <p>Digital formulation databases and AI-powered recipe development tools.</p>
-                        <ul class="service-features">
-                            <li>Ingredient substitution engine</li>
-                            <li>Nutritional profile optimization</li>
-                            <li>Cost-based formulation suggestions</li>
-                            <li>Searchable R&amp;D knowledge base</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#128203;</div>
-                            <h4>Compliance Automation</h4>
-                        </div>
-                        <p>AI systems that handle documentation so you can focus on innovation.</p>
-                        <ul class="service-features">
-                            <li>HACCP &amp; GMP document parsing</li>
-                            <li>Batch record automation</li>
-                            <li>Audit preparation assistant</li>
-                            <li>Deviation tracking workflows</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#129302;</div>
-                            <h4>Process Automation</h4>
-                        </div>
-                        <p>Connect your systems and eliminate manual data entry.</p>
-                        <ul class="service-features">
-                            <li>Inventory tracking bots</li>
-                            <li>Production data capture</li>
-                            <li>Supplier communication flows</li>
-                            <li>Quality control alerts</li>
-                        </ul>
-                    </div>
+            <div class="tab-content active" id="tab-manufacturing">
+                <div class="service-card">
+                    <div class="service-icon">&#x1F4CA;</div>
+                    <h3>Food Informatics Hub</h3>
+                    <ul>
+                        <li>AI-powered recipe optimization</li>
+                        <li>Ingredient cost analysis</li>
+                        <li>Nutritional profiling</li>
+                        <li>Shelf-life prediction models</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">&#x1F4DD;</div>
+                    <h3>Compliance Solutions</h3>
+                    <ul>
+                        <li>FSMA 204 traceability checks</li>
+                        <li>Label claim verification</li>
+                        <li>Allergen management workflows</li>
+                        <li>Regulatory document processing</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">&#x2699;&#xFE0F;</div>
+                    <h3>Process Intelligence</h3>
+                    <ul>
+                        <li>Batch record digitization</li>
+                        <li>Quality control dashboards</li>
+                        <li>Supply chain data pipelines</li>
+                        <li>Workflow orchestration</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="tab-content" id="tab-research">
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#128300;</div>
-                            <h4>Cell Morphology Analysis</h4>
-                        </div>
-                        <p>Automated cell classification and quantitative analysis from microscopy images.</p>
-                        <ul class="service-features">
-                            <li>Cell shape classification</li>
-                            <li>Soma area &amp; branch point metrics</li>
-                            <li>Ramification index calculation</li>
-                            <li>Batch image processing</li>
-                        </ul>
-                        <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="service-link">Try the Tool &rarr;</a>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#129516;</div>
-                            <h4>Genomic &amp; Sequence Analysis</h4>
-                        </div>
-                        <p>DNA/RNA sequence processing with NCBI database integration.</p>
-                        <ul class="service-features">
-                            <li>Sequence validation &amp; analysis</li>
-                            <li>BLAST database queries</li>
-                            <li>GC content &amp; composition</li>
-                            <li>Automated reporting</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon">&#128202;</div>
-                            <h4>Research Paper Analysis</h4>
-                        </div>
-                        <p>Extract insights from papers, patents, and lab data automatically.</p>
-                        <ul class="service-features">
-                            <li>PDF data extraction</li>
-                            <li>Literature review automation</li>
-                            <li>Searchable research databases</li>
-                            <li>Citation &amp; gap analysis</li>
-                        </ul>
-                    </div>
+                <div class="service-card">
+                    <div class="service-icon">&#x1F9EC;</div>
+                    <h3>Cell Morphology Analysis</h3>
+                    <ul>
+                        <li>AI-powered cell counting</li>
+                        <li>Morphological classification</li>
+                        <li>Microglia & colony analysis</li>
+                        <li>Batch image processing</li>
+                    </ul>
+                    <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-link">Try the Tool <span>&rarr;</span></a>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">&#x1F9EC;</div>
+                    <h3>Genomic & Sequence Analysis</h3>
+                    <ul>
+                        <li>Sequence alignment tools</li>
+                        <li>Primer design assistance</li>
+                        <li>Phylogenetic analysis</li>
+                        <li>Gene expression dashboards</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">&#x1F4D1;</div>
+                    <h3>Research Paper Analysis</h3>
+                    <ul>
+                        <li>Literature review AI</li>
+                        <li>Data extraction from PDFs</li>
+                        <li>Citation network mapping</li>
+                        <li>Methodology comparison</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== HOW WE WORK (Light) ========== -->
-    <section class="section-light" id="process">
+    <!-- ========== HOW WE WORK ========== -->
+    <section class="timeline-section" id="process">
         <div class="container">
             <div class="section-header">
                 <div class="section-label">The Process</div>
@@ -711,416 +1463,331 @@
             </div>
 
             <div class="timeline" id="timeline">
-                <div class="timeline-progress" id="timeline-progress"></div>
-                <div class="step" data-step="1">
-                    <div class="step-number">1</div>
+                <div class="timeline-progress" id="timelineProgress"></div>
+                <div class="timeline-step">
+                    <div class="step-number">01</div>
                     <h3>Discovery Call</h3>
-                    <p>We talk through your workflows, pain points, and goals. You share the messy reality.</p>
+                    <p>We learn about your workflows, pain points, and goals in a focused 30-minute call.</p>
                 </div>
-                <div class="step" data-step="2">
-                    <div class="step-number">2</div>
+                <div class="timeline-step">
+                    <div class="step-number">02</div>
                     <h3>Solution Design</h3>
-                    <p>We map out exactly what we'll build, how it connects, and what results to expect.</p>
+                    <p>We map out the right AI approach — no unnecessary complexity, just what works.</p>
                 </div>
-                <div class="step" data-step="3">
-                    <div class="step-number">3</div>
-                    <h3>Build &amp; Iterate</h3>
-                    <p>You get a working prototype fast. We refine it together until it's perfect.</p>
+                <div class="timeline-step">
+                    <div class="step-number">03</div>
+                    <h3>Build & Iterate</h3>
+                    <p>We build fast, test with real data, and iterate based on your feedback.</p>
                 </div>
-                <div class="step" data-step="4">
-                    <div class="step-number">4</div>
-                    <h3>Launch &amp; Support</h3>
-                    <p>Your team gets trained, documentation delivered, and ongoing support as you scale.</p>
+                <div class="timeline-step">
+                    <div class="step-number">04</div>
+                    <h3>Launch & Support</h3>
+                    <p>We deploy, train your team, and provide ongoing support as you scale.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== ABOUT (White) ========== -->
-    <section class="section-white" id="about">
+    <!-- ========== ABOUT ========== -->
+    <section class="about" id="about">
         <div class="container">
-            <div class="section-header">
-                <div class="section-label">Why Us</div>
-                <h2 class="section-title">Science meets automation</h2>
-            </div>
-
             <div class="about-grid">
                 <div class="about-text">
-                    <p>We're not just automation builders &mdash; we come from the lab and the production floor. We've run food manufacturing operations, worked in research environments, and felt the pain of manual processes, spreadsheet chaos, and compliance headaches firsthand.</p>
-                    <p>That's why we built JoeLuT AI: to create tools that actually understand how scientists and food manufacturers work. No generic solutions. No tech for tech's sake. Just practical AI that saves you time and helps you focus on what matters &mdash; innovation.</p>
+                    <div class="section-label">Why Us</div>
+                    <h2 class="section-title">Science meets AI</h2>
+                    <p>We're not a generic tech consultancy. Our team has hands-on experience in food science labs and manufacturing facilities — we've run experiments, scaled recipes, and navigated FDA regulations.</p>
+                    <p>That's why our AI tools actually solve real problems. We understand the workflows because we've lived them. Every solution we build starts with deep domain knowledge and ends with measurable impact.</p>
                 </div>
-                <div class="about-credentials">
-                    <div class="credential"><span class="cred-icon">&#128300;</span> Research Scientist Background</div>
-                    <div class="credential"><span class="cred-icon">&#127981;</span> Food Manufacturing Experience</div>
-                    <div class="credential"><span class="cred-icon">&#129302;</span> AI Tools Development</div>
+
+                <div class="credential-pills">
+                    <div class="credential-pill">
+                        <div class="pill-icon">&#x1F52C;</div>
+                        <div>
+                            <div class="pill-text">Research Scientist Background</div>
+                            <div class="pill-desc">Published research in food science & microbiology</div>
+                        </div>
+                    </div>
+                    <div class="credential-pill">
+                        <div class="pill-icon">&#x1F3ED;</div>
+                        <div>
+                            <div class="pill-text">Food Manufacturing Experience</div>
+                            <div class="pill-desc">Hands-on production floor & quality control</div>
+                        </div>
+                    </div>
+                    <div class="credential-pill">
+                        <div class="pill-icon">&#x1F916;</div>
+                        <div>
+                            <div class="pill-text">AI Tools Development</div>
+                            <div class="pill-desc">50+ custom AI workflows deployed</div>
+                        </div>
+                    </div>
+                    <div class="credential-pill">
+                        <div class="pill-icon">&#x1F4CA;</div>
+                        <div>
+                            <div class="pill-text">Data Pipeline Engineering</div>
+                            <div class="pill-desc">End-to-end data integration & orchestration</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== CTA (Dark) ========== -->
-    <section class="section-dark cta-section" id="contact">
+    <!-- ========== CTA ========== -->
+    <section class="cta-section">
         <div class="container">
-            <div class="cta-orb cta-orb-1"></div>
-            <div class="cta-orb cta-orb-2"></div>
-            <h2>Let's build something</h2>
-            <p>Tell us what's slowing you down. We'll tell you if AI can fix it &mdash; and how.</p>
-            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call &rarr;</a>
+            <h2 class="section-title">Let's build something</h2>
+            <p class="section-subtitle">Tell us what's slowing you down. We'll tell you if AI can fix it — and how.</p>
+            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call <span>&rarr;</span></a>
             <p class="cta-email">or email directly: <a href="mailto:info@joelutai.com">info@joelutai.com</a></p>
         </div>
     </section>
 
-    <!-- ========== FOOTER (Dark) ========== -->
-    <footer>
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo-text">JoeLuT AI</div>
-                    <p>AI tools built by scientists for food businesses and researchers. Houston, TX.</p>
+                    <span>JoeLuT AI</span>
+                    <p>Custom AI solutions for food science, manufacturing, and research — built by scientists who understand your work.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Free Tools</h4>
-                    <a href="https://colonycount.netlify.app/" target="_blank">Colony Counter</a>
-                    <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank">Microglia Analyzer</a>
-                    <a href="#" onclick="openFoodCostModal(); return false;">FoodCost Pro</a>
-                    <a href="/fsma-checker">FSMA Checker</a>
+                    <ul>
+                        <li><a href="https://colonycount.netlify.app/" target="_blank">Colony Counter</a></li>
+                        <li><a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank">Microglia Analyzer</a></li>
+                        <li><a href="#" id="footerFoodcost">FoodCost Pro</a></li>
+                        <li><a href="/fsma-checker">FSMA Checker</a></li>
+                    </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Company</h4>
-                    <a href="#services">Services</a>
-                    <a href="#process">How It Works</a>
-                    <a href="#about">About</a>
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#process">How It Works</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contact</h4>
-                    <a href="mailto:info@joelutai.com">info@joelutai.com</a>
-                    <a href="https://calendly.com/chiomaodo/intro-call" target="_blank">Book a Call</a>
+                    <ul>
+                        <li><a href="mailto:info@joelutai.com">info@joelutai.com</a></li>
+                        <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank">Book a Call</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 JoeLuT AI. Houston, TX.</p>
+                &copy; 2026 JoeLuT AI. Houston, TX.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top -->
-    <button class="back-to-top" id="back-to-top" aria-label="Back to top">&uarr;</button>
+    <!-- ========== BACK TO TOP ========== -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">&uarr;</button>
 
-    <!-- ========== MAIN SCRIPTS ========== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- ========== FOODCOST PRO MODAL ========== -->
+    <div class="modal-overlay" id="foodcostModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2>Get FoodCost Pro</h2>
+            <p>Enter your email to get instant access to our food costing calculator.</p>
+            <form id="foodcostForm">
+                <input type="text" name="name" placeholder="Your name" required>
+                <input type="email" name="email" placeholder="Your email" required>
+                <button type="submit" class="btn-primary">Get Access <span>&rarr;</span></button>
+            </form>
+            <p class="modal-note">Free access. No credit card required.</p>
+        </div>
+    </div>
+
+    <!-- ========== FOODPRO AI WIDGET ========== -->
+    <button class="foodpro-toggle" id="foodproToggle" aria-label="Open AI Chat">&#x1F469;&#x200D;&#x1F373;</button>
+    <div class="foodpro-panel" id="foodproPanel">
+        <div class="foodpro-header">
+            <span>Dante — AI Food Scientist</span>
+            <button class="foodpro-close" id="foodproClose">&times;</button>
+        </div>
+        <div class="foodpro-body">
+            <iframe src="https://chat.dante-ai.com/embed?kb_id=74524a65-f169-4e2f-9f04-0993076315c2&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNjBlYjVhLWQ5OTItNDRkMC05NzNhLTRjMjAxODVlYjBkMiJ9.eKfSrhbCjYHFKxIbnOgLxZjOqss85P8WtCRzpGOuq2Y&modeltype=gpt-4o-mini&tabs=false" allow="clipboard-write" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <!-- ========== GSAP CDN ========== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
     <script>
-    (function() {
-        'use strict';
+    document.addEventListener('DOMContentLoaded', function() {
 
-        // --- Navbar scroll ---
-        var navbar = document.getElementById('navbar');
-        var backToTop = document.getElementById('back-to-top');
-        window.addEventListener('scroll', function() {
-            navbar.classList.toggle('scrolled', window.scrollY > 80);
-            backToTop.classList.toggle('visible', window.scrollY > 600);
+        /* ========== NAVBAR SCROLL ========== */
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+
+        function onScroll() {
+            const y = window.scrollY;
+            navbar.classList.toggle('scrolled', y > 80);
+            backToTop.classList.toggle('visible', y > 600);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        /* ========== MOBILE NAV ========== */
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
         });
+
+        /* ========== BACK TO TOP ========== */
         backToTop.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // --- Smooth scroll ---
-        document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                var href = this.getAttribute('href');
-                if (href === '#') return;
-                e.preventDefault();
-                var t = document.querySelector(href);
-                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-
-        // --- Dante / FoodPro ---
-        window.openDante = function() {
-            if (typeof foodproOpen === 'function') foodproOpen();
-        };
-
-        // --- Tabs ---
+        /* ========== TABS ========== */
         document.querySelectorAll('.tab-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                var tabId = this.getAttribute('data-tab');
                 document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
                 document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-                this.classList.add('active');
-                document.getElementById('tab-' + tabId).classList.add('active');
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
             });
         });
 
-        // --- GSAP (progressive enhancement only) ---
+        /* ========== FOODCOST PRO MODAL ========== */
+        const modal = document.getElementById('foodcostModal');
+        const modalClose = document.getElementById('modalClose');
+
+        document.getElementById('foodcostTrigger').addEventListener('click', function() { modal.classList.add('active'); });
+        document.getElementById('footerFoodcost').addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); });
+        modalClose.addEventListener('click', function() { modal.classList.remove('active'); });
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+
+        document.getElementById('foodcostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var name = this.name.value;
+            var email = this.email.value;
+            if (name && email) {
+                modal.classList.remove('active');
+                window.open('/foodcost-pro/?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email), '_blank');
+                this.reset();
+            }
+        });
+
+        /* ========== FOODPRO / DANTE WIDGET ========== */
+        const foodproToggle = document.getElementById('foodproToggle');
+        const foodproPanel = document.getElementById('foodproPanel');
+        const foodproClose = document.getElementById('foodproClose');
+
+        foodproToggle.addEventListener('click', function() { foodproPanel.classList.toggle('open'); });
+        foodproClose.addEventListener('click', function() { foodproPanel.classList.remove('open'); });
+        document.getElementById('danteTrigger').addEventListener('click', function() { foodproPanel.classList.add('open'); });
+
+        /* ========== GSAP CINEMATIC ANIMATIONS ========== */
         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Fade-up helper: sets hidden then animates on scroll
-            function fadeUp(selector, trigger, opts) {
-                var defaults = { y: 30, duration: 0.6, stagger: 0, delay: 0 };
-                var o = Object.assign({}, defaults, opts || {});
+            /* Smooth fade-up helper */
+            function fadeUp(selector, opts) {
+                var o = Object.assign({ y: 40, stagger: 0.12, delay: 0, start: 'top 85%' }, opts || {});
+                var els = document.querySelectorAll(selector);
+                if (!els.length) return;
                 gsap.set(selector, { opacity: 0, y: o.y });
                 gsap.to(selector, {
                     opacity: 1, y: 0,
-                    duration: o.duration, stagger: o.stagger, delay: o.delay,
-                    ease: 'power2.out',
-                    scrollTrigger: { trigger: trigger, start: 'top 85%', once: true }
+                    duration: 1,
+                    stagger: o.stagger,
+                    delay: o.delay,
+                    ease: 'power3.out',
+                    scrollTrigger: { trigger: els[0].closest('section') || els[0], start: o.start, once: true }
                 });
             }
 
-            // Hero (no scroll trigger, plays on load)
+            /* Hero — cinematic entrance */
+            var heroTl = gsap.timeline({ delay: 0.3 });
             gsap.set(['.hero-badge', '.hero h1', '.hero p', '.hero-ctas'], { opacity: 0, y: 30 });
-            var tl = gsap.timeline({ delay: 0.2 });
-            tl.to('.hero-badge', { opacity: 1, y: 0, duration: 0.6 })
-              .to('.hero h1', { opacity: 1, y: 0, duration: 0.7 }, '-=0.3')
-              .to('.hero p', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-              .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3');
+            gsap.set('.hero-sphere', { opacity: 0, scale: 0.8 });
+            gsap.set('.cred-item', { opacity: 0, y: 20 });
 
-            // Credibility
-            fadeUp('.cred-item', '.credibility', { stagger: 0.1 });
+            heroTl
+                .to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+                .to('.hero h1', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
+                .to('.hero p', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+                .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+                .to('.hero-sphere', { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' }, '-=1')
+                .to('.cred-item', { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, '-=0.6');
 
-            // Tools
-            fadeUp('#tools .section-header', '#tools');
-            fadeUp('.tool-card', '.tools-grid', { stagger: 0.08, y: 40 });
-
-            // Services
-            fadeUp('#services .section-header', '#services');
-            fadeUp('.tab-buttons', '#services', { delay: 0.1 });
-            fadeUp('#tab-food .service-card', '#tab-food', { stagger: 0.08 });
-
-            // Timeline steps
-            document.querySelectorAll('.step').forEach(function(step, i) {
-                gsap.set(step, { opacity: 0, y: 20 });
-                ScrollTrigger.create({
-                    trigger: step,
-                    start: 'top 85%',
-                    once: true,
-                    onEnter: function() {
-                        step.classList.add('active');
-                        gsap.to(step, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
-                        // Progress line
-                        var tl = document.getElementById('timeline');
-                        var pr = document.getElementById('timeline-progress');
-                        var total = document.querySelectorAll('.step').length;
-                        var isMobile = window.innerWidth <= 768;
-                        if (!isMobile) {
-                            pr.style.width = (((i + 0.5) / total) * (tl.offsetWidth - 60)) + 'px';
-                        } else {
-                            pr.style.height = (((i + 0.5) / total) * tl.offsetHeight) + 'px';
-                        }
-                    }
-                });
-            });
-
-            // About
-            fadeUp('.about-text p', '.about-text', { stagger: 0.15 });
-            fadeUp('.credential', '.about-credentials', { stagger: 0.1 });
-
-            // CTA
-            fadeUp('.cta-section h2, .cta-section p, .cta-section .btn-primary, .cta-email', '.cta-section', { stagger: 0.1 });
-
-            // Counter
+            /* Counter animation */
             var counterEl = document.querySelector('[data-count]');
             if (counterEl) {
-                var countTarget = parseInt(counterEl.getAttribute('data-count'), 10);
-                ScrollTrigger.create({
-                    trigger: '.credibility',
-                    start: 'top 85%',
-                    once: true,
-                    onEnter: function() {
-                        var obj = { v: 0 };
-                        counterEl.textContent = '0';
-                        gsap.to(obj, {
-                            v: countTarget, duration: 1.5, ease: 'power2.out',
-                            onUpdate: function() { counterEl.textContent = Math.floor(obj.v); }
-                        });
+                var target = parseInt(counterEl.dataset.count);
+                gsap.from({ val: 0 }, {
+                    val: target,
+                    duration: 2,
+                    delay: 1.5,
+                    ease: 'power2.out',
+                    onUpdate: function() {
+                        counterEl.textContent = Math.round(this.targets()[0].val) + '+';
                     }
                 });
             }
-        }
-    })();
-    </script>
 
-    <!-- ========== FoodPro AI Chat Widget ========== -->
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
-      #foodpro-widget *{box-sizing:border-box;margin:0;padding:0}
-      #foodpro-widget{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif}
-      #foodpro-btn{position:fixed;bottom:24px;right:24px;width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;z-index:99999;background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 4px 24px rgba(46,125,50,0.45);transition:transform 0.2s,box-shadow 0.2s;display:flex;align-items:center;justify-content:center;font-size:30px;line-height:1}
-      #foodpro-btn:hover{transform:scale(1.12);box-shadow:0 6px 32px rgba(46,125,50,0.55)}
-      #foodpro-panel{position:fixed;bottom:24px;right:24px;width:400px;max-width:calc(100vw - 48px);border-radius:20px;background:#0D1B0F;border:1px solid #1E3A22;box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 60px rgba(46,125,50,0.08);display:none;flex-direction:column;overflow:hidden;z-index:100000}
-      #foodpro-panel.open{display:flex}
-      #foodpro-panel.chat-mode{height:600px;max-height:calc(100vh - 48px)}
-      .fp-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#1B5E20 0%,#132415 100%);border-bottom:1px solid #1E3A22;flex-shrink:0}
-      .fp-header-left{display:flex;align-items:center;gap:10px}
-      .fp-header-title{font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.3px}
-      .fp-header-sub{font-size:11px;color:#4CAF50;font-weight:500}
-      .fp-header-right{display:flex;align-items:center;gap:8px}
-      .fp-dot{width:8px;height:8px;border-radius:50%;background:#4CAF50;box-shadow:0 0 8px #4CAF50}
-      .fp-online{font-size:11px;color:#4CAF50}
-      .fp-close{margin-left:8px;width:28px;height:28px;border-radius:8px;border:none;background:rgba(255,255,255,0.08);color:#9E9E9E;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-      .fp-close:hover{background:rgba(255,255,255,0.15);color:#fff}
-      .fp-email-form{padding:32px 24px;display:flex;flex-direction:column;gap:16px}
-      .fp-email-form .fp-icon{font-size:40px;text-align:center;margin-bottom:8px}
-      .fp-email-form h3{font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#fff;text-align:center}
-      .fp-email-form .fp-desc{font-size:13px;color:#9E9E9E;text-align:center;line-height:1.5;margin-top:6px}
-      .fp-input{width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #1E3A22;background:#132415;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
-      .fp-input:focus{border-color:#4CAF50}
-      .fp-input::placeholder{color:#666}
-      .fp-submit{width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.3);transition:transform 0.2s,box-shadow 0.2s}
-      .fp-submit:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(230,81,0,0.4)}
-      .fp-error{font-size:12px;color:#FF6D00;text-align:center}
-      .fp-credit{font-size:11px;color:#5a5a5a;text-align:center}
-      .fp-credit span{color:#4CAF50;font-weight:600}
-      .fp-biz{padding:28px 20px}
-      .fp-biz h4{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#fff;text-align:center;margin-bottom:4px}
-      .fp-biz .fp-desc{font-size:12px;color:#9E9E9E;text-align:center;margin-bottom:18px}
-      .fp-biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .fp-biz-card{padding:14px 10px;border-radius:12px;border:1.5px solid #1E3A22;background:#132415;cursor:pointer;text-align:center;transition:all 0.25s ease}
-      .fp-biz-card:hover{border-color:#4CAF50;background:rgba(46,125,50,0.15);transform:translateY(-2px)}
-      .fp-biz-card .icon{font-size:24px;margin-bottom:4px}
-      .fp-biz-card .label{font-size:13px;font-weight:600;color:#E0E0E0}
-      .fp-biz-card:hover .label{color:#4CAF50}
-      .fp-messages{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column}
-      .fp-msg{display:flex;margin-bottom:12px}
-      .fp-msg.user{justify-content:flex-end}
-      .fp-msg.assistant{justify-content:flex-start}
-      .fp-bubble{max-width:82%;padding:12px 16px;font-size:13.5px;line-height:1.55;color:#fff;white-space:pre-wrap;word-break:break-word}
-      .fp-msg.user .fp-bubble{border-radius:14px 14px 4px 14px;background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);box-shadow:0 2px 12px rgba(230,81,0,0.2)}
-      .fp-msg.assistant .fp-bubble{border-radius:14px 14px 14px 4px;background:#132415;border:1px solid #1E3A22;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
-      .fp-typing{display:flex;gap:5px;padding:14px 18px;background:#132415;border-radius:14px 14px 14px 4px;border:1px solid #1E3A22;width:fit-content;margin-bottom:12px}
-      .fp-typing-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:fp-bounce 1.2s ease-in-out infinite}
-      .fp-typing-dot:nth-child(2){animation-delay:0.15s}
-      .fp-typing-dot:nth-child(3){animation-delay:0.3s}
-      @keyframes fp-bounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-6px);opacity:1}}
-      .fp-examples{padding:12px 16px 4px}
-      .fp-examples .fp-desc{font-size:12px;color:#9E9E9E;margin-bottom:10px;padding-left:4px}
-      .fp-example-btn{display:block;width:100%;padding:11px 14px;border-radius:10px;border:1px solid #1E3A22;background:transparent;color:#E0E0E0;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;margin-bottom:8px;transition:all 0.2s;line-height:1.4}
-      .fp-example-btn:hover{border-color:#4CAF50;background:rgba(46,125,50,0.1);color:#4CAF50}
-      .fp-input-area{padding:12px 16px 14px;border-top:1px solid #1E3A22;background:#0D1B0F;flex-shrink:0}
-      .fp-input-row{display:flex;gap:8px;align-items:flex-end}
-      .fp-chat-input{flex:1;padding:11px 14px;border-radius:12px;border:1.5px solid #1E3A22;background:#132415;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;max-height:100px;transition:border-color 0.2s}
-      .fp-chat-input:focus{border-color:#4CAF50}
-      .fp-chat-input::placeholder{color:#666}
-      .fp-send{width:42px;height:42px;border-radius:12px;border:none;background:rgba(255,255,255,0.06);color:#9E9E9E;font-size:18px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
-      .fp-send.active{background:linear-gradient(135deg,#E65100 0%,#FF6D00 100%);color:#fff;cursor:pointer;box-shadow:0 2px 12px rgba(230,81,0,0.3)}
-      .fp-footer{text-align:center;margin-top:8px;font-size:10px;color:#444}
-      .fp-footer span{color:#4CAF50;font-weight:600}
-    </style>
-    <div id="foodpro-widget">
-      <button id="foodpro-btn" onclick="foodproOpen()">&#129489;&#8205;&#127859;</button>
-      <div id="foodpro-panel">
-        <div class="fp-header">
-          <div class="fp-header-left"><span style="font-size:22px">&#129489;&#8205;&#127859;</span><div><div class="fp-header-title">FoodPro AI</div><div class="fp-header-sub">by JoeLuT AI</div></div></div>
-          <div class="fp-header-right"><div class="fp-dot"></div><span class="fp-online">Online</span><button class="fp-close" onclick="foodproClose()">&#10005;</button></div>
-        </div>
-        <div id="fp-step-email" class="fp-email-form">
-          <div><div class="fp-icon">&#129489;&#8205;&#127859;</div><h3>Meet FoodPro AI</h3><p class="fp-desc">Your food science consultant &mdash; recipe optimization, ingredient substitutions &amp; nutraceutical insights</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <input type="text" id="fp-name" class="fp-input" placeholder="Your name">
-            <input type="email" id="fp-email" class="fp-input" placeholder="Your email" onkeydown="if(event.key==='Enter')foodproSubmitEmail()">
-          </div>
-          <div id="fp-email-error" class="fp-error" style="display:none"></div>
-          <button class="fp-submit" onclick="foodproSubmitEmail()">Start Chatting &rarr;</button>
-          <p class="fp-credit">Built by <span>JoeLuT AI</span> &mdash; AI automation for food businesses</p>
-        </div>
-        <div id="fp-step-biz" class="fp-biz" style="display:none">
-          <h4>What type of food business are you?</h4>
-          <p class="fp-desc">This helps me tailor my advice</p>
-          <div class="fp-biz-grid">
-            <div class="fp-biz-card" onclick="foodproSelectBiz('restaurant')"><div class="icon">&#127869;&#65039;</div><div class="label">Restaurant</div></div>
-            <div class="fp-biz-card" onclick="foodproSelectBiz('bakery')"><div class="icon">&#129360;</div><div class="label">Bakery</div></div>
-            <div class="fp-biz-card" onclick="foodproSelectBiz('manufacturer')"><div class="icon">&#127981;</div><div class="label">Manufacturer</div></div>
-            <div class="fp-biz-card" onclick="foodproSelectBiz('caterer')"><div class="icon">&#127857;</div><div class="label">Caterer</div></div>
-            <div class="fp-biz-card" onclick="foodproSelectBiz('food_truck')"><div class="icon">&#128666;</div><div class="label">Food Truck</div></div>
-            <div class="fp-biz-card" onclick="foodproSelectBiz('meal_prep')"><div class="icon">&#129367;</div><div class="label">Meal Prep</div></div>
-          </div>
-        </div>
-        <div id="fp-step-chat" style="display:none;flex:1;flex-direction:column;overflow:hidden">
-          <div class="fp-messages" id="fp-messages"></div>
-          <div class="fp-examples" id="fp-examples"></div>
-          <div class="fp-input-area">
-            <div class="fp-input-row">
-              <textarea id="fp-chat-input" class="fp-chat-input" placeholder="Ask about your recipes..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();foodproSend()}" oninput="foodproUpdateSendBtn()"></textarea>
-              <button id="fp-send-btn" class="fp-send" onclick="foodproSend()">&#8593;</button>
-            </div>
-            <div class="fp-footer">Powered by <span>JoeLuT AI</span> &mdash; joelutai.com</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script>
-    (function(){
-      var WEBHOOK_URL="https://joelut.app.n8n.cloud/webhook/foodpro-chat";
-      var EXAMPLES={restaurant:["My grilled chicken dries out during dinner rush hold times","What anti-inflammatory ingredients can I add to my menu?","How do I make a creamy pasta sauce dairy-free?"],bakery:["How can I make my muffins healthier without changing taste?","My sourdough isn't getting the right crumb structure","Best sugar substitute for diabetic-friendly pastries?"],manufacturer:["My chin chin is absorbing too much oil during frying","How do I extend shelf life without artificial preservatives?","What functional ingredients can I add to snack products?"],caterer:["How do I scale mac & cheese from 20 to 200 servings?","Best way to keep food safe during outdoor events?","Which dishes hold best for 3+ hour buffet service?"],food_truck:["Quick anti-inflammatory taco toppings that wow customers?","How to keep fried items crispy in a food truck setup?","Cost-effective protein substitutes for my bowls?"],meal_prep:["Which vegetables lose the most nutrients when reheated?","Best containers to preserve freshness for 5-day preps?","How to add functional superfoods to weekly meal plans?"]};
-      var BIZ_LABELS={restaurant:"Restaurant",bakery:"Bakery",manufacturer:"Manufacturer",caterer:"Caterer",food_truck:"Food Truck",meal_prep:"Meal Prep"};
-      var userData={name:"",email:"",businessType:""};var isLoading=false;
-      (function(){var p=new URLSearchParams(window.location.search);if(p.get('foodpro')==='true'){var e=p.get('email')||'';if(e){userData.name=e.split('@')[0];userData.email=e;setTimeout(function(){foodproOpen();document.getElementById("fp-step-email").style.display="none";document.getElementById("fp-step-biz").style.display="block"},500);window.history.replaceState({},'',window.location.pathname)}}})();
-      window.foodproOpen=function(){document.getElementById("foodpro-btn").style.display="none";document.getElementById("foodpro-panel").classList.add("open")};
-      window.foodproClose=function(){document.getElementById("foodpro-panel").classList.remove("open");document.getElementById("foodpro-btn").style.display="flex"};
-      window.foodproSubmitEmail=function(){var n=document.getElementById("fp-name").value.trim();var e=document.getElementById("fp-email").value.trim();var err=document.getElementById("fp-email-error");if(!n){err.textContent="Please enter your name";err.style.display="block";return}if(!e||!e.includes("@")){err.textContent="Please enter a valid email";err.style.display="block";return}userData.name=n;userData.email=e;err.style.display="none";document.getElementById("fp-step-email").style.display="none";document.getElementById("fp-step-biz").style.display="block"};
-      window.foodproSelectBiz=function(type){userData.businessType=type;var label=BIZ_LABELS[type]||type;document.getElementById("fp-step-biz").style.display="none";document.getElementById("fp-step-chat").style.display="flex";document.getElementById("foodpro-panel").classList.add("chat-mode");addMsg("assistant","Hey "+userData.name+"! \uD83D\uDC4B Welcome to FoodPro AI.\n\nI see you run a "+label.toLowerCase()+" \u2014 great! I'm here to help with recipe optimization, ingredient substitutions, cost analysis, and functional food insights.\n\nAsk me anything, or try one of the examples below!");var exDiv=document.getElementById("fp-examples");var qs=EXAMPLES[type]||EXAMPLES.restaurant;exDiv.innerHTML='<p class="fp-desc">Try asking about your '+label.toLowerCase()+':</p>'+qs.map(function(q){return'<button class="fp-example-btn" onclick="foodproSendExample(this,\''+q.replace(/'/g,"\\'")+'\')">\uD83D\uDCAC '+q+'</button>'}).join("");setTimeout(function(){document.getElementById("fp-chat-input").focus()},150)};
-      function addMsg(r,t){var c=document.getElementById("fp-messages");var d=document.createElement("div");d.className="fp-msg "+r;d.innerHTML='<div class="fp-bubble">'+esc(t)+'</div>';c.appendChild(d);c.scrollTop=c.scrollHeight}
-      function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}
-      function showTyping(){var c=document.getElementById("fp-messages");var d=document.createElement("div");d.id="fp-typing";d.className="fp-typing";d.innerHTML='<div class="fp-typing-dot"></div><div class="fp-typing-dot"></div><div class="fp-typing-dot"></div>';c.appendChild(d);c.scrollTop=c.scrollHeight}
-      function hideTyping(){var el=document.getElementById("fp-typing");if(el)el.remove()}
-      window.foodproUpdateSendBtn=function(){var btn=document.getElementById("fp-send-btn");var val=document.getElementById("fp-chat-input").value.trim();btn.classList.toggle("active",!!val&&!isLoading)};
-      window.foodproSendExample=function(btn,text){document.getElementById("fp-examples").style.display="none";send(text)};
-      window.foodproSend=function(){var input=document.getElementById("fp-chat-input");var text=input.value.trim();if(!text||isLoading)return;input.value="";foodproUpdateSendBtn();document.getElementById("fp-examples").style.display="none";send(text)};
-      async function send(text){addMsg("user",text);isLoading=true;foodproUpdateSendBtn();showTyping();try{var res=await fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:text,user_name:userData.name,user_email:userData.email,business_type:userData.businessType,session_id:"web_"+userData.email+"_"+Date.now(),timestamp:new Date().toISOString()})});var data=await res.json();var reply=data&&(data.output||data.response||data.text)||"\u26A0\uFE0F Could not process your request. Please try again.";hideTyping();addMsg("assistant",reply)}catch(err){hideTyping();addMsg("assistant","\u26A0\uFE0F Connection error \u2014 please try again in a moment.")}finally{isLoading=false;foodproUpdateSendBtn()}}
-    })();
-    </script>
+            /* Section reveals */
+            fadeUp('.tools-header > *', { stagger: 0.1 });
+            fadeUp('.tool-card', { stagger: 0.1, y: 30 });
+            fadeUp('.services-header > *', { stagger: 0.1 });
+            fadeUp('.service-card', { stagger: 0.12 });
+            fadeUp('.about-text > *', { stagger: 0.1 });
+            fadeUp('.credential-pill', { stagger: 0.12, y: 20 });
+            fadeUp('.cta-section .section-title, .cta-section .section-subtitle, .cta-section .btn-primary, .cta-section .cta-email', { stagger: 0.1 });
 
-    <!-- ========== FoodCost Pro Email Capture Modal ========== -->
-    <style>
-      .fc-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:200000;align-items:center;justify-content:center}
-      .fc-overlay.open{display:flex}
-      .fc-modal{background:#fff;border:1px solid var(--border);border-radius:20px;padding:40px 32px;max-width:420px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
-      .fc-modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:none;background:#f3f4f6;color:#6b7280;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-      .fc-modal-close:hover{background:#e5e7eb;color:#111}
-      .fc-modal-icon{text-align:center;font-size:48px;margin-bottom:12px}
-      .fc-modal h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:#111827;text-align:center;margin-bottom:6px}
-      .fc-modal .fc-desc{font-size:14px;color:#6b7280;text-align:center;line-height:1.5;margin-bottom:24px}
-      .fc-modal input{width:100%;padding:13px 16px;border-radius:10px;border:1.5px solid #e5e7eb;background:#fff;color:#111;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color 0.2s;margin-bottom:12px}
-      .fc-modal input:focus{border-color:#4DD9CB}
-      .fc-modal input::placeholder{color:#9ca3af}
-      .fc-modal-btn{width:100%;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,#4DD9CB 0%,#2196F3 100%);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 16px rgba(77,217,203,0.3);transition:transform 0.2s,box-shadow 0.2s}
-      .fc-modal-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(77,217,203,0.4)}
-      .fc-modal-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-      .fc-modal .fc-trust{font-size:12px;color:#9ca3af;text-align:center;margin-top:16px}
-      .fc-modal .fc-trust span{color:#4DD9CB}
-      .fc-modal .fc-error{font-size:12px;color:#ef4444;text-align:center;margin-bottom:8px;display:none}
-      .fc-modal .fc-success{display:none;text-align:center}
-      .fc-modal .fc-success .fc-check{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4DD9CB,#2196F3);display:inline-flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:12px;color:#fff}
-      .fc-modal .fc-success h4{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#111827;margin-bottom:6px}
-      .fc-modal .fc-success p{font-size:14px;color:#6b7280}
-    </style>
-    <div class="fc-overlay" id="fc-overlay" onclick="if(event.target===this)closeFoodCostModal()">
-      <div class="fc-modal">
-        <button class="fc-modal-close" onclick="closeFoodCostModal()">&#10005;</button>
-        <div id="fc-form-view">
-          <div class="fc-modal-icon">&#128176;</div>
-          <h3>Get Free Access to FoodCost Pro</h3>
-          <p class="fc-desc">Enter your email and start calculating your true product costs in seconds.</p>
-          <div class="fc-error" id="fc-error"></div>
-          <input type="email" id="fc-email" placeholder="Your email" onkeydown="if(event.key==='Enter')submitFoodCostModal()">
-          <button class="fc-modal-btn" id="fc-submit-btn" onclick="submitFoodCostModal()">Get Free Access &rarr;</button>
-          <p class="fc-trust">&#128274; No spam. Built by <span>a food manufacturer</span> for food businesses.</p>
-        </div>
-        <div class="fc-success" id="fc-success-view">
-          <div class="fc-check">&#10003;</div>
-          <h4>You're in! &#127881;</h4>
-          <p>Redirecting to FoodCost Pro...</p>
-        </div>
-      </div>
-    </div>
-    <script>
-    var FC_BLOCKED_DOMAINS=['mailinator.com','tempmail.com','guerrillamail.com','throwaway.email','temp-mail.org','fakeinbox.com','sharklasers.com','guerrillamailblock.com','grr.la','dispostable.com','yopmail.com','trashmail.com','maildrop.cc','10minutemail.com','minutemail.com','getairmail.com','mohmal.com','burpcollaborator.net','mailnesia.com','tempail.com','tempr.email','discard.email','discardmail.com','mailcatch.com','trash-mail.com','binkmail.com','bobmail.info','chammy.info','devnullmail.com','letthemeatspam.com','mailexpire.com','mailforspam.com','mailinator.net','mailmetrash.com','nomail.xl.cx','spamfree24.org','spamhereplease.com','throwam.com','trashymail.com','tmail.ws'];
-    function isFcDisposable(e){var d=e.split('@')[1];return d?FC_BLOCKED_DOMAINS.indexOf(d.toLowerCase())!==-1:false}
-    function openFoodCostModal(){document.getElementById('fc-overlay').classList.add('open');setTimeout(function(){document.getElementById('fc-email').focus()},100)}
-    function closeFoodCostModal(){document.getElementById('fc-overlay').classList.remove('open');document.getElementById('fc-form-view').style.display='block';document.getElementById('fc-success-view').style.display='none';document.getElementById('fc-error').style.display='none';document.getElementById('fc-email').value=''}
-    function submitFoodCostModal(){var e=document.getElementById('fc-email').value.trim();var err=document.getElementById('fc-error');var btn=document.getElementById('fc-submit-btn');if(!e||!e.includes('@')){err.textContent='Please enter a valid email';err.style.display='block';return}if(isFcDisposable(e)){err.textContent='Please use a valid business or personal email address.';err.style.display='block';return}err.style.display='none';btn.disabled=true;btn.textContent='Sending...';fetch('https://joelut.app.n8n.cloud/webhook/foodcost-signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({firstName:'',lastName:'',email:e,phone:'',businessName:'',businessType:'',timestamp:new Date().toISOString()})}).then(function(){document.getElementById('fc-form-view').style.display='none';document.getElementById('fc-success-view').style.display='block';setTimeout(function(){window.location.href='/foodcost-pro'},2000)}).catch(function(){document.getElementById('fc-form-view').style.display='none';document.getElementById('fc-success-view').style.display='block';setTimeout(function(){window.location.href='/foodcost-pro'},2000)}).finally(function(){btn.disabled=false;btn.textContent='Get Free Access \u2192'})}
-    </script>
+            /* Timeline — sequential step reveal with progress line */
+            var steps = document.querySelectorAll('.timeline-step');
+            steps.forEach(function(step, i) {
+                gsap.set(step, { opacity: 0, y: 24 });
+            });
 
+            ScrollTrigger.create({
+                trigger: '#timeline',
+                start: 'top 75%',
+                once: true,
+                onEnter: function() {
+                    var isMobile = window.innerWidth <= 768;
+                    var progress = document.getElementById('timelineProgress');
+
+                    steps.forEach(function(step, i) {
+                        gsap.to(step, {
+                            opacity: 1, y: 0,
+                            duration: 0.7,
+                            delay: i * 0.25,
+                            ease: 'power3.out',
+                            onStart: function() {
+                                step.classList.add('active');
+                            }
+                        });
+                    });
+
+                    /* Animate progress bar */
+                    if (isMobile) {
+                        gsap.to(progress, { height: '100%', duration: 1.5, delay: 0.2, ease: 'power2.inOut' });
+                    } else {
+                        gsap.to(progress, { width: '100%', duration: 1.5, delay: 0.2, ease: 'power2.inOut' });
+                    }
+                }
+            });
+
+            /* Parallax on hero orbs */
+            gsap.to('.hero-orb-1', {
+                yPercent: -15,
+                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
+            });
+            gsap.to('.hero-orb-2', {
+                yPercent: 10,
+                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
+            });
+
+        } /* end GSAP check */
+
+    });
+    </script>
 </body>
 </html>
