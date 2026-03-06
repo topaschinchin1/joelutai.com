@@ -1,1793 +1,1732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JoeLuT AI — AI Tools for Food Science & Manufacturing</title>
-    <meta name="description" content="Custom AI solutions that streamline R&D workflows, simplify compliance, and accelerate product development for food science and manufacturing.">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ============================================
-           DESIGN TOKENS
-           ============================================ */
-        :root {
-            --white: #ffffff;
-            --light: #f7f8fa;
-            --dark: #0a0e17;
-            --gradient: linear-gradient(135deg, #4DD9CB 0%, #2196F3 50%, #0D47A1 100%);
-            --gradient-text: linear-gradient(135deg, #4DD9CB, #2196F3, #0D47A1);
-            --teal: #4DD9CB;
-            --blue: #2196F3;
-            --deep: #0D47A1;
-            --text-dark: #111827;
-            --text-body: #6b7280;
-            --text-light: #ffffff;
-            --text-light-muted: #94a3b8;
-            --border: #e5e7eb;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
-            --radius: 16px;
-            --radius-sm: 10px;
-        }
-
-        /* ============================================
-           RESET & BASE
-           ============================================ */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--white);
-            overflow-x: hidden;
-        }
-
-        a { text-decoration: none; color: inherit; }
-        img { max-width: 100%; display: block; }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .section-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 2.75rem;
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
-        }
-
-        .section-subtitle {
-            font-size: 1.15rem;
-            color: var(--text-body);
-            max-width: 600px;
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           NAVBAR
-           ============================================ */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 20px 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .navbar.scrolled {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 0;
-            box-shadow: 0 1px 20px rgba(0,0,0,0.06);
-        }
-
-        .navbar .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-brand svg { width: 40px; height: 40px; }
-
-        .nav-brand span {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-light);
-            transition: color 0.4s;
-        }
-
-        .navbar.scrolled .nav-brand span { color: var(--text-dark); }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 36px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 0;
-            width: 0; height: 2px;
-            background: var(--gradient);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover { color: var(--text-light); }
-        .nav-links a:hover::after { width: 100%; }
-
-        .navbar.scrolled .nav-links a { color: var(--text-body); }
-        .navbar.scrolled .nav-links a:hover { color: var(--text-dark); }
-
-        .nav-cta {
-            padding: 10px 24px;
-            background: var(--gradient);
-            color: var(--text-light) !important;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(77,217,203,0.3);
-        }
-
-        .nav-cta::after { display: none !important; }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none; border: none;
-            padding: 4px;
-        }
-
-        .nav-toggle span {
-            width: 24px; height: 2px;
-            background: var(--text-light);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        .navbar.scrolled .nav-toggle span { background: var(--text-dark); }
-
-        /* ============================================
-           HERO — CINEMATIC
-           ============================================ */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: var(--dark);
-            overflow: hidden;
-            padding: 120px 0 80px;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-
-        .hero-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            will-change: transform;
-        }
-
-        .hero-orb-1 {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(77,217,203,0.15), transparent 70%);
-            top: -200px; right: -100px;
-            animation: orbFloat1 20s ease-in-out infinite;
-        }
-
-        .hero-orb-2 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(33,150,243,0.12), transparent 70%);
-            bottom: -150px; left: -100px;
-            animation: orbFloat2 25s ease-in-out infinite;
-        }
-
-        .hero-orb-3 {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(13,71,161,0.1), transparent 70%);
-            top: 40%; left: 50%;
-            animation: orbFloat3 18s ease-in-out infinite;
-        }
-
-        @keyframes orbFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-40px, 30px) scale(1.05); }
-            66% { transform: translate(20px, -20px) scale(0.95); }
-        }
-        @keyframes orbFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        @keyframes orbFloat3 {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-30px, -30px); }
-        }
-
-        /* Cinematic grain overlay */
-        .hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .hero .container {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .hero-content { max-width: 580px; }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            background: rgba(77,217,203,0.08);
-            border: 1px solid rgba(77,217,203,0.2);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            color: var(--teal);
-            margin-bottom: 28px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            line-height: 1.08;
-            letter-spacing: -0.03em;
-            color: var(--text-light);
-            margin-bottom: 24px;
-        }
-
-        .hero h1 em {
-            font-style: normal;
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-light-muted);
-            line-height: 1.7;
-            margin-bottom: 36px;
-            max-width: 500px;
-        }
-
-        .hero-ctas {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: var(--gradient);
-            color: var(--text-light);
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(77,217,203,0.25);
-        }
-
-        .btn-outline {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: transparent;
-            color: var(--text-light);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.4);
-        }
-
-        /* Hero visual — cinematic 3D orb */
-        .hero-visual {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .hero-sphere {
-            width: 380px;
-            height: 380px;
-            border-radius: 50%;
-            background:
-                radial-gradient(circle at 30% 30%, rgba(77,217,203,0.4), transparent 60%),
-                radial-gradient(circle at 70% 70%, rgba(33,150,243,0.3), transparent 60%),
-                radial-gradient(circle at 50% 50%, rgba(13,71,161,0.2), transparent 70%);
-            box-shadow:
-                0 0 80px rgba(77,217,203,0.15),
-                0 0 160px rgba(33,150,243,0.08),
-                inset 0 0 80px rgba(10,14,23,0.5);
-            animation: spherePulse 8s ease-in-out infinite;
-            position: relative;
-        }
-
-        .hero-sphere::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
-            border: 1px solid rgba(77,217,203,0.15);
-            animation: sphereRotate 20s linear infinite;
-        }
-
-        .hero-sphere::after {
-            content: '';
-            position: absolute;
-            inset: 20px;
-            border-radius: 50%;
-            border: 1px solid rgba(33,150,243,0.1);
-            animation: sphereRotate 15s linear infinite reverse;
-        }
-
-        @keyframes spherePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
-
-        @keyframes sphereRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Credibility bar */
-        .credibility-bar {
-            position: relative;
-            z-index: 2;
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .credibility-bar .container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 32px;
-        }
-
-        .cred-item {
-            text-align: center;
-            padding: 16px;
-        }
-
-        .cred-icon {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .cred-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-            line-height: 1.2;
-        }
-
-        .cred-label {
-            font-size: 0.85rem;
-            color: var(--text-light-muted);
-            margin-top: 4px;
-        }
-
-        /* ============================================
-           FREE TOOLS
-           ============================================ */
-        .tools {
-            padding: 120px 0;
-            background: var(--light);
-        }
-
-        .tools-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .tools-header .section-subtitle {
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .tool-card {
-            position: relative;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 36px 28px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-        }
-
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; bottom: 0;
-            width: 3px;
-            background: var(--gradient);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: transparent;
-        }
-
-        .tool-card:hover::before { opacity: 1; }
-
-        .tool-icon {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .tool-badge {
-            position: absolute;
-            top: 20px; right: 20px;
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .badge-popular { background: #FEF3C7; color: #92400E; }
-        .badge-new { background: #DBEAFE; color: #1E40AF; }
-        .badge-ai { background: #D1FAE5; color: #065F46; }
-
-        .tool-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-
-        .tool-card p {
-            font-size: 0.95rem;
-            color: var(--text-body);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .tool-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--blue);
-            transition: gap 0.3s;
-        }
-
-        .tool-link:hover { gap: 12px; }
-
-        /* ============================================
-           SERVICES (Tabbed)
-           ============================================ */
-        .services {
-            padding: 120px 0;
-            background: var(--white);
-        }
-
-        .services-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .services-header .section-subtitle { margin: 0 auto; }
-
-        .tab-bar {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 48px;
-        }
-
-        .tab-btn {
-            padding: 12px 28px;
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            background: var(--white);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-body);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            background: var(--gradient);
-            color: var(--text-light);
-            border-color: transparent;
-        }
-
-        .tab-btn:hover:not(.active) {
-            border-color: var(--blue);
-            color: var(--text-dark);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-        .service-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 36px 28px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .service-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-
-        .service-icon {
-            width: 56px; height: 56px;
-            border-radius: 14px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        .service-card h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 14px;
-            color: var(--text-dark);
-        }
-
-        .service-card ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .service-card li {
-            font-size: 0.92rem;
-            color: var(--text-body);
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .service-card li::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 9px;
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--teal);
-        }
-
-        .service-card .tool-link { margin-top: 16px; }
-
-        /* ============================================
-           TIMELINE — HOW WE WORK
-           ============================================ */
-        .timeline-section {
-            padding: 120px 0;
-            background: var(--light);
-        }
-
-        .timeline-section .section-header {
-            text-align: center;
-            margin-bottom: 72px;
-        }
-
-        .timeline-section .section-subtitle { margin: 0 auto; }
-
-        .timeline {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 36px;
-            left: calc(12.5% + 12px);
-            right: calc(12.5% + 12px);
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        .timeline-progress {
-            position: absolute;
-            top: 36px;
-            left: calc(12.5% + 12px);
-            height: 3px;
-            width: 0;
-            background: var(--gradient);
-            border-radius: 2px;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .timeline-step {
-            text-align: center;
-            position: relative;
-            padding: 0 16px;
-        }
-
-        .step-number {
-            width: 72px; height: 72px;
-            border-radius: 50%;
-            background: var(--white);
-            border: 3px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-body);
-            margin: 0 auto 20px;
-            position: relative;
-            z-index: 2;
-            transition: all 0.5s;
-        }
-
-        .timeline-step.active .step-number {
-            background: var(--gradient);
-            border-color: transparent;
-            color: var(--text-light);
-            box-shadow: 0 8px 24px rgba(77,217,203,0.25);
-        }
-
-        .timeline-step h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-
-        .timeline-step p {
-            font-size: 0.9rem;
-            color: var(--text-body);
-            line-height: 1.5;
-        }
-
-        /* ============================================
-           ABOUT / CREDIBILITY
-           ============================================ */
-        .about {
-            padding: 120px 0;
-            background: var(--white);
-        }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
-        }
-
-        .about-text .section-title { margin-bottom: 24px; }
-
-        .about-text p {
-            color: var(--text-body);
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
-
-        .credential-pills {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-top: 40px;
-        }
-
-        .credential-pill {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 20px 24px;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--teal);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-        }
-
-        .credential-pill:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateX(4px);
-        }
-
-        .credential-pill .pill-icon {
-            width: 44px; height: 44px;
-            border-radius: 12px;
-            background: var(--light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .credential-pill .pill-text {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .credential-pill .pill-desc {
-            font-size: 0.82rem;
-            color: var(--text-body);
-            margin-top: 2px;
-        }
-
-        /* ============================================
-           CTA SECTION
-           ============================================ */
-        .cta-section {
-            padding: 120px 0;
-            background: var(--dark);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            width: 600px; height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(77,217,203,0.08), transparent 70%);
-            top: -200px; right: -200px;
-            pointer-events: none;
-        }
-
-        .cta-section::after {
-            content: '';
-            position: absolute;
-            width: 400px; height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(33,150,243,0.06), transparent 70%);
-            bottom: -100px; left: -100px;
-            pointer-events: none;
-        }
-
-        .cta-section .container { position: relative; z-index: 2; }
-
-        .cta-section .section-title {
-            color: var(--text-light);
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .cta-section .section-subtitle {
-            color: var(--text-light-muted);
-            margin: 0 auto 40px;
-            text-align: center;
-        }
-
-        .cta-section .btn-primary {
-            padding: 18px 40px;
-            font-size: 1.1rem;
-        }
-
-        .cta-email {
-            margin-top: 20px;
-            font-size: 0.95rem;
-            color: var(--text-light-muted);
-        }
-
-        .cta-email a {
-            color: var(--teal);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .cta-email a:hover { color: var(--text-light); }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            padding: 64px 0 32px;
-            background: var(--dark);
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 48px;
-        }
-
-        .footer-brand span {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-light);
-        }
-
-        .footer-brand p {
-            font-size: 0.9rem;
-            color: var(--text-light-muted);
-            margin-top: 12px;
-            line-height: 1.6;
-            max-width: 280px;
-        }
-
-        .footer-col h4 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-        }
-
-        .footer-col ul { list-style: none; }
-
-        .footer-col li { margin-bottom: 10px; }
-
-        .footer-col a {
-            font-size: 0.9rem;
-            color: var(--text-light-muted);
-            transition: color 0.3s;
-        }
-
-        .footer-col a:hover { color: var(--teal); }
-
-        .footer-bottom {
-            padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-light-muted);
-        }
-
-        /* ============================================
-           BACK TO TOP
-           ============================================ */
-        .back-to-top {
-            position: fixed;
-            bottom: 32px; right: 32px;
-            width: 48px; height: 48px;
-            border-radius: 50%;
-            background: var(--white);
-            border: 1px solid var(--border);
-            color: var(--text-body);
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 99;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-            box-shadow: var(--shadow-md);
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .back-to-top:hover {
-            background: var(--gradient);
-            color: var(--text-light);
-            border-color: transparent;
-        }
-
-        /* ============================================
-           FOODCOST PRO MODAL
-           ============================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 48px;
-            max-width: 460px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.15);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px; right: 16px;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--light);
-            color: var(--text-body);
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
-        }
-
-        .modal-close:hover { background: var(--border); }
-
-        .modal h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-
-        .modal p {
-            font-size: 0.95rem;
-            color: var(--text-body);
-            margin-bottom: 24px;
-        }
-
-        .modal input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            transition: border-color 0.3s;
-            outline: none;
-        }
-
-        .modal input:focus { border-color: var(--blue); }
-
-        .modal .btn-primary {
-            width: 100%;
-            justify-content: center;
-            margin-top: 4px;
-        }
-
-        .modal .modal-note {
-            font-size: 0.8rem;
-            color: var(--text-body);
-            text-align: center;
-            margin-top: 12px;
-            margin-bottom: 0;
-        }
-
-        /* ============================================
-           FOODPRO AI WIDGET
-           ============================================ */
-        .foodpro-toggle {
-            position: fixed;
-            bottom: 24px; right: 96px;
-            width: 56px; height: 56px;
-            border-radius: 50%;
-            background: var(--gradient);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 998;
-            box-shadow: 0 4px 20px rgba(77,217,203,0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .foodpro-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 28px rgba(77,217,203,0.4);
-        }
-
-        .foodpro-panel {
-            position: fixed;
-            bottom: 96px; right: 24px;
-            width: 380px; height: 520px;
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.15);
-            border: 1px solid var(--border);
-            z-index: 999;
-            overflow: hidden;
-            display: none;
-            flex-direction: column;
-        }
-
-        .foodpro-panel.open { display: flex; }
-
-        .foodpro-header {
-            padding: 16px 20px;
-            background: var(--gradient);
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .foodpro-header span {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .foodpro-close {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .foodpro-body {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .foodpro-body iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 1024px) {
-            .hero .container { grid-template-columns: 1fr; text-align: center; }
-            .hero-content { max-width: 100%; }
-            .hero p { margin: 0 auto 36px; }
-            .hero-ctas { justify-content: center; }
-            .hero-visual { display: none; }
-            .credibility-bar .container { grid-template-columns: repeat(2, 1fr); }
-            .tools-grid { grid-template-columns: repeat(2, 1fr); }
-            .tab-content.active { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .nav-toggle { display: flex; }
-
-            .nav-links.open {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%; left: 0; right: 0;
-                background: var(--white);
-                padding: 24px;
-                gap: 16px;
-                box-shadow: var(--shadow-lg);
-                border-radius: 0 0 var(--radius) var(--radius);
-            }
-
-            .nav-links.open a { color: var(--text-dark); }
-
-            .section-title { font-size: 2rem; }
-            .hero { padding: 100px 0 60px; min-height: auto; }
-            .hero h1 { font-size: 2.2rem; }
-
-            .tools, .services, .timeline-section, .about, .cta-section { padding: 80px 0; }
-
-            .credibility-bar .container { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-            .tools-grid { grid-template-columns: 1fr; }
-            .tab-content.active { grid-template-columns: 1fr; }
-            .about-grid { grid-template-columns: 1fr; gap: 40px; }
-
-            .timeline { grid-template-columns: 1fr; gap: 32px; }
-            .timeline::before {
-                top: 0; bottom: 0;
-                left: 36px; right: auto;
-                width: 3px; height: 100%;
-            }
-            .timeline-progress {
-                top: 0; left: 36px;
-                width: 3px !important; height: 0;
-                transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .timeline-step {
-                text-align: left;
-                padding-left: 90px;
-            }
-            .step-number {
-                position: absolute;
-                left: 0; top: 0;
-                margin: 0;
-            }
-
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .cta-section .section-title { font-size: 2rem; }
-
-            .foodpro-panel {
-                width: calc(100% - 32px);
-                right: 16px; bottom: 88px;
-                height: 480px;
-            }
-
-            .foodpro-toggle { right: 24px; }
-        }
-
-        /* ============================================
-           REDUCED MOTION
-           ============================================ */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* ============================================
-           SMOOTH SCROLL REVEAL (cinematic)
-           ============================================ */
-        .reveal {
-            opacity: 1;
-            transform: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JoeLuT AI — AI Tools for Food Science & Research</title>
+<meta name="description" content="Custom AI solutions that transform R&D workflows, streamline compliance, and accelerate product development for food businesses and researchers.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & VARIABLES ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-section: #111111;
+  --bg-light: #f5f5f3;
+  --bg-card: #161616;
+  --text-white: #ffffff;
+  --text-muted: #777777;
+  --text-dark: #111111;
+  --accent: #4DD9CB;
+  --accent-blue: #2196F3;
+  --accent-deep: #0D47A1;
+  --gradient: linear-gradient(135deg, #4DD9CB, #2196F3, #0D47A1);
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --nav-height: 80px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  color: var(--text-white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* Section label */
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 1000;
+  transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+}
+
+.navbar.scrolled {
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.nav-logo svg { width: 36px; height: 36px; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--text-white); }
+
+.nav-cta {
+  padding: 10px 24px;
+  border: 1px solid rgba(77, 217, 203, 0.4);
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent) !important;
+  transition: all 0.3s;
+}
+
+.nav-cta:hover {
+  background: var(--accent);
+  color: var(--bg-dark) !important;
+}
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none; border: none;
+  padding: 4px;
+}
+
+.nav-hamburger span {
+  width: 24px; height: 2px;
+  background: var(--text-white);
+  transition: all 0.3s;
+}
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--nav-height) + 40px) 0 60px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+}
+
+.hero-orb-1 {
+  width: 600px; height: 600px;
+  background: var(--accent);
+  top: -200px; right: -100px;
+  animation: orbFloat1 20s ease-in-out infinite;
+}
+
+.hero-orb-2 {
+  width: 400px; height: 400px;
+  background: var(--accent-blue);
+  bottom: -100px; left: -100px;
+  animation: orbFloat2 25s ease-in-out infinite;
+}
+
+.hero-orb-3 {
+  width: 300px; height: 300px;
+  background: var(--accent-deep);
+  top: 30%; left: 40%;
+  animation: orbFloat3 18s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-60px, 40px); } }
+@keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, -60px); } }
+@keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-30px, -40px); } }
+
+/* Dot grid */
+.hero-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 70%);
+}
+
+/* Film grain */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-content { position: relative; z-index: 1; }
+
+.hero-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-label::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  margin-bottom: 32px;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  max-width: 520px;
+  margin-bottom: 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: var(--gradient);
+  color: var(--bg-dark);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(77, 217, 203, 0.3);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text-white);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: none;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Cinematic Hero Sphere */
+.hero-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-sphere {
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(77,217,203,0.4), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(33,150,243,0.3), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(13,71,161,0.2), transparent 70%);
+  box-shadow:
+    0 0 80px rgba(77,217,203,0.12),
+    0 0 160px rgba(33,150,243,0.06),
+    inset 0 0 80px rgba(10,10,10,0.5);
+  animation: spherePulse 8s ease-in-out infinite;
+  position: relative;
+}
+
+.hero-sphere::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px solid rgba(77,217,203,0.15);
+  animation: sphereRotate 20s linear infinite;
+}
+
+.hero-sphere::after {
+  content: '';
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(33,150,243,0.1);
+  animation: sphereRotate 15s linear infinite reverse;
+}
+
+/* Sphere orbit dots */
+.sphere-dot {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  filter: blur(0.5px);
+}
+
+.sphere-dot-1 {
+  background: var(--accent);
+  top: 15%; left: -4%;
+  animation: sphereOrbit1 12s linear infinite;
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.sphere-dot-2 {
+  background: var(--accent-blue);
+  bottom: 10%; right: -2%;
+  animation: sphereOrbit2 16s linear infinite;
+  box-shadow: 0 0 12px var(--accent-blue);
+}
+
+.sphere-dot-3 {
+  background: var(--accent-deep);
+  top: 50%; right: -6%;
+  animation: sphereOrbit3 10s linear infinite;
+  box-shadow: 0 0 10px var(--accent-deep);
+  width: 6px; height: 6px;
+}
+
+@keyframes spherePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes sphereRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sphereOrbit1 {
+  0% { transform: rotate(0deg) translateX(170px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(170px) rotate(-360deg); }
+}
+
+@keyframes sphereOrbit2 {
+  0% { transform: rotate(0deg) translateX(160px) rotate(0deg); }
+  100% { transform: rotate(-360deg) translateX(160px) rotate(360deg); }
+}
+
+@keyframes sphereOrbit3 {
+  0% { transform: rotate(90deg) translateX(175px) rotate(-90deg); }
+  100% { transform: rotate(450deg) translateX(175px) rotate(-450deg); }
+}
+
+/* Hero Stats Bar */
+.hero-stats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-stat {
+  padding: 32px 0;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+
+.hero-stat-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.hero-stat-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ========== FREE TOOLS ========== */
+.tools {
+  padding: 140px 0;
+  background: var(--bg-section);
+  position: relative;
+}
+
+.tools-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.tools-header .section-subtitle { margin: 0 auto; }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.tool-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(77, 217, 203, 0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.tool-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+
+.badge-new { background: rgba(77, 217, 203, 0.15); color: var(--accent); }
+.badge-popular { background: rgba(33, 150, 243, 0.15); color: var(--accent-blue); }
+.badge-ai { background: rgba(13, 71, 161, 0.25); color: #6aabf7; }
+
+.tool-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+
+.tool-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tool-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.tool-link {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.3s;
+}
+
+.tool-link:hover { gap: 12px; }
+
+/* ========== SERVICES ========== */
+.services {
+  padding: 140px 0;
+  background: var(--bg-dark);
+}
+
+.service-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.service-block:last-child { margin-bottom: 0; }
+.service-block.reverse { direction: rtl; }
+.service-block.reverse > * { direction: ltr; }
+
+.service-text .section-label { margin-bottom: 12px; }
+
+.service-text h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.service-text > p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.service-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+.service-points li::before {
+  content: '\2726';
+  color: var(--accent);
+  font-size: 0.7rem;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.service-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.service-mini-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: border-color 0.4s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+
+.service-mini-card:hover {
+  border-color: rgba(77, 217, 203, 0.15);
+  transform: translateX(4px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.mini-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.mini-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.mini-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ========== PROCESS ========== */
+.process {
+  padding: 140px 0;
+  background: var(--bg-section);
+}
+
+.process-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.process-header .section-subtitle { margin: 0 auto; }
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-blue), var(--accent-deep), transparent);
+  opacity: 0.3;
+}
+
+.process-line-animated {
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  height: 2px;
+  background: var(--gradient);
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.process-line-animated.active { width: 80%; }
+
+.process-step {
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.step-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.step-number::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 2px;
+  background: var(--gradient);
+  opacity: 0.5;
+}
+
+.process-step h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.process-step p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ========== ABOUT ========== */
+.about {
+  padding: 140px 0;
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-text .section-title { color: var(--text-dark); }
+
+.about-text > p {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.cred-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cred-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+
+.cred-card:hover {
+  transform: translateX(6px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.cred-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+.cred-card span {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* ========== CTA ========== */
+.cta-section {
+  padding: 160px 0;
+  background: var(--bg-dark);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section .hero-orb-1 {
+  width: 500px; height: 500px;
+  top: -200px; left: -100px;
+  opacity: 0.1;
+}
+
+.cta-section .hero-orb-2 {
+  width: 400px; height: 400px;
+  bottom: -200px; right: -100px;
+  opacity: 0.08;
+}
+
+.cta-content { position: relative; z-index: 1; }
+
+.cta-content .section-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  margin-bottom: 24px;
+}
+
+.cta-content .section-subtitle {
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.cta-email {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.cta-email a { color: var(--accent); transition: opacity 0.3s; }
+.cta-email a:hover { opacity: 0.7; }
+
+/* ========== FOOTER ========== */
+.footer {
+  padding: 60px 0 40px;
+  background: var(--bg-dark);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.footer-brand svg { width: 28px; height: 28px; }
+
+.footer-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.footer h4 {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-white);
+  margin-bottom: 16px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+.footer-bottom {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.8rem;
+  color: #444;
+  text-align: center;
+}
+
+/* Smooth section separators */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77, 217, 203, 0.3), rgba(33, 150, 243, 0.2), transparent);
+}
+
+/* ========== FOODCOST PRO MODAL ========== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 48px;
+  max-width: 440px;
+  width: 90%;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-white);
+}
+
+.modal h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.modal > p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.modal input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-white);
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+  outline: none;
+}
+
+.modal input::placeholder { color: var(--text-muted); }
+.modal input:focus { border-color: var(--accent); }
+
+.modal .btn-primary {
+  width: 100%;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.modal-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* ========== FOODPRO AI WIDGET ========== */
+.foodpro-toggle {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--gradient);
+  border: none;
+  color: var(--bg-dark);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 998;
+  box-shadow: 0 4px 20px rgba(77,217,203,0.3);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foodpro-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(77,217,203,0.4);
+}
+
+.foodpro-panel {
+  position: fixed;
+  bottom: 96px; right: 24px;
+  width: 380px; height: 520px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.06);
+  z-index: 999;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+.foodpro-panel.open { display: flex; }
+
+.foodpro-header {
+  padding: 16px 20px;
+  background: var(--gradient);
+  color: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.foodpro-header span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.foodpro-close {
+  background: rgba(0,0,0,0.15);
+  border: none;
+  color: var(--bg-dark);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.foodpro-close:hover { background: rgba(0,0,0,0.25); }
+
+.foodpro-body { flex: 1; overflow: hidden; }
+.foodpro-body iframe { width: 100%; height: 100%; border: none; }
+
+/* ========== TEERYA-STYLE SCROLL REVEALS ========== */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hero-label { animation: slideRight 0.8s ease both; animation-delay: 0.2s; }
+.hero h1 { animation: slideUp 1s ease both; animation-delay: 0.4s; }
+.hero-tagline { animation: slideUp 1s ease both; animation-delay: 0.7s; }
+.hero-desc { animation: slideUp 0.8s ease both; animation-delay: 0.9s; }
+.hero-ctas { animation: slideUp 0.8s ease both; animation-delay: 1.1s; }
+.hero-stats { animation: fadeIn 1s ease both; animation-delay: 1.4s; }
+.hero-visual { animation: fadeIn 1.5s ease both; animation-delay: 0.6s; }
+
+.reveal {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.hidden { opacity: 0; transform: translateY(50px); }
+
+.reveal-left {
+  opacity: 1; transform: translateX(0);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.hidden { opacity: 0; transform: translateX(-50px); }
+
+.reveal-right {
+  opacity: 1; transform: translateX(0);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.hidden { opacity: 0; transform: translateX(50px); }
+
+.reveal-scale {
+  opacity: 1; transform: scale(1);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.hidden { opacity: 0; transform: scale(0.92); }
+
+.stagger-1 { transition-delay: 0.1s !important; }
+.stagger-2 { transition-delay: 0.2s !important; }
+.stagger-3 { transition-delay: 0.3s !important; }
+.stagger-4 { transition-delay: 0.4s !important; }
+.stagger-5 { transition-delay: 0.5s !important; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .hero .container { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-block { grid-template-columns: 1fr; gap: 40px; }
+  .service-block.reverse { direction: ltr; }
+  .process-steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  .process-steps::before { display: none; }
+  .process-line-animated { display: none; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+
+  .hero h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+  .hero-stats { grid-template-columns: 1fr; }
+  .hero-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 20px 0; }
+  .hero-stat:last-child { border-bottom: none; }
+
+  .tools, .services, .process, .about, .cta-section { padding: 80px 0; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr; gap: 32px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+
+  .foodpro-panel {
+    width: calc(100% - 32px);
+    right: 16px; bottom: 88px;
+    height: 480px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
 </head>
 <body>
 
-    <!-- ========== NAVBAR ========== -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="#" class="nav-brand">
-                <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#E0F7FA"/>
-                            <stop offset="25%" stop-color="#4DD9CB"/>
-                            <stop offset="60%" stop-color="#2196F3"/>
-                            <stop offset="100%" stop-color="#0D47A1"/>
-                        </linearGradient>
-                    </defs>
-                    <circle cx="120" cy="120" r="90" stroke="url(#navGrad)" stroke-width="3" fill="none"/>
-                    <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#4DD9CB" stroke-width="2" fill="none" opacity="0.35" transform="rotate(-35 120 120)"/>
-                    <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#2196F3" stroke-width="2" fill="none" opacity="0.35" transform="rotate(35 120 120)"/>
-                    <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
-                    <path d="M106 92V152H130" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
-                    <path d="M138 92H174M156 92V152" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
-                    <circle cx="38" cy="84" r="7" fill="#4DD9CB" opacity="0.8"/>
-                    <circle cx="202" cy="84" r="7" fill="#2196F3" opacity="0.7"/>
-                    <circle cx="120" cy="214" r="7" fill="#0D47A1" opacity="0.5"/>
-                </svg>
-                <span>JoeLuT AI</span>
-            </a>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="navGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E0F7FA"/><stop offset="25%" stop-color="#4DD9CB"/><stop offset="60%" stop-color="#2196F3"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient></defs>
+      <circle cx="120" cy="120" r="90" stroke="url(#navGrad)" stroke-width="3" fill="none"/>
+      <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#4DD9CB" stroke-width="2" fill="none" opacity="0.35" transform="rotate(-35 120 120)"/>
+      <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#2196F3" stroke-width="2" fill="none" opacity="0.35" transform="rotate(35 120 120)"/>
+      <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M106 92V152H130" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M138 92H174M156 92V152" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <circle cx="38" cy="84" r="7" fill="#4DD9CB" opacity="0.8"/>
+      <circle cx="202" cy="84" r="7" fill="#2196F3" opacity="0.7"/>
+      <circle cx="120" cy="214" r="7" fill="#0D47A1" opacity="0.5"/>
+    </svg>
+    JoeLuT AI
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="nav-cta">Book a Call</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#tools">Free Tools</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#process">How It Works</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="nav-cta">Book a Call</a></li>
-            </ul>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-dots"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-label">Specialized Industrial AI &bull; Houston, TX</div>
+      <h1>Intelligence for<br>the Lab &amp; the<br>Factory.</h1>
+      <h2 class="hero-tagline"><span class="gradient-text">Discovery Without the Tedious.</span></h2>
+      <p class="hero-desc">JoeLuT AI bridges the gap between scientific discovery and operational efficiency with custom AI solutions built by scientists.</p>
+      <div class="hero-ctas">
+        <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Call &rarr;</a>
+        <a href="#tools" class="btn-outline">View Tools</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-sphere">
+        <div class="sphere-dot sphere-dot-1"></div>
+        <div class="sphere-dot sphere-dot-2"></div>
+        <div class="sphere-dot sphere-dot-3"></div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">01 /</div>
+        <div class="hero-stat-title">Research Scientist</div>
+        <div class="hero-stat-desc">PhD-level domain expertise</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">02 /</div>
+        <div class="hero-stat-title">Food Manufacturer</div>
+        <div class="hero-stat-desc">Built from real production experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">03 /</div>
+        <div class="hero-stat-title"><span id="counter">50</span>+ Workflows</div>
+        <div class="hero-stat-desc">AI systems deployed</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                <span></span><span></span><span></span>
-            </button>
+<div class="section-divider"></div>
+
+<!-- FREE TOOLS -->
+<section class="tools" id="tools">
+  <div class="container">
+    <div class="tools-header">
+      <div class="section-label">Free Tools</div>
+      <h2 class="section-title">Try Before You Talk</h2>
+      <p class="section-subtitle">No signup. No credit card. Just useful tools built by a food scientist for food businesses and researchers.</p>
+    </div>
+    <div class="tools-grid">
+      <a href="https://colonycount.netlify.app/" target="_blank" class="tool-card">
+        <span class="tool-badge badge-new">New</span>
+        <span class="tool-icon">&#x1F9EB;</span>
+        <h3>Bacterial Colony Counter</h3>
+        <p>Upload petri dish images and get instant AI-powered colony counts with computer vision analysis.</p>
+        <span class="tool-link">Try It Free &rarr;</span>
+      </a>
+      <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-card">
+        <span class="tool-badge badge-popular">Popular</span>
+        <span class="tool-icon">&#x1F52C;</span>
+        <h3>Microglia Morphology Analyzer</h3>
+        <p>Upload microscopy images for instant cell classification — solidity, area, and morphological state.</p>
+        <span class="tool-link">Try It Free &rarr;</span>
+      </a>
+      <div class="tool-card" id="foodcost-trigger" style="cursor:pointer;">
+        <span class="tool-badge badge-new">New</span>
+        <span class="tool-icon">&#x1F4B0;</span>
+        <h3>FoodCost Pro Calculator</h3>
+        <p>Calculate true product costs including ingredients, labor, packaging &amp; overhead with pricing recommendations.</p>
+        <span class="tool-link">Get Free Access &rarr;</span>
+      </div>
+      <a href="/fsma-checker" class="tool-card">
+        <span class="tool-badge badge-new">New</span>
+        <span class="tool-icon">&#x1F4CB;</span>
+        <h3>FSMA 204 Compliance Checker</h3>
+        <p>Answer 6 questions to find out if the FDA Food Traceability Rule applies to your business.</p>
+        <span class="tool-link">Check Now &rarr;</span>
+      </a>
+      <div class="tool-card" id="dante-trigger" style="cursor:pointer;">
+        <span class="tool-badge badge-ai">AI Chat</span>
+        <span class="tool-icon">&#x1F469;&#x200D;&#x1F373;</span>
+        <h3>AI Food Scientist</h3>
+        <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation. Instant answers.</p>
+        <span class="tool-link">Chat Now &rarr;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="service-block">
+      <div class="service-text">
+        <div class="section-label">What We Build</div>
+        <h2>Food Manufacturing AI</h2>
+        <p>From formulation databases to compliance systems, we build AI tools that understand how food manufacturers actually work — because we've been on the production floor.</p>
+        <ul class="service-points">
+          <li>Digital formulation databases &amp; AI-powered recipe development</li>
+          <li>HACCP, GMP document parsing &amp; audit preparation</li>
+          <li>Inventory tracking, production data capture &amp; QC alerts</li>
+        </ul>
+      </div>
+      <div class="service-visual">
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F9EC;</div>
+          <div>
+            <div class="mini-title">Food Informatics Hub</div>
+            <div class="mini-desc">Ingredient substitution, nutritional optimization &amp; searchable R&amp;D knowledge base</div>
+          </div>
         </div>
-    </nav>
-
-    <!-- ========== HERO ========== -->
-    <section class="hero">
-        <div class="hero-bg">
-            <div class="hero-orb hero-orb-1"></div>
-            <div class="hero-orb hero-orb-2"></div>
-            <div class="hero-orb hero-orb-3"></div>
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F4CB;</div>
+          <div>
+            <div class="mini-title">Compliance Intelligence</div>
+            <div class="mini-desc">HACCP &amp; GMP parsing, batch records, deviation tracking workflows</div>
+          </div>
         </div>
-
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">AI Tools for Food Science & Manufacturing</div>
-                <h1>AI tools built by scientists, <em>for scientists.</em></h1>
-                <p>We build custom AI solutions that streamline R&D workflows, simplify compliance, and accelerate product development — because we've been in the lab and on the production floor.</p>
-                <div class="hero-ctas">
-                    <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call <span>&rarr;</span></a>
-                    <a href="#tools" class="btn-outline">Try Free Tools</a>
-                </div>
-            </div>
-
-            <div class="hero-visual">
-                <div class="hero-sphere"></div>
-            </div>
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F916;</div>
+          <div>
+            <div class="mini-title">Process Intelligence</div>
+            <div class="mini-desc">Inventory bots, supplier flows, quality control alerts &amp; production capture</div>
+          </div>
         </div>
-
-        <div class="credibility-bar">
-            <div class="container">
-                <div class="cred-item">
-                    <div class="cred-icon">&#x1F52C;</div>
-                    <div class="cred-label">Research Scientist</div>
-                </div>
-                <div class="cred-item">
-                    <div class="cred-icon">&#x1F3ED;</div>
-                    <div class="cred-label">Food Manufacturing</div>
-                </div>
-                <div class="cred-item">
-                    <div class="cred-icon">&#x2699;&#xFE0F;</div>
-                    <div class="cred-number" data-count="50">50+</div>
-                    <div class="cred-label">Workflows Built</div>
-                </div>
-                <div class="cred-item">
-                    <div class="cred-icon">&#x1F9EC;</div>
-                    <div class="cred-label">Science + AI</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FREE TOOLS ========== -->
-    <section class="tools" id="tools">
-        <div class="container">
-            <div class="tools-header">
-                <div class="section-label">Free Tools</div>
-                <h2 class="section-title">Try our tools — no signup required</h2>
-                <p class="section-subtitle">Built by a food scientist for food businesses and researchers.</p>
-            </div>
-
-            <div class="tools-grid">
-                <a href="https://colonycount.netlify.app/" target="_blank" class="tool-card">
-                    <span class="tool-badge badge-new">New</span>
-                    <span class="tool-icon">&#x1F9EB;</span>
-                    <h3>Bacterial Colony Counter</h3>
-                    <p>Upload plate images and get instant, accurate colony counts powered by AI vision.</p>
-                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
-                </a>
-
-                <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-card">
-                    <span class="tool-badge badge-popular">Popular</span>
-                    <span class="tool-icon">&#x1F52C;</span>
-                    <h3>Microglia Morphology Analyzer</h3>
-                    <p>Analyze cell morphology with AI-powered image segmentation and classification.</p>
-                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
-                </a>
-
-                <div class="tool-card" id="foodcostTrigger" style="cursor:pointer;">
-                    <span class="tool-badge badge-new">New</span>
-                    <span class="tool-icon">&#x1F4B0;</span>
-                    <h3>FoodCost Pro Calculator</h3>
-                    <p>Calculate recipe costs, margins, and pricing with our intelligent food costing tool.</p>
-                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
-                </div>
-
-                <a href="/fsma-checker" class="tool-card">
-                    <span class="tool-badge badge-new">New</span>
-                    <span class="tool-icon">&#x1F4CB;</span>
-                    <h3>FSMA 204 Compliance Checker</h3>
-                    <p>Check your food traceability compliance against FDA FSMA 204 requirements.</p>
-                    <span class="tool-link">Try It Free <span>&rarr;</span></span>
-                </a>
-
-                <div class="tool-card" id="danteTrigger" style="cursor:pointer;">
-                    <span class="tool-badge badge-ai">AI Chat</span>
-                    <span class="tool-icon">&#x1F469;&#x200D;&#x1F373;</span>
-                    <h3>Dante — AI Food Scientist</h3>
-                    <p>Chat with an AI trained on food science, formulation, and regulatory knowledge.</p>
-                    <span class="tool-link">Start Chatting <span>&rarr;</span></span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== SERVICES (Tabbed) ========== -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="services-header">
-                <div class="section-label">Services</div>
-                <h2 class="section-title">AI tools that actually work</h2>
-                <p class="section-subtitle">Built by a team that understands both the science and the business.</p>
-            </div>
-
-            <div class="tab-bar">
-                <button class="tab-btn active" data-tab="manufacturing">Food Manufacturing</button>
-                <button class="tab-btn" data-tab="research">Research & Analysis</button>
-            </div>
-
-            <div class="tab-content active" id="tab-manufacturing">
-                <div class="service-card">
-                    <div class="service-icon">&#x1F4CA;</div>
-                    <h3>Food Informatics Hub</h3>
-                    <ul>
-                        <li>AI-powered recipe optimization</li>
-                        <li>Ingredient cost analysis</li>
-                        <li>Nutritional profiling</li>
-                        <li>Shelf-life prediction models</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&#x1F4DD;</div>
-                    <h3>Compliance Solutions</h3>
-                    <ul>
-                        <li>FSMA 204 traceability checks</li>
-                        <li>Label claim verification</li>
-                        <li>Allergen management workflows</li>
-                        <li>Regulatory document processing</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&#x2699;&#xFE0F;</div>
-                    <h3>Process Intelligence</h3>
-                    <ul>
-                        <li>Batch record digitization</li>
-                        <li>Quality control dashboards</li>
-                        <li>Supply chain data pipelines</li>
-                        <li>Workflow orchestration</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="tab-content" id="tab-research">
-                <div class="service-card">
-                    <div class="service-icon">&#x1F9EC;</div>
-                    <h3>Cell Morphology Analysis</h3>
-                    <ul>
-                        <li>AI-powered cell counting</li>
-                        <li>Morphological classification</li>
-                        <li>Microglia & colony analysis</li>
-                        <li>Batch image processing</li>
-                    </ul>
-                    <a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank" class="tool-link">Try the Tool <span>&rarr;</span></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&#x1F9EC;</div>
-                    <h3>Genomic & Sequence Analysis</h3>
-                    <ul>
-                        <li>Sequence alignment tools</li>
-                        <li>Primer design assistance</li>
-                        <li>Phylogenetic analysis</li>
-                        <li>Gene expression dashboards</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&#x1F4D1;</div>
-                    <h3>Research Paper Analysis</h3>
-                    <ul>
-                        <li>Literature review AI</li>
-                        <li>Data extraction from PDFs</li>
-                        <li>Citation network mapping</li>
-                        <li>Methodology comparison</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== HOW WE WORK ========== -->
-    <section class="timeline-section" id="process">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-label">The Process</div>
-                <h2 class="section-title">How we work together</h2>
-                <p class="section-subtitle">No bloated proposals. No unnecessary complexity. Just solutions that work.</p>
-            </div>
-
-            <div class="timeline" id="timeline">
-                <div class="timeline-progress" id="timelineProgress"></div>
-                <div class="timeline-step">
-                    <div class="step-number">01</div>
-                    <h3>Discovery Call</h3>
-                    <p>We learn about your workflows, pain points, and goals in a focused 30-minute call.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-number">02</div>
-                    <h3>Solution Design</h3>
-                    <p>We map out the right AI approach — no unnecessary complexity, just what works.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-number">03</div>
-                    <h3>Build & Iterate</h3>
-                    <p>We build fast, test with real data, and iterate based on your feedback.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-number">04</div>
-                    <h3>Launch & Support</h3>
-                    <p>We deploy, train your team, and provide ongoing support as you scale.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== ABOUT ========== -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-text">
-                    <div class="section-label">Why Us</div>
-                    <h2 class="section-title">Science meets AI</h2>
-                    <p>We're not a generic tech consultancy. Our team has hands-on experience in food science labs and manufacturing facilities — we've run experiments, scaled recipes, and navigated FDA regulations.</p>
-                    <p>That's why our AI tools actually solve real problems. We understand the workflows because we've lived them. Every solution we build starts with deep domain knowledge and ends with measurable impact.</p>
-                </div>
-
-                <div class="credential-pills">
-                    <div class="credential-pill">
-                        <div class="pill-icon">&#x1F52C;</div>
-                        <div>
-                            <div class="pill-text">Research Scientist Background</div>
-                            <div class="pill-desc">Published research in food science & microbiology</div>
-                        </div>
-                    </div>
-                    <div class="credential-pill">
-                        <div class="pill-icon">&#x1F3ED;</div>
-                        <div>
-                            <div class="pill-text">Food Manufacturing Experience</div>
-                            <div class="pill-desc">Hands-on production floor & quality control</div>
-                        </div>
-                    </div>
-                    <div class="credential-pill">
-                        <div class="pill-icon">&#x1F916;</div>
-                        <div>
-                            <div class="pill-text">AI Tools Development</div>
-                            <div class="pill-desc">50+ custom AI workflows deployed</div>
-                        </div>
-                    </div>
-                    <div class="credential-pill">
-                        <div class="pill-icon">&#x1F4CA;</div>
-                        <div>
-                            <div class="pill-text">Data Pipeline Engineering</div>
-                            <div class="pill-desc">End-to-end data integration & orchestration</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== CTA ========== -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="section-title">Let's build something</h2>
-            <p class="section-subtitle">Tell us what's slowing you down. We'll tell you if AI can fix it — and how.</p>
-            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call <span>&rarr;</span></a>
-            <p class="cta-email">or email directly: <a href="mailto:info@joelutai.com">info@joelutai.com</a></p>
-        </div>
-    </section>
-
-    <!-- ========== FOOTER ========== -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <span>JoeLuT AI</span>
-                    <p>Custom AI solutions for food science, manufacturing, and research — built by scientists who understand your work.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Free Tools</h4>
-                    <ul>
-                        <li><a href="https://colonycount.netlify.app/" target="_blank">Colony Counter</a></li>
-                        <li><a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank">Microglia Analyzer</a></li>
-                        <li><a href="#" id="footerFoodcost">FoodCost Pro</a></li>
-                        <li><a href="/fsma-checker">FSMA Checker</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#process">How It Works</a></li>
-                        <li><a href="#about">About</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="mailto:info@joelutai.com">info@joelutai.com</a></li>
-                        <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank">Book a Call</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2026 JoeLuT AI. Houston, TX.
-            </div>
-        </div>
-    </footer>
-
-    <!-- ========== BACK TO TOP ========== -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">&uarr;</button>
-
-    <!-- ========== FOODCOST PRO MODAL ========== -->
-    <div class="modal-overlay" id="foodcostModal">
-        <div class="modal">
-            <button class="modal-close" id="modalClose">&times;</button>
-            <h2>Get FoodCost Pro</h2>
-            <p>Enter your email to get instant access to our food costing calculator.</p>
-            <form id="foodcostForm">
-                <input type="text" name="name" placeholder="Your name" required>
-                <input type="email" name="email" placeholder="Your email" required>
-                <button type="submit" class="btn-primary">Get Access <span>&rarr;</span></button>
-            </form>
-            <p class="modal-note">Free access. No credit card required.</p>
-        </div>
+      </div>
     </div>
 
-    <!-- ========== FOODPRO AI WIDGET ========== -->
-    <button class="foodpro-toggle" id="foodproToggle" aria-label="Open AI Chat">&#x1F469;&#x200D;&#x1F373;</button>
-    <div class="foodpro-panel" id="foodproPanel">
-        <div class="foodpro-header">
-            <span>Dante — AI Food Scientist</span>
-            <button class="foodpro-close" id="foodproClose">&times;</button>
+    <div class="service-block reverse">
+      <div class="service-text">
+        <div class="section-label">Research &amp; Analysis</div>
+        <h2>AI for the Lab</h2>
+        <p>AI-powered cell classification, sequence analysis, and literature review tools built by a researcher who's spent years at the bench.</p>
+        <ul class="service-points">
+          <li>Cell morphology classification with quantitative metrics</li>
+          <li>DNA/RNA sequence processing with NCBI integration</li>
+          <li>PDF extraction, literature review &amp; citation analysis</li>
+        </ul>
+      </div>
+      <div class="service-visual">
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F52C;</div>
+          <div>
+            <div class="mini-title">Cell Morphology Analysis</div>
+            <div class="mini-desc">AI-driven classification, soma area &amp; branch metrics, batch processing</div>
+          </div>
         </div>
-        <div class="foodpro-body">
-            <iframe src="https://chat.dante-ai.com/embed?kb_id=74524a65-f169-4e2f-9f04-0993076315c2&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNjBlYjVhLWQ5OTItNDRkMC05NzNhLTRjMjAxODVlYjBkMiJ9.eKfSrhbCjYHFKxIbnOgLxZjOqss85P8WtCRzpGOuq2Y&modeltype=gpt-4o-mini&tabs=false" allow="clipboard-write" loading="lazy"></iframe>
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F9EC;</div>
+          <div>
+            <div class="mini-title">Genomic &amp; Sequence Analysis</div>
+            <div class="mini-desc">Sequence validation, BLAST queries, GC content &amp; intelligent reporting</div>
+          </div>
         </div>
+        <div class="service-mini-card">
+          <div class="mini-icon">&#x1F4CA;</div>
+          <div>
+            <div class="mini-title">Research Paper Analysis</div>
+            <div class="mini-desc">PDF extraction, literature review, searchable databases &amp; gap analysis</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <!-- ========== GSAP CDN ========== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<div class="section-divider"></div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="process-header">
+      <div class="section-label">The Process</div>
+      <h2 class="section-title">How We Work Together</h2>
+      <p class="section-subtitle">No bloated proposals. No unnecessary complexity. Just solutions that work.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-line-animated"></div>
+      <div class="process-step">
+        <div class="step-number">01</div>
+        <h3>Discovery</h3>
+        <p>We talk through your workflows, pain points, and goals. You share the messy reality.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-number">02</div>
+        <h3>Design</h3>
+        <p>We map out exactly what we'll build, how it connects, and what results to expect.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-number">03</div>
+        <h3>Build</h3>
+        <p>You get a working prototype fast. We refine it together until it fits perfectly.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-number">04</div>
+        <h3>Launch</h3>
+        <p>Your team gets trained, documentation delivered, and ongoing support as you scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        /* ========== NAVBAR SCROLL ========== */
-        const navbar = document.getElementById('navbar');
-        const backToTop = document.getElementById('backToTop');
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label" style="color: var(--accent-deep);">Why Us</div>
+        <h2 class="section-title">Science Meets AI</h2>
+        <p>We're not just tool builders — we come from the lab and the production floor. We've run food manufacturing operations, worked in research environments, and felt the pain of manual processes, spreadsheet chaos, and compliance headaches firsthand.</p>
+        <p>That's why we built JoeLuT AI: to create intelligent solutions that actually understand how scientists and food manufacturers work. No generic software. No tech for tech's sake. Just practical AI that saves you time and helps you focus on what matters — innovation.</p>
+      </div>
+      <div class="cred-cards">
+        <div class="cred-card">
+          <span class="cred-icon">&#x1F52C;</span>
+          <span>Research Scientist Background</span>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">&#x1F3ED;</span>
+          <span>Food Manufacturing Experience</span>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">&#x2699;&#xFE0F;</span>
+          <span>Workflow Design Experts</span>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">&#x1F916;</span>
+          <span>AI Tools Development</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function onScroll() {
-            const y = window.scrollY;
-            navbar.classList.toggle('scrolled', y > 80);
-            backToTop.classList.toggle('visible', y > 600);
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+<!-- CTA -->
+<section class="cta-section">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="cta-content container">
+    <div class="section-label" style="text-align:center;">Let's Connect</div>
+    <h2 class="section-title" style="text-align:center;">Ready to<br><span class="gradient-text">Transform?</span></h2>
+    <p class="section-subtitle" style="text-align:center;">Tell us what's slowing you down. We'll tell you if AI can fix it — and how.</p>
+    <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-primary">Book a Discovery Call &rarr;</a>
+    <p class="cta-email">or email directly: <a href="mailto:info@joelutai.com">info@joelutai.com</a></p>
+  </div>
+</section>
 
-        /* ========== MOBILE NAV ========== */
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        navToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('open');
-        });
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <defs><linearGradient id="fGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#4DD9CB"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient></defs>
+            <circle cx="120" cy="120" r="90" stroke="url(#fGrad)" stroke-width="4" fill="none"/>
+            <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M106 92V152H130" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M138 92H174M156 92V152" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+          JoeLuT AI
+        </div>
+        <p class="footer-desc">AI tools for food business &amp; research. Built by scientists, for scientists.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <ul class="footer-links">
+          <li><a href="https://colonycount.netlify.app/" target="_blank">Colony Counter</a></li>
+          <li><a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank">Microglia Analyzer</a></li>
+          <li><a href="#" id="footer-foodcost">FoodCost Pro</a></li>
+          <li><a href="/fsma-checker">FSMA Checker</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank">Book a Call</a></li>
+          <li><a href="mailto:info@joelutai.com">info@joelutai.com</a></li>
+          <li>Houston, TX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 JoeLuT AI. Houston, TX. All rights reserved.</div>
+  </div>
+</footer>
 
-        /* ========== BACK TO TOP ========== */
-        backToTop.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+<!-- FOODCOST PRO MODAL -->
+<div class="modal-overlay" id="foodcostModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h2>Get FoodCost Pro</h2>
+    <p>Enter your email to get instant access to our food costing calculator.</p>
+    <form id="foodcostForm">
+      <input type="text" name="name" placeholder="Your name" required>
+      <input type="email" name="email" placeholder="Your email" required>
+      <button type="submit" class="btn-primary">Get Access &rarr;</button>
+    </form>
+    <p class="modal-note">Free access. No credit card required.</p>
+  </div>
+</div>
 
-        /* ========== TABS ========== */
-        document.querySelectorAll('.tab-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-                document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-                btn.classList.add('active');
-                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-            });
-        });
+<!-- FOODPRO AI WIDGET -->
+<button class="foodpro-toggle" id="foodproToggle" aria-label="Open AI Chat">&#x1F469;&#x200D;&#x1F373;</button>
+<div class="foodpro-panel" id="foodproPanel">
+  <div class="foodpro-header">
+    <span>Dante — AI Food Scientist</span>
+    <button class="foodpro-close" id="foodproClose">&times;</button>
+  </div>
+  <div class="foodpro-body">
+    <iframe src="https://chat.dante-ai.com/embed?kb_id=74524a65-f169-4e2f-9f04-0993076315c2&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNjBlYjVhLWQ5OTItNDRkMC05NzNhLTRjMjAxODVlYjBkMiJ9.eKfSrhbCjYHFKxRbnOgLxZjOqss85P8WtCRzpGOuq2Y&modeltype=gpt-4o-mini&tabs=false" allow="clipboard-write" loading="lazy"></iframe>
+  </div>
+</div>
 
-        /* ========== FOODCOST PRO MODAL ========== */
-        const modal = document.getElementById('foodcostModal');
-        const modalClose = document.getElementById('modalClose');
+<script>
+(function() {
+  // Navbar scroll
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
 
-        document.getElementById('foodcostTrigger').addEventListener('click', function() { modal.classList.add('active'); });
-        document.getElementById('footerFoodcost').addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); });
-        modalClose.addEventListener('click', function() { modal.classList.remove('active'); });
-        modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+  // Counter animation
+  var counterEl = document.getElementById('counter');
+  var counted = false;
+  function animateCounter() {
+    if (counted) return;
+    var rect = counterEl.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      counted = true;
+      var current = 0;
+      var target = 50;
+      var step = function() {
+        current += 1;
+        counterEl.textContent = current;
+        if (current < target) requestAnimationFrame(step);
+      };
+      step();
+    }
+  }
+  window.addEventListener('scroll', animateCounter, { passive: true });
+  animateCounter();
 
-        document.getElementById('foodcostForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var name = this.name.value;
-            var email = this.email.value;
-            if (name && email) {
-                modal.classList.remove('active');
-                window.open('/foodcost-pro/?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email), '_blank');
-                this.reset();
-            }
-        });
-
-        /* ========== FOODPRO / DANTE WIDGET ========== */
-        const foodproToggle = document.getElementById('foodproToggle');
-        const foodproPanel = document.getElementById('foodproPanel');
-        const foodproClose = document.getElementById('foodproClose');
-
-        foodproToggle.addEventListener('click', function() { foodproPanel.classList.toggle('open'); });
-        foodproClose.addEventListener('click', function() { foodproPanel.classList.remove('open'); });
-        document.getElementById('danteTrigger').addEventListener('click', function() { foodproPanel.classList.add('open'); });
-
-        /* ========== GSAP CINEMATIC ANIMATIONS ========== */
-        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-            gsap.registerPlugin(ScrollTrigger);
-
-            /* Smooth fade-up helper */
-            function fadeUp(selector, opts) {
-                var o = Object.assign({ y: 40, stagger: 0.12, delay: 0, start: 'top 85%' }, opts || {});
-                var els = document.querySelectorAll(selector);
-                if (!els.length) return;
-                gsap.set(selector, { opacity: 0, y: o.y });
-                gsap.to(selector, {
-                    opacity: 1, y: 0,
-                    duration: 1,
-                    stagger: o.stagger,
-                    delay: o.delay,
-                    ease: 'power3.out',
-                    scrollTrigger: { trigger: els[0].closest('section') || els[0], start: o.start, once: true }
-                });
-            }
-
-            /* Hero — cinematic entrance */
-            var heroTl = gsap.timeline({ delay: 0.3 });
-            gsap.set(['.hero-badge', '.hero h1', '.hero p', '.hero-ctas'], { opacity: 0, y: 30 });
-            gsap.set('.hero-sphere', { opacity: 0, scale: 0.8 });
-            gsap.set('.cred-item', { opacity: 0, y: 20 });
-
-            heroTl
-                .to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
-                .to('.hero h1', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
-                .to('.hero p', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
-                .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
-                .to('.hero-sphere', { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' }, '-=1')
-                .to('.cred-item', { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, '-=0.6');
-
-            /* Counter animation */
-            var counterEl = document.querySelector('[data-count]');
-            if (counterEl) {
-                var target = parseInt(counterEl.dataset.count);
-                gsap.from({ val: 0 }, {
-                    val: target,
-                    duration: 2,
-                    delay: 1.5,
-                    ease: 'power2.out',
-                    onUpdate: function() {
-                        counterEl.textContent = Math.round(this.targets()[0].val) + '+';
-                    }
-                });
-            }
-
-            /* Section reveals */
-            fadeUp('.tools-header > *', { stagger: 0.1 });
-            fadeUp('.tool-card', { stagger: 0.1, y: 30 });
-            fadeUp('.services-header > *', { stagger: 0.1 });
-            fadeUp('.service-card', { stagger: 0.12 });
-            fadeUp('.about-text > *', { stagger: 0.1 });
-            fadeUp('.credential-pill', { stagger: 0.12, y: 20 });
-            fadeUp('.cta-section .section-title, .cta-section .section-subtitle, .cta-section .btn-primary, .cta-section .cta-email', { stagger: 0.1 });
-
-            /* Timeline — sequential step reveal with progress line */
-            var steps = document.querySelectorAll('.timeline-step');
-            steps.forEach(function(step, i) {
-                gsap.set(step, { opacity: 0, y: 24 });
-            });
-
-            ScrollTrigger.create({
-                trigger: '#timeline',
-                start: 'top 75%',
-                once: true,
-                onEnter: function() {
-                    var isMobile = window.innerWidth <= 768;
-                    var progress = document.getElementById('timelineProgress');
-
-                    steps.forEach(function(step, i) {
-                        gsap.to(step, {
-                            opacity: 1, y: 0,
-                            duration: 0.7,
-                            delay: i * 0.25,
-                            ease: 'power3.out',
-                            onStart: function() {
-                                step.classList.add('active');
-                            }
-                        });
-                    });
-
-                    /* Animate progress bar */
-                    if (isMobile) {
-                        gsap.to(progress, { height: '100%', duration: 1.5, delay: 0.2, ease: 'power2.inOut' });
-                    } else {
-                        gsap.to(progress, { width: '100%', duration: 1.5, delay: 0.2, ease: 'power2.inOut' });
-                    }
-                }
-            });
-
-            /* Parallax on hero orbs */
-            gsap.to('.hero-orb-1', {
-                yPercent: -15,
-                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
-            });
-            gsap.to('.hero-orb-2', {
-                yPercent: 10,
-                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
-            });
-
-        } /* end GSAP check */
-
+  // Teerya-style scroll reveals
+  function setupReveals() {
+    document.querySelectorAll('.tool-card').forEach(function(el, i) {
+      el.classList.add('reveal-scale', 'hidden', 'stagger-' + (i + 1));
     });
-    </script>
+
+    document.querySelectorAll('.service-block').forEach(function(block, i) {
+      var text = block.querySelector('.service-text');
+      var visual = block.querySelector('.service-visual');
+      if (i % 2 === 0) {
+        text.classList.add('reveal-left', 'hidden');
+        visual.classList.add('reveal-right', 'hidden');
+      } else {
+        text.classList.add('reveal-right', 'hidden');
+        visual.classList.add('reveal-left', 'hidden');
+      }
+    });
+
+    document.querySelectorAll('.process-step').forEach(function(el, i) {
+      el.classList.add('reveal', 'hidden', 'stagger-' + (i + 1));
+    });
+
+    document.querySelectorAll('.cred-card').forEach(function(el, i) {
+      el.classList.add('reveal-right', 'hidden', 'stagger-' + (i + 1));
+    });
+
+    document.querySelectorAll('.tools-header, .process-header, .about-text, .cta-content').forEach(function(el) {
+      el.classList.add('reveal', 'hidden');
+    });
+  }
+
+  setupReveals();
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.remove('hidden');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // Process line animation
+  var processLine = document.querySelector('.process-line-animated');
+  if (processLine) {
+    var processObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          processLine.classList.add('active');
+          processObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    processObserver.observe(document.querySelector('.process-steps'));
+  }
+
+  // Mobile hamburger
+  var hamburger = document.getElementById('hamburger');
+  var navLinks = document.getElementById('navLinks');
+  var menuOpen = false;
+
+  hamburger.addEventListener('click', function() {
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+      navLinks.style.display = 'flex';
+      navLinks.style.position = 'fixed';
+      navLinks.style.top = 'var(--nav-height)';
+      navLinks.style.left = '0';
+      navLinks.style.right = '0';
+      navLinks.style.background = 'rgba(10,10,10,0.97)';
+      navLinks.style.flexDirection = 'column';
+      navLinks.style.padding = '24px 40px';
+      navLinks.style.gap = '20px';
+      navLinks.style.backdropFilter = 'blur(20px)';
+    } else {
+      navLinks.style.display = '';
+      navLinks.style.position = '';
+      navLinks.style.top = '';
+      navLinks.style.left = '';
+      navLinks.style.right = '';
+      navLinks.style.background = '';
+      navLinks.style.flexDirection = '';
+      navLinks.style.padding = '';
+      navLinks.style.gap = '';
+      navLinks.style.backdropFilter = '';
+    }
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (href === '#') return;
+      var target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (menuOpen) {
+          menuOpen = false;
+          navLinks.style.display = '';
+          navLinks.style.position = '';
+          navLinks.style.top = '';
+          navLinks.style.left = '';
+          navLinks.style.right = '';
+          navLinks.style.background = '';
+          navLinks.style.flexDirection = '';
+          navLinks.style.padding = '';
+          navLinks.style.gap = '';
+          navLinks.style.backdropFilter = '';
+        }
+      }
+    });
+  });
+
+  // FoodCost Pro modal
+  var modal = document.getElementById('foodcostModal');
+  var modalClose = document.getElementById('modalClose');
+
+  document.getElementById('foodcost-trigger').addEventListener('click', function() { modal.classList.add('active'); });
+  document.getElementById('footer-foodcost').addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); });
+  modalClose.addEventListener('click', function() { modal.classList.remove('active'); });
+  modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+
+  document.getElementById('foodcostForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var name = this.name.value;
+    var email = this.email.value;
+    if (name && email) {
+      modal.classList.remove('active');
+      window.open('/foodcost-pro/?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email), '_blank');
+      this.reset();
+    }
+  });
+
+  // Dante AI widget
+  var foodproToggle = document.getElementById('foodproToggle');
+  var foodproPanel = document.getElementById('foodproPanel');
+  var foodproClose = document.getElementById('foodproClose');
+
+  foodproToggle.addEventListener('click', function() { foodproPanel.classList.toggle('open'); });
+  foodproClose.addEventListener('click', function() { foodproPanel.classList.remove('open'); });
+  document.getElementById('dante-trigger').addEventListener('click', function() { foodproPanel.classList.add('open'); });
+})();
+</script>
 </body>
 </html>
