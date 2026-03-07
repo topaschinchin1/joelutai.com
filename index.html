@@ -1569,15 +1569,17 @@ img { max-width: 100%; display: block; }
 (function() {
   // Navbar scroll
   var navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', function() {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  }, { passive: true });
+  if (navbar) {
+    window.addEventListener('scroll', function() {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+  }
 
   // Counter animation
   var counterEl = document.getElementById('counter');
   var counted = false;
   function animateCounter() {
-    if (counted) return;
+    if (counted || !counterEl) return;
     var rect = counterEl.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0) {
       counted = true;
@@ -1659,7 +1661,7 @@ img { max-width: 100%; display: block; }
   var navLinks = document.getElementById('navLinks');
   var menuOpen = false;
 
-  hamburger.addEventListener('click', function() {
+  if (hamburger) hamburger.addEventListener('click', function() {
     menuOpen = !menuOpen;
     if (menuOpen) {
       navLinks.style.display = 'flex';
@@ -1715,31 +1717,48 @@ img { max-width: 100%; display: block; }
   // FoodCost Pro modal
   var modal = document.getElementById('foodcostModal');
   var modalClose = document.getElementById('modalClose');
+  var foodcostTrigger = document.getElementById('foodcost-trigger');
+  var footerFoodcost = document.getElementById('footer-foodcost');
+  var foodcostForm = document.getElementById('foodcostForm');
 
-  document.getElementById('foodcost-trigger').addEventListener('click', function() { modal.classList.add('active'); });
-  document.getElementById('footer-foodcost').addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); });
-  modalClose.addEventListener('click', function() { modal.classList.remove('active'); });
-  modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
-
-  document.getElementById('foodcostForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var name = this.name.value;
-    var email = this.email.value;
-    if (name && email) {
-      modal.classList.remove('active');
-      window.open('/foodcost-pro/?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email), '_blank');
-      this.reset();
-    }
-  });
+  if (foodcostTrigger && modal) {
+    foodcostTrigger.addEventListener('click', function() { modal.classList.add('active'); });
+  }
+  if (footerFoodcost && modal) {
+    footerFoodcost.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); });
+  }
+  if (modalClose && modal) {
+    modalClose.addEventListener('click', function() { modal.classList.remove('active'); });
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+  }
+  if (foodcostForm && modal) {
+    foodcostForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var name = this.name.value;
+      var email = this.email.value;
+      if (name && email) {
+        modal.classList.remove('active');
+        window.open('/foodcost-pro/?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email), '_blank');
+        this.reset();
+      }
+    });
+  }
 
   // Dante AI widget
   var foodproToggle = document.getElementById('foodproToggle');
   var foodproPanel = document.getElementById('foodproPanel');
   var foodproClose = document.getElementById('foodproClose');
+  var danteTrigger = document.getElementById('dante-trigger');
 
-  foodproToggle.addEventListener('click', function() { foodproPanel.classList.toggle('open'); });
-  foodproClose.addEventListener('click', function() { foodproPanel.classList.remove('open'); });
-  document.getElementById('dante-trigger').addEventListener('click', function() { foodproPanel.classList.add('open'); });
+  if (foodproToggle && foodproPanel) {
+    foodproToggle.addEventListener('click', function() { foodproPanel.classList.toggle('open'); });
+  }
+  if (foodproClose && foodproPanel) {
+    foodproClose.addEventListener('click', function() { foodproPanel.classList.remove('open'); });
+  }
+  if (danteTrigger && foodproPanel) {
+    danteTrigger.addEventListener('click', function() { foodproPanel.classList.add('open'); });
+  }
 })();
 </script>
 </body>
