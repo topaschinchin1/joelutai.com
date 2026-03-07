@@ -1032,6 +1032,13 @@ img { max-width: 100%; display: block; }
 }
 
 
+/* ========== QUIZ CARDS ========== */
+.quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
 /* ========== TEERYA-STYLE SCROLL REVEALS ========== */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(60px); }
@@ -1112,6 +1119,7 @@ img { max-width: 100%; display: block; }
   .tools, .services, .process, .about, .cta-section { padding: 80px 0; }
   .tools-grid { grid-template-columns: 1fr; }
   .tool-card { width: 280px; height: 280px; padding: 30px 24px; }
+  .quiz-grid { grid-template-columns: 1fr; }
   .process-steps { grid-template-columns: 1fr; gap: 32px; }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -1254,20 +1262,6 @@ img { max-width: 100%; display: block; }
         <p>Ask about recipe optimization, ingredient substitutions, or nutraceutical formulation. Instant answers.</p>
         <span class="tool-link">Chat Now &rarr;</span>
       </div>
-      <a href="/quizzes/quiz-manufacturer.html" target="_blank" class="tool-card">
-        <span class="tool-badge badge-new">Ops Audit</span>
-        <span class="tool-icon">🏭</span>
-        <h3>Food Manufacturer Audit</h3>
-        <p>Find out if your production ops are ready for AI. Takes 2 minutes.</p>
-        <span class="tool-link">Start Audit &rarr;</span>
-      </a>
-      <a href="/quizzes/quiz-restaurant.html" target="_blank" class="tool-card">
-        <span class="tool-badge badge-new">Ops Audit</span>
-        <span class="tool-icon">🍽️</span>
-        <h3>Restaurant Ops Audit</h3>
-        <p>Assess your inventory, labor, and customer ops. See where AI fits.</p>
-        <span class="tool-link">Start Audit &rarr;</span>
-      </a>
     </div>
   </div>
 </section>
@@ -1415,6 +1409,33 @@ img { max-width: 100%; display: block; }
           <span>AI Tools Development</span>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ SECTION -->
+<section class="tools" id="quizzes">
+  <div class="container">
+    <div class="tools-header">
+      <div class="section-label">Ops Audits</div>
+      <h2 class="section-title">Ready to Find Out What We Can Build for You?</h2>
+      <p class="section-subtitle">Take a 2-minute ops audit to assess your automation readiness and see where AI can make the biggest impact.</p>
+    </div>
+    <div class="quiz-grid">
+      <a href="/quizzes/quiz-manufacturer.html" target="_blank" class="tool-card" style="width:auto;height:auto;border-radius:12px;padding:36px 28px;">
+        <span class="tool-badge badge-new">Ops Audit</span>
+        <span class="tool-icon">🏭</span>
+        <h3>Food Manufacturer Audit</h3>
+        <p>Find out if your production ops are ready for AI automation. Takes 2 minutes.</p>
+        <span class="tool-link">Start Audit &rarr;</span>
+      </a>
+      <a href="/quizzes/quiz-restaurant.html" target="_blank" class="tool-card" style="width:auto;height:auto;border-radius:12px;padding:36px 28px;">
+        <span class="tool-badge badge-new">Ops Audit</span>
+        <span class="tool-icon">🍽️</span>
+        <h3>Restaurant Ops Audit</h3>
+        <p>Assess your inventory, labor, and customer ops. See where automation fits.</p>
+        <span class="tool-link">Start Audit &rarr;</span>
+      </a>
     </div>
   </div>
 </section>
