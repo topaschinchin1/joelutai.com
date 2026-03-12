@@ -937,6 +937,185 @@ img { max-width: 100%; display: block; }
   text-align: center;
 }
 
+/* ========== FEATURED PRODUCT ========== */
+.featured-product {
+  padding: 100px 0;
+  background: var(--bg-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-product::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(77, 217, 203, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.featured-inner {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.featured-content {
+  flex: 1;
+}
+
+.featured-content .section-label {
+  margin-bottom: 16px;
+}
+
+.featured-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.featured-content .featured-sub {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 520px;
+}
+
+.featured-bullets {
+  list-style: none;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.featured-bullets li {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  padding-left: 4px;
+}
+
+.featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 40px;
+  background: var(--gradient);
+  color: var(--bg-dark);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+
+.featured-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(77, 217, 203, 0.3);
+}
+
+.featured-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-mockup {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-mockup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient);
+}
+
+.mockup-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+}
+
+.mockup-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.mockup-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mockup-line {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mockup-line:nth-child(1) { width: 90%; background: linear-gradient(90deg, rgba(77, 217, 203, 0.15), rgba(33, 150, 243, 0.1)); }
+.mockup-line:nth-child(2) { width: 75%; }
+.mockup-line:nth-child(3) { width: 60%; background: linear-gradient(90deg, rgba(77, 217, 203, 0.1), rgba(13, 71, 161, 0.1)); }
+.mockup-line:nth-child(4) { width: 85%; }
+.mockup-line:nth-child(5) { width: 45%; }
+
+.mockup-badge {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(77, 217, 203, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(77, 217, 203, 0.2);
+}
+
+@media (max-width: 768px) {
+  .featured-inner {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .featured-visual {
+    order: -1;
+  }
+  .featured-mockup {
+    max-width: 340px;
+  }
+  .featured-product {
+    padding: 60px 0;
+  }
+}
+
 /* Smooth section separators */
 .section-divider {
   height: 1px;
@@ -1212,6 +1391,41 @@ img { max-width: 100%; display: block; }
         <div class="hero-stat-num">03 /</div>
         <div class="hero-stat-title"><span id="counter">50</span>+ Workflows</div>
         <div class="hero-stat-desc">AI systems deployed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FEATURED PRODUCT: BENCHVOICE -->
+<section class="featured-product" id="benchvoice">
+  <div class="container">
+    <div class="featured-inner">
+      <div class="featured-content">
+        <div class="section-label">Featured Product</div>
+        <h2>BenchVoice — <span class="gradient-text">Voice-First Lab Notebook</span></h2>
+        <p class="featured-sub">Speak your experiment. Get a structured lab report instantly.</p>
+        <ul class="featured-bullets">
+          <li>🎙 Record hands-free at the bench</li>
+          <li>🔬 Auto-extracts reagents, quantities & observations</li>
+          <li>📄 Exports to Word with embedded images & PubMed citations</li>
+        </ul>
+        <a href="https://benchvoice-wheat.vercel.app" target="_blank" class="featured-cta">Try BenchVoice Free →</a>
+      </div>
+      <div class="featured-visual">
+        <div class="featured-mockup">
+          <div class="mockup-icon">🎙</div>
+          <div class="mockup-title">Lab Report Generated</div>
+          <div class="mockup-lines">
+            <div class="mockup-line"></div>
+            <div class="mockup-line"></div>
+            <div class="mockup-line"></div>
+            <div class="mockup-line"></div>
+            <div class="mockup-line"></div>
+          </div>
+          <div class="mockup-badge">✓ Ready to Export</div>
+        </div>
       </div>
     </div>
   </div>
