@@ -1003,6 +1003,13 @@ img { max-width: 100%; display: block; }
   padding-left: 4px;
 }
 
+.featured-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .featured-cta {
   display: inline-flex;
   align-items: center;
@@ -1411,7 +1418,10 @@ img { max-width: 100%; display: block; }
           <li>🔬 Auto-extracts reagents, quantities & observations</li>
           <li>📄 Exports to Word with embedded images & PubMed citations</li>
         </ul>
-        <a href="https://benchvoice-wheat.vercel.app" target="_blank" class="featured-cta">Try BenchVoice Free →</a>
+        <div class="featured-ctas">
+          <a href="https://benchvoice-wheat.vercel.app" target="_blank" class="featured-cta">Try BenchVoice Free →</a>
+          <a href="https://benchvoice-wheat.vercel.app/dashboard" target="_blank" class="btn-outline">View Dashboard →</a>
+        </div>
       </div>
       <div class="featured-visual">
         <div class="featured-mockup">
