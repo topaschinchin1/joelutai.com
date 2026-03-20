@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Blog — JoeLuT AI</title>
+<meta id="pageMeta" name="description" content="Insights on AI tools, food safety, and life sciences research from JoeLuT AI.">
+<link id="pageCanonical" rel="canonical" href="https://joelutai.com/blog">
+<meta id="ogTitle" property="og:title" content="Blog — JoeLuT AI">
+<meta id="ogDesc" property="og:description" content="">
+<meta id="ogImage" property="og:image" content="https://joelutai.com/images/og-cover.png">
+<meta property="og:type" content="article">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & VARIABLES ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-section: #111111;
+  --bg-card: #161616;
+  --text-white: #ffffff;
+  --text-muted: #777777;
+  --accent: #4DD9CB;
+  --accent-blue: #2196F3;
+  --accent-deep: #0D47A1;
+  --gradient: linear-gradient(135deg, #4DD9CB, #2196F3, #0D47A1);
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --nav-height: 80px;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg-dark); color: var(--text-white); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.container-narrow { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 1000;
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.nav-logo svg { width: 36px; height: 36px; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--text-white); }
+.nav-links a.active { color: var(--accent); }
+.nav-cta {
+  padding: 10px 24px;
+  border: 1px solid rgba(77, 217, 203, 0.4);
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent) !important;
+  transition: all 0.3s;
+}
+.nav-cta:hover { background: var(--accent); color: var(--bg-dark) !important; }
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none; border: none;
+  padding: 4px;
+}
+.nav-hamburger span { width: 24px; height: 2px; background: var(--text-white); transition: all 0.3s; }
+
+/* ========== POST HEADER ========== */
+.post-header {
+  padding: calc(var(--nav-height) + 60px) 0 0;
+  background: var(--bg-dark);
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+.back-link svg { width: 16px; height: 16px; }
+
+.post-cat-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(77,217,203,0.12);
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.post-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+.post-meta-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-weight: 500;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 48px;
+}
+.post-meta-bar .dot { color: #333; }
+
+/* ========== PROSE CONTENT ========== */
+.post-body {
+  padding-bottom: 80px;
+}
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.8);
+}
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin: 52px 0 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.prose h2:first-child { margin-top: 0; }
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin: 36px 0 12px;
+}
+.prose p {
+  margin-bottom: 20px;
+  color: rgba(255,255,255,0.75);
+}
+.prose ul, .prose ol {
+  margin: 0 0 20px 24px;
+  color: rgba(255,255,255,0.75);
+}
+.prose li { margin-bottom: 8px; line-height: 1.7; }
+.prose ul li::marker { color: var(--accent); }
+.prose ol li::marker { color: var(--accent); font-weight: 700; }
+.prose strong { color: var(--text-white); font-weight: 700; }
+.prose em { color: rgba(255,255,255,0.65); font-style: italic; }
+.prose a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(77,217,203,0.3); transition: text-decoration-color 0.2s; }
+.prose a:hover { text-decoration-color: var(--accent); }
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  margin: 24px 0;
+  background: rgba(77,217,203,0.05);
+  border-radius: 0 8px 8px 0;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 40px 0;
+}
+.prose code {
+  font-size: 0.88em;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+.prose pre {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255,255,255,0.85);
+}
+
+/* ========== CTA BLOCK ========== */
+.post-cta {
+  background: var(--bg-card);
+  border: 1px solid rgba(77,217,203,0.15);
+  border-radius: 12px;
+  padding: 36px;
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.post-cta-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.post-cta-text p { font-size: 0.9rem; color: var(--text-muted); }
+.cta-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--gradient);
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.cta-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ========== LOADING / ERROR ========== */
+.post-loading, .post-error {
+  padding: calc(var(--nav-height) + 100px) 0 100px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.post-loading::after {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 2px solid rgba(77,217,203,0.3);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========== FOOTER ========== */
+.footer {
+  background: var(--bg-section);
+  padding: 60px 0 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.footer-brand svg { width: 28px; height: 28px; }
+.footer-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; max-width: 280px; }
+.footer h4 {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-white);
+  margin-bottom: 16px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { font-size: 0.85rem; color: var(--text-muted); transition: color 0.3s; }
+.footer-links a:hover { color: var(--accent); }
+.footer-links li { font-size: 0.85rem; color: var(--text-muted); }
+.footer-bottom {
+  padding: 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.8rem;
+  color: #444;
+  text-align: center;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .container-narrow { padding: 0 20px; }
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .post-cta { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+.nav-links.open {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: var(--nav-height);
+  left: 0; right: 0;
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(20px);
+  padding: 32px 24px;
+  gap: 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  z-index: 999;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="navGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E0F7FA"/><stop offset="25%" stop-color="#4DD9CB"/><stop offset="60%" stop-color="#2196F3"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient></defs>
+      <circle cx="120" cy="120" r="90" stroke="url(#navGrad)" stroke-width="3" fill="none"/>
+      <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#4DD9CB" stroke-width="2" fill="none" opacity="0.35" transform="rotate(-35 120 120)"/>
+      <ellipse cx="120" cy="120" rx="90" ry="30" stroke="#2196F3" stroke-width="2" fill="none" opacity="0.35" transform="rotate(35 120 120)"/>
+      <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M106 92V152H130" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M138 92H174M156 92V152" stroke="url(#navGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <circle cx="38" cy="84" r="7" fill="#4DD9CB" opacity="0.8"/>
+      <circle cx="202" cy="84" r="7" fill="#2196F3" opacity="0.7"/>
+      <circle cx="120" cy="214" r="7" fill="#0D47A1" opacity="0.5"/>
+    </svg>
+    JoeLuT AI
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/#tools">Tools</a></li>
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#process">Process</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/blog" class="active">Blog</a></li>
+    <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="nav-cta">Book a Call</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- POST CONTENT (rendered by JS) -->
+<div id="postContainer">
+  <div class="post-loading">Loading</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <defs><linearGradient id="fGrad" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#4DD9CB"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient></defs>
+            <circle cx="120" cy="120" r="90" stroke="url(#fGrad)" stroke-width="4" fill="none"/>
+            <path d="M76 92H94V138C94 150 87 157 76 157C68 157 63 151 63 144" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M106 92V152H130" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M138 92H174M156 92V152" stroke="url(#fGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+          JoeLuT AI
+        </div>
+        <p class="footer-desc">AI tools for food business &amp; research. Built by scientists, for scientists.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <ul class="footer-links">
+          <li><a href="https://colonycount.netlify.app/" target="_blank">Colony Counter</a></li>
+          <li><a href="https://joelutai-microglia-analysis.netlify.app/" target="_blank">Microglia Analyzer</a></li>
+          <li><a href="https://tools.joelutai.com/foodcost" target="_blank">FoodCost Pro</a></li>
+          <li><a href="https://tools.joelutai.com/fsma" target="_blank">FSMA Checker</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#process">Process</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="https://calendly.com/chiomaodo/intro-call" target="_blank">Book a Call</a></li>
+          <li><a href="mailto:info@joelutai.com">info@joelutai.com</a></li>
+          <li>Houston, TX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 JoeLuT AI. Houston, TX. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  function formatDate(dateStr) {
+    var d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Extract slug from URL: /blog/my-post-slug → my-post-slug
+  var parts = window.location.pathname.replace(/\/+$/, '').split('/');
+  var slug = parts[parts.length - 1];
+
+  if (!slug || slug === 'blog' || slug === 'post') {
+    window.location.href = '/blog';
+    return;
+  }
+
+  fetch('/api/blog?slug=' + encodeURIComponent(slug))
+    .then(function(r) {
+      if (r.status === 404) throw new Error('not-found');
+      if (!r.ok) throw new Error('server-error');
+      return r.json();
+    })
+    .then(function(post) {
+      // Update page meta
+      document.getElementById('pageTitle').textContent = post.title + ' — JoeLuT AI';
+      document.getElementById('pageMeta').setAttribute('content', post.description);
+      document.getElementById('pageCanonical').setAttribute('href', 'https://joelutai.com/blog/' + post.slug);
+      document.getElementById('ogTitle').setAttribute('content', post.title);
+      document.getElementById('ogDesc').setAttribute('content', post.description);
+      if (post.image) document.getElementById('ogImage').setAttribute('content', 'https://joelutai.com' + post.image);
+
+      document.getElementById('postContainer').innerHTML =
+        '<section class="post-header">' +
+          '<div class="container-narrow">' +
+            '<a href="/blog" class="back-link">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>' +
+              'All Posts' +
+            '</a>' +
+            '<span class="post-cat-badge">' + escapeHtml(post.category) + '</span>' +
+            '<h1 class="post-title">' + escapeHtml(post.title) + '</h1>' +
+            '<div class="post-meta-bar">' +
+              '<span>' + formatDate(post.date) + '</span>' +
+              '<span class="dot">&middot;</span>' +
+              '<span>' + (post.readingTime || 1) + ' min read</span>' +
+            '</div>' +
+          '</div>' +
+        '</section>' +
+        '<section class="post-body">' +
+          '<div class="container-narrow">' +
+            '<div class="prose">' + post.htmlContent + '</div>' +
+            '<div class="post-cta">' +
+              '<div class="post-cta-text">' +
+                '<h3>Ready to reduce manual work in your lab or facility?</h3>' +
+                '<p>Free tools, no signup required — or book a call to talk through your specific challenges.</p>' +
+              '</div>' +
+              '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
+                '<a href="/" class="cta-btn">Explore Tools</a>' +
+                '<a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="cta-btn" style="background:transparent;border:1px solid rgba(77,217,203,0.4);color:var(--accent);">Book a Call</a>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</section>';
+    })
+    .catch(function(err) {
+      var msg = err.message === 'not-found'
+        ? 'Post not found. <a href="/blog" style="color:var(--accent)">Back to blog →</a>'
+        : 'Failed to load post. Please refresh.';
+      document.getElementById('postContainer').innerHTML =
+        '<div class="post-error">' + msg + '</div>';
+    });
+
+  // Mobile hamburger
+  var hamburger = document.getElementById('hamburger');
+  var navLinks = document.getElementById('navLinks');
+  if (hamburger) {
+    hamburger.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
