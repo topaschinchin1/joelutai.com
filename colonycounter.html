@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ColonyCount AI – Automated Bacterial Colony Counter for Researchers</title>
+  <meta name="description" content="Upload a plate image. AI counts your bacterial colonies instantly. Free tool for microbiologists and lab researchers. Built by JoeLuT AI." />
+  <meta name="keywords" content="bacterial colony counter, AI colony counting, automated colony counter, plate count bacteria, colony forming units, CFU counter, microbiology tools, lab AI tools" />
+  <meta property="og:title" content="ColonyCount AI – Upload a Plate. Get a Count." />
+  <meta property="og:description" content="AI-powered bacterial colony counter. Upload your plate image and get an accurate colony count in seconds." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://colonycounter.joelutai.com" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #0D1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --teal:        #2DD4BF;
+      --teal-dim:    rgba(45,212,191,0.12);
+      --teal-glow:   rgba(45,212,191,0.06);
+      --teal-border: rgba(45,212,191,0.5);
+      --white:       #FFFFFF;
+      --muted:       #94A3B8;
+      --subtle:      #64748B;
+      --text:        #CBD5E1;
+      --line:        rgba(255,255,255,0.06);
+      --border:      rgba(45,212,191,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── GLOW BG ── */
+    .glow-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .glow-bg .g1, .glow-bg .g2 {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .glow-bg .g1 { width: 700px; height: 700px; opacity: 0.04; }
+    .glow-bg .g2 { width: 400px; height: 400px; opacity: 0.05; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      z-index: 100;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(13,17,23,0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-logo {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-sub { font-size: 0.65rem; color: var(--subtle); letter-spacing: 0.04em; }
+
+    .nav-cta {
+      background: var(--teal-dim);
+      border: 1px solid var(--teal-border);
+      color: var(--teal);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.48rem 1.2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--teal); color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      overflow: hidden;
+    }
+
+    /* animated rings */
+    .rings {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--teal);
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+    .ring:nth-child(1) { width: 260px; height: 260px; opacity: 0.1;  animation-delay: 0s; }
+    .ring:nth-child(2) { width: 460px; height: 460px; opacity: 0.06; animation-delay: 1s; }
+    .ring:nth-child(3) { width: 660px; height: 660px; opacity: 0.04; animation-delay: 2s; }
+    .ring:nth-child(4) { width: 860px; height: 860px; opacity: 0.02; animation-delay: 3s; }
+
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.05); opacity: 0 !important; }
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .teal-line {
+      width: 160px; height: 1px;
+      background: var(--teal);
+      opacity: 0.6;
+      margin: 0 auto 2.2rem;
+      animation: fadeUp 0.7s 0.06s ease both;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6.5vw, 5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      animation: fadeUp 0.8s 0.17s ease both;
+    }
+
+    /* ── ANIMATED PLATE ── */
+    .plate-wrap {
+      position: relative;
+      width: 200px; height: 200px;
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 0.8s 0.22s ease both;
+    }
+
+    .plate {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #1e2d2a, #0d1a17);
+      border: 2px solid var(--teal-border);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(45,212,191,0.12), inset 0 0 40px rgba(0,0,0,0.4);
+    }
+
+    /* petri dish shine */
+    .plate::before {
+      content: '';
+      position: absolute;
+      top: 10%; left: 15%;
+      width: 30%; height: 20%;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+      transform: rotate(-30deg);
+    }
+
+    /* colonies */
+    .colony {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: colonyAppear 0.4s ease both;
+    }
+
+    @keyframes colonyAppear {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    /* scan line */
+    .scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0.7;
+      animation: scan 2.5s ease-in-out infinite;
+      top: 0;
+    }
+
+    @keyframes scan {
+      0%   { top: 0%;   opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.7; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* count badge */
+    .count-badge {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      background: var(--teal);
+      color: var(--bg);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      animation: badgePop 0.5s 2.8s ease both;
+      transform: scale(0);
+    }
+
+    @keyframes badgePop {
+      from { transform: scale(0); }
+      to   { transform: scale(1); }
+    }
+
+    /* upload CTA */
+    .upload-cta {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      animation: fadeUp 0.8s 0.28s ease both;
+      margin-bottom: 2.5rem;
+    }
+
+    .upload-btn {
+      background: var(--teal);
+      color: var(--bg);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.9rem 2.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 0 36px rgba(45,212,191,0.25);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .upload-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .upload-btn svg { width: 18px; height: 18px; }
+
+    .upload-note {
+      font-size: 0.75rem;
+      color: var(--subtle);
+      letter-spacing: 0.03em;
+    }
+
+    /* dot row */
+    .dot-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      animation: fadeUp 0.8s 0.33s ease both;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .dot:nth-child(1), .dot:nth-child(6) { opacity: 0.4; }
+    .dot:nth-child(2), .dot:nth-child(5) { opacity: 0.7; }
+    .dot:nth-child(3), .dot:nth-child(4) { opacity: 1; }
+
+    /* ── PROOF STRIP ── */
+    .proof-strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      font-size: 0.74rem;
+      color: var(--subtle);
+      letter-spacing: 0.04em;
+    }
+    .proof-strip span { color: var(--teal); margin-right: 0.3rem; }
+
+    /* ── SECTIONS ── */
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 5.5rem 2rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+
+    .section-line {
+      width: 80px; height: 1px;
+      background: var(--teal);
+      opacity: 0.5;
+      margin-bottom: 1.8rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.975rem;
+      max-width: 520px;
+      margin-bottom: 3rem;
+    }
+
+    .alt-bg {
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .step-num {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+      background: var(--teal-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.18rem 0.55rem;
+      width: fit-content;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .step h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── FEATURE CARDS ── */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.8rem;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover { border-color: var(--teal-border); transform: translateY(-3px); }
+    .card:hover::after { opacity: 1; }
+
+    .card-tag {
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--teal);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── USE CASES ── */
+    .use-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .use-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.4rem;
+      background: var(--surface2);
+      transition: border-color 0.2s;
+    }
+    .use-card:hover { border-color: var(--teal-border); }
+
+    .use-card h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .use-card p { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── FAQ ── */
+    details {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+    summary {
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--white);
+      padding: 1.1rem 1.4rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    summary::after { content: '+'; color: var(--teal); font-size: 1.2rem; font-weight: 400; transition: transform 0.2s; }
+    details[open] summary::after { transform: rotate(45deg); }
+    details p { padding: 0 1.4rem 1.1rem; font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── CLOSING ── */
+    .closing {
+      position: relative;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      overflow: hidden;
+    }
+
+    .closing-label {
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      position: relative; z-index: 1;
+    }
+
+    .closing-line {
+      width: 160px; height: 1px;
+      background: var(--teal);
+      opacity: 0.6;
+      margin: 0 auto 2.5rem;
+      position: relative; z-index: 1;
+    }
+
+    .closing h2 { position: relative; z-index: 1; max-width: 560px; margin: 0 auto 1rem; }
+    .closing p  { position: relative; z-index: 1; color: var(--muted); margin-bottom: 2rem; }
+
+    .closing-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--teal);
+      font-size: 0.84rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.75rem 1.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--teal-border);
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-ghost:hover { background: var(--teal-dim); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      padding: 1.8rem 2rem;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--subtle);
+    }
+    footer a { color: var(--teal); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 640px) {
+      .proof-strip { gap: 1.2rem; }
+      h1 { font-size: 2.5rem; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ColonyCount AI",
+    "applicationCategory": "ResearchApplication",
+    "operatingSystem": "Web",
+    "description": "AI-powered bacterial colony counter. Upload a plate image and get an accurate colony count in seconds. Built for microbiologists and lab researchers.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "url": "https://colonycounter.joelutai.com",
+    "creator": { "@type": "Organization", "name": "JoeLuT AI", "url": "https://joelutai.com" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does AI bacterial colony counting work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "ColonyCount AI uses computer vision to analyze uploaded plate images. It identifies individual colonies based on size, shape, and contrast, counts them automatically, and returns a total count with a visual overlay showing detected colonies." }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of plates does ColonyCount AI support?",
+        "acceptedAnswer": { "@type": "Answer", "text": "ColonyCount AI works with standard agar plates including TSA, LB, MacConkey, blood agar, and most common microbiological growth media. It supports JPEG and PNG image formats." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is ColonyCount AI free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. ColonyCount AI is free to use. Upload your plate image and get a colony count with no account required." }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <a href="https://joelutai.com" class="nav-logo">JoeLuT <span>AI</span></a>
+    <span class="nav-sub">ColonyCount AI</span>
+  </div>
+  <a href="https://colonycounter.joelutai.com" class="nav-cta">COUNT MY PLATE →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow-bg"><div class="g1"></div><div class="g2"></div></div>
+  <div class="rings">
+    <div class="ring"></div><div class="ring"></div>
+    <div class="ring"></div><div class="ring"></div>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-label">COLONYCOUNT AI</p>
+    <div class="teal-line"></div>
+
+    <h1>Upload a plate.<br>Get a count.</h1>
+    <p class="hero-sub">AI-powered bacterial colony counter for microbiologists. Upload your plate image — get an accurate CFU count in seconds. No manual counting. No eye strain.</p>
+
+    <!-- Animated petri dish -->
+    <div class="plate-wrap">
+      <div class="plate" id="plate">
+        <div class="scan-line"></div>
+      </div>
+      <div class="count-badge" id="countBadge">247 colonies detected</div>
+    </div>
+
+    <div class="upload-cta">
+      <a href="https://colonycounter.joelutai.com" class="upload-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Upload Plate Image — Free
+      </a>
+      <span class="upload-note">JPEG or PNG · No account required · Results in seconds</span>
+    </div>
+
+    <div class="dot-row" aria-hidden="true">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div><span>✓</span> Built by a PhD microbiologist</div>
+  <div><span>✓</span> Computer vision AI</div>
+  <div><span>✓</span> Works on standard agar plates</div>
+  <div><span>✓</span> Instant results</div>
+  <div><span>✓</span> Free to use</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <p class="section-label reveal">How it works</p>
+    <div class="section-line reveal"></div>
+    <h2 class="reveal">Three steps from plate to count.</h2>
+    <p class="section-sub reveal">No calibration. No setup. No manual counting. Just upload and get your result.</p>
+
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step-num">STEP 01</span>
+        <h3>Upload your plate image</h3>
+        <p>Photograph your agar plate under consistent lighting and upload the image — JPEG or PNG. No special equipment required beyond a standard camera or phone.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">STEP 02</span>
+        <h3>AI analyses the image</h3>
+        <p>Computer vision scans the plate, identifies individual colonies based on size, shape, and contrast, and distinguishes colonies from artifacts and background variation.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">STEP 03</span>
+        <h3>Get your count and overlay</h3>
+        <p>Receive a total colony count with a visual overlay marking each detected colony. Download the annotated image and count data for your lab records.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="alt-bg">
+  <div class="section-inner">
+    <p class="section-label reveal">Features</p>
+    <div class="section-line reveal"></div>
+    <h2 class="reveal">Built for real lab conditions.</h2>
+    <p class="section-sub reveal">Colony counting is tedious, time-consuming, and subject to inter-observer variability. ColonyCount AI removes all three problems.</p>
+
+    <div class="grid-3">
+      <div class="card reveal">
+        <span class="card-tag">ACCURACY</span>
+        <h3>AI Colony Detection</h3>
+        <p>Computer vision trained on microbiological plate images. Detects colonies across varying sizes, densities, and media types with consistent accuracy.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-tag">SPEED</span>
+        <h3>Results in Seconds</h3>
+        <p>Manual plate counting takes minutes per plate and accumulates fatigue errors over a session. ColonyCount AI returns results in seconds regardless of colony density.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-tag">REPRODUCIBILITY</span>
+        <h3>Consistent Counts</h3>
+        <p>Eliminates inter-observer variability — the same plate image returns the same count every time. Critical for experiments where CFU consistency affects downstream analysis.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-tag">DOCUMENTATION</span>
+        <h3>Annotated Image Export</h3>
+        <p>Download the plate image with each detected colony marked. Includes the colony count and timestamp — ready to attach to your experiment record or ELN entry.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-tag">COMPATIBILITY</span>
+        <h3>Standard Plate Support</h3>
+        <p>Works with TSA, LB, MacConkey, blood agar, and most common microbiological growth media. Handles circular and square plates in standard laboratory photography conditions.</p>
+      </div>
+      <div class="card reveal">
+        <span class="card-tag">INTEGRATION</span>
+        <h3>Works with BenchVoice</h3>
+        <p>Export your colony count directly into a BenchVoice lab notebook entry. Your plate count becomes part of your searchable experiment record automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <p class="section-label reveal">Use cases</p>
+    <div class="section-line reveal"></div>
+    <h2 class="reveal">Who uses ColonyCount AI.</h2>
+    <p class="section-sub reveal">Anyone who counts colonies manually is a candidate for a faster, more consistent approach.</p>
+
+    <div class="use-grid reveal">
+      <div class="use-card">
+        <h4>Microbiology Research Labs</h4>
+        <p>Growth curves, antimicrobial susceptibility, kill assays — any experiment requiring accurate CFU counts.</p>
+      </div>
+      <div class="use-card">
+        <h4>Food Safety Testing</h4>
+        <p>Total plate counts, yeast and mould counts, and indicator organism quantification for food safety and QC.</p>
+      </div>
+      <div class="use-card">
+        <h4>PhD Students and Postdocs</h4>
+        <p>Reduce time spent on manual counting during high-throughput experiments. More plates, less fatigue.</p>
+      </div>
+      <div class="use-card">
+        <h4>Pharmaceutical QC</h4>
+        <p>Environmental monitoring and bioburden testing where colony count accuracy and documentation matter.</p>
+      </div>
+      <div class="use-card">
+        <h4>Teaching Laboratories</h4>
+        <p>Standardise student colony counting results and use AI-annotated images for instructional comparison.</p>
+      </div>
+      <div class="use-card">
+        <h4>Clinical Microbiology</h4>
+        <p>Semi-quantitative culture counts and urine culture colony enumeration where speed and consistency are critical.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt-bg">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQ</p>
+    <div class="section-line reveal"></div>
+    <h2 class="reveal">Common questions about AI colony counting.</h2>
+
+    <div style="margin-top:2rem;">
+      <details class="reveal">
+        <summary>How accurate is AI bacterial colony counting?</summary>
+        <p>ColonyCount AI performs comparably to experienced manual counters on standard plates with well-separated colonies. Accuracy is highest on plates with 30-300 colonies — the standard countable range. Heavily confluent plates or plates with unusual morphology may require manual review of the annotated output.</p>
+      </details>
+      <details class="reveal">
+        <summary>What types of plates does it support?</summary>
+        <p>ColonyCount AI works with standard agar plates including TSA, LB, MacConkey, blood agar, R2A, and most common microbiological growth media. It supports JPEG and PNG image formats. Best results come from photographs taken with consistent overhead lighting and a plain contrasting background.</p>
+      </details>
+      <details class="reveal">
+        <summary>Is ColonyCount AI free?</summary>
+        <p>Yes. ColonyCount AI is free to use. Upload your plate image and get a colony count with no account required. For high-volume use or API access, contact JoeLuT AI about research or institutional plans.</p>
+      </details>
+      <details class="reveal">
+        <summary>Can I use phone photos or do I need a lab camera?</summary>
+        <p>Phone photos work well provided the lighting is consistent and the plate is photographed straight-on without shadows or glare. A simple lightbox or consistent overhead lighting setup significantly improves detection accuracy.</p>
+      </details>
+      <details class="reveal">
+        <summary>Does ColonyCount AI work with confluent plates?</summary>
+        <p>Heavily confluent plates — where colonies are touching or overlapping throughout — are challenging for both AI and manual counting. ColonyCount AI will flag high-density regions and provide an estimated count, but plates with TNTC (too numerous to count) density should be diluted and re-plated for accurate quantification.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="glow-bg"><div class="g1"></div><div class="g2"></div></div>
+  <div class="rings" style="position:absolute;">
+    <div class="ring"></div><div class="ring"></div>
+    <div class="ring"></div><div class="ring"></div>
+  </div>
+
+  <p class="closing-label reveal">COLONYCOUNT AI</p>
+  <div class="closing-line reveal"></div>
+
+  <h2 class="reveal">Stop counting manually.<br>Start counting accurately.</h2>
+  <p class="reveal">Free. No account needed. Results in seconds.</p>
+
+  <div class="closing-actions reveal">
+    <a href="https://colonycounter.joelutai.com" class="upload-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      Upload Your Plate — Free
+    </a>
+    <a href="https://joelutai.com" class="btn-ghost">Explore JoeLuT AI Tools</a>
+  </div>
+
+  <div class="dot-row reveal" style="margin-top:2.5rem;" aria-hidden="true">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>ColonyCount AI is a tool by <a href="https://joelutai.com">JoeLuT AI</a> · Built in Houston, TX · <a href="https://joelutai.com">joelutai.com</a></p>
+</footer>
+
+<script>
+  // Animate colonies appearing on the petri dish
+  const plate = document.getElementById('plate');
+  const colonies = [
+    { x: 30, y: 40, r: 5 }, { x: 55, y: 25, r: 4 }, { x: 75, y: 50, r: 6 },
+    { x: 45, y: 65, r: 4 }, { x: 80, y: 75, r: 5 }, { x: 20, y: 70, r: 3 },
+    { x: 60, y: 80, r: 4 }, { x: 35, y: 55, r: 5 }, { x: 70, y: 35, r: 3 },
+    { x: 50, y: 45, r: 6 }, { x: 25, y: 30, r: 4 }, { x: 85, y: 55, r: 3 },
+    { x: 40, y: 80, r: 5 }, { x: 65, y: 60, r: 4 }, { x: 55, y: 55, r: 3 },
+    { x: 30, y: 55, r: 4 }, { x: 75, y: 25, r: 5 }, { x: 45, y: 35, r: 3 },
+  ];
+
+  colonies.forEach((c, i) => {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'colony';
+      el.style.cssText = `
+        left: ${c.x}%;
+        top: ${c.y}%;
+        width: ${c.r * 2}px;
+        height: ${c.r * 2}px;
+        transform: translate(-50%, -50%);
+        opacity: ${0.5 + Math.random() * 0.5};
+        animation-delay: 0s;
+      `;
+      plate.appendChild(el);
+    }, 300 + i * 120);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 65);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
