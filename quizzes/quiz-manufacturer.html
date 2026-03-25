@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Manufacturer Ops Audit — JoeLuT AI</title>
+<title>Food Manufacturer Operations Audit — JoeLuT AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -103,12 +103,16 @@
   .score-bar-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s; }
   .audit-section { padding: 28px 36px; border-bottom: 1px solid var(--border); }
   .audit-title { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; font-weight: 700; }
-  .audit-items { display: flex; flex-direction: column; gap: 10px; }
-  .audit-item { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #AABCC8; }
-  .audit-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .dot-good { background: var(--accent); box-shadow: 0 0 6px rgba(63,184,196,0.5); }
-  .dot-warn { background: var(--warn); }
-  .dot-bad { background: #c44; }
+  .cat-row { margin-bottom: 14px; }
+  .cat-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .cat-name { font-size: 13px; color: #AABCC8; font-weight: 500; }
+  .cat-pct { font-size: 13px; font-weight: 700; }
+  .cat-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s; }
+  .opp-section { padding: 28px 36px; border-bottom: 1px solid var(--border); }
+  .opp-item { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 18px; margin-bottom: 10px; }
+  .opp-cat { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .opp-rec { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .cta-section { padding: 28px 36px; }
   .cta-title { font-family: "Barlow Condensed", sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.02em; }
   .cta-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
@@ -124,7 +128,7 @@
   @media (max-width: 480px) {
     .card { padding: 24px; }
     .result-header { padding: 24px; }
-    .audit-section, .cta-section { padding: 20px 24px; }
+    .audit-section, .opp-section, .cta-section { padding: 20px 24px; }
     .result-score { font-size: 60px; }
   }
 </style>
@@ -132,144 +136,189 @@
 <body>
 <div class="container">
   <div class="header">
-    <div class="logo-tag">JoeLuT AI · Manufacturing Audit</div>
-    <h1>Can We Work<br><span>Together?</span></h1>
-    <p class="subtitle">A 2-minute ops audit for food manufacturers. Find out where your production business stands — and where AI automation can move the needle.</p>
+    <div class="logo-tag">JoeLuT AI &middot; Manufacturing Audit</div>
+    <h1>Food Manufacturer<br><span>Operations Audit</span></h1>
+    <p class="subtitle">12 questions. 3 minutes. Find out where your production process is costing you the most time and money.</p>
   </div>
   <div id="progress-wrap" class="progress-wrap" style="display:none;">
     <div class="progress-meta">
-      <span id="progress-label">Question 1 of 8</span>
-      <span id="progress-pct">0%</span>
+      <span id="progress-label">Question 1 of 12</span>
+      <span id="progress-cat"></span>
     </div>
     <div class="progress-bar">
       <div class="progress-fill" id="progress-fill" style="width:0%"></div>
     </div>
   </div>
   <div id="quiz-area"></div>
-  <div class="footer">Powered by JoeLuT AI · joelutai.com</div>
+  <div class="footer">Powered by JoeLuT AI &middot; joelutai.com</div>
 </div>
 
 <script>
   const QUESTIONS = [
     {
-      id: 'cost',
-      text: 'Do you know your unit production cost for each SKU — off the top of your head?',
+      id: 1, category: 'Compliance & Traceability',
+      text: "If the FDA showed up tomorrow and asked you to trace an ingredient back to its supplier, lot number, and receiving date, how fast could your team pull that up?",
       options: [
-        { label: 'Yes — tracked in a spreadsheet or production system', score: 3 },
-        { label: 'Roughly — I estimate but it\'s not precise', score: 1 },
-        { label: 'Not really, I go by feel or past experience', score: 0 },
+        { label: 'Under 5 minutes from a digital system', score: 4 },
+        { label: '30 minutes searching records', score: 3 },
+        { label: 'Half a day going through files', score: 2 },
+        { label: 'We would struggle to do it at all', score: 1 },
       ]
     },
     {
-      id: 'inventory',
-      text: 'How do you currently track raw material inventory?',
+      id: 2, category: 'Compliance & Traceability',
+      text: "How do you track and store supplier certifications, allergen documentation, and food safety records?",
       options: [
-        { label: 'Digital system — updated regularly with accurate counts', score: 3 },
-        { label: 'Handwritten logs or occasional spot checks', score: 1 },
-        { label: 'I don\'t track it consistently', score: 0 },
+        { label: 'Dedicated digital system with alerts for expirations', score: 4 },
+        { label: 'Organized folders or shared drive', score: 3 },
+        { label: 'Paper files or scattered across email', score: 2 },
+        { label: "We collect them but don\u2019t have a consistent system", score: 1 },
       ]
     },
     {
-      id: 'compliance',
-      text: 'Are you familiar with FSMA 204 traceability requirements for your product category?',
+      id: 3, category: 'Production Tracking',
+      text: "How do you track production runs, batch schedules, and what was produced each day?",
       options: [
-        { label: 'Yes — we have a traceability system in place', score: 3 },
-        { label: 'I\'ve heard of it but haven\'t implemented anything yet', score: 1 },
-        { label: 'No — this is new to me', score: 0 },
+        { label: 'Digital production management system', score: 4 },
+        { label: 'Spreadsheets updated manually', score: 3 },
+        { label: 'Paper logs or whiteboards', score: 2 },
+        { label: 'Mostly from memory or verbal updates', score: 1 },
       ]
     },
     {
-      id: 'orders',
-      text: 'When a wholesale or co-packing order comes in, how do you process it?',
+      id: 4, category: 'Production Tracking',
+      text: "When something goes wrong in a batch, how quickly can you identify which ingredients, quantities, and steps were involved?",
       options: [
-        { label: 'Documented process — steps written out or systemized', score: 3 },
-        { label: 'I handle it manually each time, mostly from memory', score: 1 },
-        { label: 'It\'s chaotic — no set process yet', score: 0 },
+        { label: 'Instantly from a digital batch record', score: 4 },
+        { label: 'Within an hour from spreadsheets', score: 3 },
+        { label: 'Takes most of a day digging through records', score: 2 },
+        { label: "We often can\u2019t trace it fully", score: 1 },
       ]
     },
     {
-      id: 'bottleneck',
-      text: 'What\'s your biggest operational bottleneck right now?',
+      id: 5, category: 'Costing & Margins',
+      text: "Do you know the real per-unit cost of every product you make, including ingredients, labor, packaging, and overhead?",
       options: [
-        { label: 'Tracking costs, orders, or inventory (data problems)', score: 3 },
-        { label: 'Customer communication or follow-up (time problems)', score: 2 },
-        { label: 'I\'m not sure — I just know something feels off', score: 1 },
+        { label: 'Yes, calculated automatically with current prices', score: 4 },
+        { label: 'Yes, from a spreadsheet we update periodically', score: 3 },
+        { label: 'We have rough estimates', score: 2 },
+        { label: 'Not accurately, no', score: 1 },
       ]
     },
     {
-      id: 'inventory_cost_lag',
-      text: 'When ingredient costs or inventory levels change, how quickly does that show up in your unit cost?',
+      id: 6, category: 'Costing & Margins',
+      text: "When ingredient prices change, how do you update your product pricing?",
       options: [
-        { label: 'Same day or within the week — my cost sheet updates automatically or I recalculate right away', score: 3 },
-        { label: 'Eventually — I catch it when I do a monthly review or notice margin shrinking', score: 1 },
-        { label: 'Honestly, I\'m not sure — cost changes often go unnoticed until it\'s a problem', score: 0 },
+        { label: 'Automatically flagged and recalculated', score: 4 },
+        { label: 'We manually recalculate when we notice', score: 3 },
+        { label: 'We adjust prices when margins feel tight', score: 2 },
+        { label: 'We rarely update until it becomes a problem', score: 1 },
       ]
     },
     {
-      id: 'invoice_processing',
-      text: 'How do you currently handle supplier invoices when they come in?',
+      id: 7, category: 'Inventory & Sourcing',
+      text: "How do you track ingredient inventory levels and know when to reorder?",
       options: [
-        { label: 'Digital — invoices are logged into a system and matched to orders automatically or same day', score: 3 },
-        { label: 'Manual entry — I type or copy the details into a spreadsheet or accounting software myself', score: 1 },
-        { label: 'Paper or email filing — invoices are stored but rarely entered into any system', score: 0 },
+        { label: 'Digital inventory system with reorder alerts', score: 4 },
+        { label: 'Spreadsheet we check regularly', score: 3 },
+        { label: "Physical counts when we think we\u2019re running low", score: 2 },
+        { label: "We often find out we\u2019re short during production", score: 1 },
       ]
     },
     {
-      id: 'openness',
-      text: 'How open is your team to adopting new digital tools or automation?',
+      id: 8, category: 'Inventory & Sourcing',
+      text: "Can you quickly see which supplier provided which ingredient lot and at what cost?",
       options: [
-        { label: 'Very — we actively look for tools that save time', score: 3 },
-        { label: 'Open, but cautious about disrupting what works', score: 2 },
-        { label: 'Skeptical — it takes a lot to get buy-in here', score: 0 },
+        { label: 'Yes, linked in our system', score: 4 },
+        { label: "Yes, but I\u2019d need to check invoices manually", score: 3 },
+        { label: 'Sometimes, if we kept the paperwork', score: 2 },
+        { label: 'Not reliably', score: 1 },
+      ]
+    },
+    {
+      id: 9, category: 'Recipe & Scaling',
+      text: "How do you scale recipes from test batch to production quantities?",
+      options: [
+        { label: 'Software handles the conversion automatically', score: 4 },
+        { label: 'Spreadsheet with formulas', score: 3 },
+        { label: 'We do the math manually each time', score: 2 },
+        { label: 'Rough estimates and adjust during production', score: 1 },
+      ]
+    },
+    {
+      id: 10, category: 'Recipe & Scaling',
+      text: "How do you manage recipe versions when you make changes to a formula?",
+      options: [
+        { label: 'Version-controlled in a digital system', score: 4 },
+        { label: 'Updated spreadsheet or document', score: 3 },
+        { label: 'Notes written on the original recipe', score: 2 },
+        { label: "We don\u2019t always track changes", score: 1 },
+      ]
+    },
+    {
+      id: 11, category: 'Capacity & Growth',
+      text: "How close are you to maximum production capacity?",
+      options: [
+        { label: 'Under 50% \u2014 plenty of room to grow', score: 4 },
+        { label: '50\u201375% \u2014 growing steadily', score: 3 },
+        { label: '75\u201390% \u2014 starting to feel the strain', score: 2 },
+        { label: 'Over 90% \u2014 turning away orders or running behind', score: 1 },
+      ]
+    },
+    {
+      id: 12, category: 'Capacity & Growth',
+      text: "What is the biggest bottleneck preventing you from scaling?",
+      options: [
+        { label: 'Nothing major \u2014 operations are smooth', score: 4 },
+        { label: 'Finding and training production staff', score: 3 },
+        { label: 'Managing the admin and paperwork around production', score: 2 },
+        { label: 'Everything runs through me personally', score: 1 },
       ]
     },
   ];
 
-  const TIERS = [
-    {
-      min: 0, max: 7,
-      label: 'Not Ready Yet',
-      badgeBg: 'rgba(204,68,68,0.12)',
-      badgeColor: '#c44444',
-      badge: 'TIER 1 — FOUNDATION NEEDED',
-      desc: 'Your production is running on intuition and manual effort. Before AI can help you scale, there are foundational systems to put in place — but that\'s exactly what we build. The opportunity here is enormous.',
-      cta: 'Let\'s talk about where to start.',
-      next: 'A free 20-minute call to map out the 3 systems your manufacturing operation needs first.'
-    },
-    {
-      min: 8, max: 13,
-      label: 'Emerging',
-      badgeBg: 'rgba(232,148,58,0.12)',
-      badgeColor: '#E8943A',
-      badge: 'TIER 2 — GETTING THERE',
-      desc: 'You have the basics in place but things are slipping through the cracks. Manual tracking is costing you time and margin. The right automation layer could change your production week dramatically.',
-      cta: 'Ready to stop doing it manually.',
-      next: 'A 30-minute discovery call to identify your highest-ROI automation opportunity.'
-    },
-    {
-      min: 14, max: 19,
-      label: 'Automation-Ready',
-      badgeBg: 'rgba(63,184,196,0.12)',
-      badgeColor: '#3FB8C4',
-      badge: 'TIER 3 — STRONG FOUNDATION',
-      desc: 'You\'ve built real operational discipline. Your data is reasonably clean, your processes are mostly documented, and your team is open to change. AI automation will stack directly on what\'s already working.',
-      cta: 'Let\'s build something powerful.',
-      next: 'A 45-minute strategy session to scope your first AI workflow.'
-    },
-    {
-      min: 20, max: 24,
-      label: 'Prime Fit',
-      badgeBg: 'rgba(63,184,196,0.15)',
-      badgeColor: '#3FB8C4',
-      badge: 'TIER 4 — TOP OF THE LIST',
-      desc: 'You\'re already operating with the mindset of a modern food manufacturer. You track what matters, you\'re open to technology, and you have real pain points AI can solve fast. Clients like you see the clearest ROI.',
-      cta: 'You\'re exactly who we built this for.',
-      next: 'Let\'s get into a full AI Ops audit and build your production automation roadmap.'
-    },
+  const CATEGORIES = [
+    'Compliance & Traceability',
+    'Production Tracking',
+    'Costing & Margins',
+    'Inventory & Sourcing',
+    'Recipe & Scaling',
+    'Capacity & Growth',
   ];
 
-  function getTier(score) {
-    return TIERS.find(t => score >= t.min && score <= t.max) || TIERS[0];
+  const CATEGORY_RECOMMENDATIONS = {
+    'Compliance & Traceability': 'FSMA 204 enforcement started January 2026. Small food manufacturers are getting the most scrutiny. A digital traceability system linking ingredients, lot numbers, suppliers, and batch records would make you audit-ready in minutes instead of days.',
+    'Production Tracking': 'A digital batch tracking system would give you instant visibility into what was produced, when, with which ingredients, and flag issues before they become costly recalls.',
+    'Costing & Margins': 'An automated COG calculator that updates with current ingredient prices would catch margin erosion before it eats your profit. Most manufacturers discover they\u2019ve been underpricing products for months.',
+    'Inventory & Sourcing': 'Automated inventory tracking with reorder alerts and supplier lot linking would eliminate stockouts during production and give you full ingredient traceability.',
+    'Recipe & Scaling': 'Recipe management with automatic scaling and version control would remove manual conversion errors and ensure consistency across production runs.',
+    'Capacity & Growth': 'Systemizing your production operations would allow you to increase output without proportionally increasing headcount or admin burden.',
+  };
+
+  const MAX_SCORE = 48;
+
+  const GRADES = [
+    { min: 42, label: 'A', title: 'Optimized Operation', color: '#3FB8C4', badge: 'GRADE A \u2014 OPTIMIZED', desc: 'Your manufacturing operation is well-systemized. You have strong processes across compliance, costing, and production tracking. Focus on scaling and optimization.' },
+    { min: 34, label: 'B', title: 'Solid Foundation', color: '#3FB8C4', badge: 'GRADE B \u2014 SOLID FOUNDATION', desc: 'You have good processes but there are gaps costing you time and margin. Targeted improvements in your weakest areas could unlock significant growth.' },
+    { min: 24, label: 'C', title: 'Growth Bottleneck', color: '#E8943A', badge: 'GRADE C \u2014 GROWTH BOTTLENECK', desc: 'Your operation is hitting a ceiling. Manual processes are eating your time, costing errors are eroding margins, and compliance gaps are a risk. Systemizing your operations would have immediate impact.' },
+    { min: 12, label: 'D', title: 'Critical Overload', color: '#c44444', badge: 'GRADE D \u2014 CRITICAL', desc: 'You are the system. Everything runs through you, and it\u2019s unsustainable. Without changes, growth is impossible and an FDA audit could be devastating. The good news: the biggest gains come from starting here.' },
+  ];
+
+  function getGrade(score) {
+    return GRADES.find(g => score >= g.min) || GRADES[GRADES.length - 1];
+  }
+
+  function getCategoryScores(scores) {
+    return CATEGORIES.map(cat => {
+      const qs = QUESTIONS.filter(q => q.category === cat);
+      const catScore = qs.reduce((sum, q, i) => {
+        const qIdx = QUESTIONS.indexOf(q);
+        return sum + (scores[qIdx] || 0);
+      }, 0);
+      const max = qs.length * 4;
+      const pct = Math.round((catScore / max) * 100);
+      return { category: cat, score: catScore, max, pct };
+    });
   }
 
   let state = { screen: 'quiz', currentQ: 0, answers: [], scores: [] };
@@ -291,8 +340,11 @@
         const fill = document.getElementById('score-bar-fill');
         if (fill) {
           const total = state.scores.reduce((a, b) => a + b, 0);
-          fill.style.width = Math.round((total / 24) * 100) + '%';
+          fill.style.width = Math.round((total / MAX_SCORE) * 100) + '%';
         }
+        document.querySelectorAll('.cat-bar-fill').forEach(el => {
+          el.style.width = el.dataset.pct + '%';
+        });
       }, 100);
     }
   }
@@ -301,10 +353,10 @@
     const q = QUESTIONS[state.currentQ];
     const total = QUESTIONS.length;
     const selected = state.answers[state.currentQ];
-    const keys = ['A', 'B', 'C'];
+    const keys = ['A', 'B', 'C', 'D'];
     return `
       <div class="card">
-        <div class="question-num">Question ${state.currentQ + 1} of ${total}</div>
+        <div class="question-num">${q.category} &middot; Question ${state.currentQ + 1} of ${total}</div>
         <div class="question-text">${q.text}</div>
         <div class="options">
           ${q.options.map((opt, i) => `
@@ -315,9 +367,9 @@
           `).join('')}
         </div>
         <div class="nav">
-          ${state.currentQ > 0 ? `<button class="btn btn-ghost" onclick="goBack()">← Back</button>` : ''}
+          ${state.currentQ > 0 ? '<button class="btn btn-ghost" onclick="goBack()">&larr; Back</button>' : ''}
           <button class="btn btn-primary" onclick="goNext()" ${selected === undefined ? 'disabled' : ''} id="next-btn">
-            ${state.currentQ === total - 1 ? 'See My Results →' : 'Next →'}
+            ${state.currentQ === total - 1 ? 'See My Results &rarr;' : 'Next &rarr;'}
           </button>
         </div>
       </div>
@@ -326,35 +378,60 @@
 
   function renderResult() {
     const total = state.scores.reduce((a, b) => a + b, 0);
-    const pct = Math.round((total / 24) * 100);
-    const tier = getTier(total);
-    const auditItems = QUESTIONS.map((q, i) => {
-      const score = state.scores[i];
-      const dotClass = score >= 3 ? 'dot-good' : score >= 1 ? 'dot-warn' : 'dot-bad';
-      const status = score >= 3 ? 'Strong' : score >= 1 ? 'Needs work' : 'Gap identified';
-      const shortQ = q.text.split('?')[0].replace(/^(Do you|How do you|Are you|When a|Have you|What's)/, '').trim();
-      const label = shortQ.length > 52 ? shortQ.slice(0, 52) + '...' : shortQ;
-      return `<div class="audit-item"><span class="audit-dot ${dotClass}"></span><span>${label} — <span style="color:var(--muted)">${status}</span></span></div>`;
+    const pct = Math.round((total / MAX_SCORE) * 100);
+    const grade = getGrade(total);
+    const catScores = getCategoryScores(state.scores);
+    const weakest = [...catScores].sort((a, b) => a.pct - b.pct).slice(0, 2);
+
+    const catBarsHtml = catScores.map(cs => {
+      const barColor = cs.pct >= 75 ? 'var(--accent)' : cs.pct >= 50 ? 'var(--warn)' : '#c44';
+      const pctColor = cs.pct >= 75 ? 'var(--accent)' : cs.pct >= 50 ? 'var(--warn)' : '#c44';
+      return `
+        <div class="cat-row">
+          <div class="cat-header">
+            <span class="cat-name">${cs.category}</span>
+            <span class="cat-pct" style="color:${pctColor}">${cs.pct}%</span>
+          </div>
+          <div class="cat-bar">
+            <div class="cat-bar-fill" data-pct="${cs.pct}" style="background:${barColor};width:0%"></div>
+          </div>
+        </div>
+      `;
     }).join('');
+
+    const oppHtml = weakest.map(w => `
+      <div class="opp-item">
+        <div class="opp-cat" style="color:#c44">${w.category} (${w.pct}%)</div>
+        <div class="opp-rec">${CATEGORY_RECOMMENDATIONS[w.category]}</div>
+      </div>
+    `).join('');
+
+    const badgeBg = grade.color === '#c44444' ? 'rgba(204,68,68,0.12)' :
+                    grade.color === '#E8943A' ? 'rgba(232,148,58,0.12)' :
+                    'rgba(63,184,196,0.12)';
 
     return `
       <div class="result-card">
         <div class="result-header">
-          <div class="tier-badge" style="background:${tier.badgeBg};color:${tier.badgeColor};border:1px solid ${tier.badgeColor}40">${tier.badge}</div>
-          <div class="result-score" style="color:${tier.badgeColor}">${pct}<span style="font-size:32px;color:var(--muted)">%</span></div>
-          <div class="result-label">${tier.label}</div>
-          <div class="result-desc">${tier.desc}</div>
-          <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar-fill" style="background:${tier.badgeColor};width:0%"></div></div>
+          <div class="tier-badge" style="background:${badgeBg};color:${grade.color};border:1px solid ${grade.color}40">${grade.badge}</div>
+          <div class="result-score" style="color:${grade.color}">${total}<span style="font-size:32px;color:var(--muted)">/${MAX_SCORE}</span></div>
+          <div class="result-label">${grade.title}</div>
+          <div class="result-desc">${grade.desc}</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar-fill" style="background:${grade.color};width:0%"></div></div>
         </div>
         <div class="audit-section">
-          <div class="audit-title">📋 Your Manufacturing Ops Snapshot</div>
-          <div class="audit-items">${auditItems}</div>
+          <div class="audit-title">Breakdown by Category</div>
+          ${catBarsHtml}
+        </div>
+        <div class="opp-section">
+          <div class="audit-title">Your Biggest Opportunities</div>
+          ${oppHtml}
         </div>
         <div class="cta-section">
-          <div class="cta-title">${tier.cta}</div>
-          <div class="cta-sub">${tier.next}</div>
+          <div class="cta-title">Want a Deeper Look?</div>
+          <div class="cta-sub">Book a free 20-minute call and we'll walk through your results together with specific recommendations for your operation.</div>
           <div class="cta-buttons">
-            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-cta btn-calendly">Book a Free Call →</a>
+            <a href="https://calendly.com/chiomaodo/intro-call" target="_blank" class="btn-cta btn-calendly">Book a Free Call &rarr;</a>
             <button class="btn-restart" onclick="restart()">Start Over</button>
           </div>
         </div>
@@ -365,23 +442,22 @@
   function updateProgress() {
     const total = QUESTIONS.length;
     const pct = Math.round((state.currentQ / total) * 100);
-    document.getElementById('progress-label').textContent = `Question ${state.currentQ + 1} of ${total}`;
-    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-label').textContent = 'Question ' + (state.currentQ + 1) + ' of ' + total;
+    document.getElementById('progress-cat').textContent = QUESTIONS[state.currentQ].category;
     document.getElementById('progress-fill').style.width = pct + '%';
   }
 
   function selectAnswer(idx) {
     state.answers[state.currentQ] = idx;
-    const btn = document.getElementById('next-btn');
+    var btn = document.getElementById('next-btn');
     if (btn) btn.disabled = false;
-    document.querySelectorAll('.option').forEach((el, i) => {
+    document.querySelectorAll('.option').forEach(function(el, i) {
       el.className = 'option' + (i === idx ? ' selected' : '');
-      el.querySelector('.option-key').style.color = i === idx ? 'var(--teal)' : 'var(--orange)';
     });
   }
 
   function goNext() {
-    const selected = state.answers[state.currentQ];
+    var selected = state.answers[state.currentQ];
     if (selected === undefined) return;
     state.scores[state.currentQ] = QUESTIONS[state.currentQ].options[selected].score;
     if (state.currentQ < QUESTIONS.length - 1) {
